@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:flutter_template/bloc/bloc_provider.dart';
+import 'package:flutter_template/bloc/rx/obs_builder.dart';
+import 'package:flutter_template/i18n/strings.g.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_template/shared/bloc/theme/app_theme.dart';
 import 'dependency/app_service.dart';
 import 'dependency/router/utils/route_name.dart';
 import 'dependency/router/utils/route_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   final container = ProviderContainer();
 
   runApp(
     UncontrolledProviderScope(
       container: container,
-      child: const MyApp(),
+      child: TranslationProvider(child: const MyApp()),
     ),
   );
 }
@@ -21,16 +27,25 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final routerService = ref.watch(AppService.router);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      onGenerateRoute: RoutePage.onGenerateRoute,
-      navigatorKey: routerService.navigatorKey,
-      initialRoute: RouteName.counter,
+    final appThemeBloc = ref.watch(BlocProvider.appTheme);
+    return ObsBuilder(
+      streams: [appThemeBloc.themeModeSubject],
+      builder: (context) {
+        return MaterialApp(
+          locale: TranslationProvider.of(context).flutterLocale,
+          supportedLocales:
+              AppLocale.values.map((e) => e.flutterLocale).toList(),
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
+          themeMode: appThemeBloc.themeModeSubject.value,
+          onGenerateRoute: RoutePage.onGenerateRoute,
+          navigatorKey: routerService.navigatorKey,
+          initialRoute: RouteName.counter,
+        );
+      },
     );
   }
 }

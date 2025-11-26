@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
+import 'package:flutter_template/i18n/strings.g.dart';
 
 class CounterScreen extends ConsumerWidget {
   const CounterScreen({super.key});
@@ -12,6 +13,30 @@ class CounterScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Counter'),
+        actions: [
+          //change language button
+          PopupMenuButton<AppLocale>(
+            icon: const Icon(Icons.language),
+            onSelected: (locale) {
+              LocaleSettings.setLocale(locale).then(
+                (value) {},
+              );
+            },
+            itemBuilder: (context) => AppLocale.values
+                .map((locale) => PopupMenuItem<AppLocale>(
+                      value: locale,
+                      child: Text(locale.languageCode.toUpperCase()),
+                    ))
+                .toList(),
+          ),
+        ],
+        // leading button change theme
+        leading: IconButton(
+          icon: const Icon(Icons.brightness_6),
+          onPressed: () {
+            ref.read(BlocProvider.appTheme).onToggleThemeMode();
+          },
+        ),
       ),
       body: Center(
         child: Column(
@@ -20,7 +45,7 @@ class CounterScreen extends ConsumerWidget {
             ObsBuilder(
               streams: [bloc.counterSubject],
               builder: (ctx) => Text(
-                'You have pushed the button this many times: ${bloc.counterSubject.value}',
+                '${context.t.buttonPressCount}: ${bloc.counterSubject.value}',
               ),
             ),
           ],

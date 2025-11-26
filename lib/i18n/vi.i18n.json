@@ -1,0 +1,20 @@
+{
+    "hello": "Xin chào",
+    "welcome": "Chào mừng bạn đến với ứng dụng của chúng tôi",
+    "login": {
+        "username": "Tên đăng nhập {username: String} - {name: String} - {age: int} tuổi",
+        "password": "Mật khẩu",
+        "submit": "Đăng nhập",
+        "forgot_password": "Quên mật khẩu?"
+    },
+    "list": [
+        "Mục một",
+        "Mục hai",
+        "Mục ba"
+    ],
+    "greet(context=SexEnum)": {
+        "male": "Hello <br>Mr</br> Hoa",
+        "female": "Hello Ms {name}"
+    },
+    "buttonPressCount": "Bạn đã nhấn nút nhiều lần"
+}
