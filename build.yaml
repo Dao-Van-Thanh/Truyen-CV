@@ -1,0 +1,13 @@
+targets:
+  $default:
+    builders:
+      slang_build_runner:
+        options:
+          base_locale: vi
+          input_directory: lib/i18n
+          output_directory: lib/i18n
+          fallback_strategy: base_locale
+          key_case: camel
+          key_map_case: pascal
+          param_case: snake
+          string_interpolation: braces
