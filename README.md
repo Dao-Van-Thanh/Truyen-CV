@@ -293,27 +293,8 @@ flutter analyze
 - [SSL Pinning Guide](SSL_PINNING_GUIDE.md)
 - [Commands Reference](COMMAND.md)
 
-## 📝 License
-
-This project is private and proprietary to GTS Vietnam.
-
----
-
-## 👥 Team
-
-**GTS Vietnam - Projects Team**
-
-- 📧 Email: contact@gtsvn.com.vn
-- 🌐 Website: [gtsvn.com.vn](https://gtsvn.com.vn)
-
----
-
 ## 🎉 Acknowledgments
 
 - Flutter team for the amazing framework
 - Riverpod team for powerful state management
 - All contributors who helped shape this template
-
----
-
-**Made with ❤️ by GTS Vietnam**
