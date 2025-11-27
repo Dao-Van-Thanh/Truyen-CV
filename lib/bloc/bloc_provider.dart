@@ -5,11 +5,11 @@ import 'package:flutter_template/features/individual/individual_bloc.dart';
 import 'package:flutter_template/features/library/library_bloc.dart';
 import 'package:flutter_template/features/root/root_bloc.dart';
 import 'package:flutter_template/shared/bloc/app_bloc.dart';
-import 'package:flutter_template/shared/bloc/theme/app_theme_bloc.dart';
+import 'package:flutter_template/shared/bloc/config/app_config_bloc.dart';
 
 class BlocProvider {
   static final app = Provider((ref) => AppBloc(ref));
-  static final appTheme = Provider((ref) => AppThemeBloc(ref));
+  static final config = Provider((ref) => AppConfigBloc(ref));
   static late AutoDisposeProvider<CounterBloc> counter;
   static late AutoDisposeProvider<RootBloc> root;
   static late AutoDisposeProvider<LibraryBloc> library;

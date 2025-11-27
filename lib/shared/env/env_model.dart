@@ -8,12 +8,10 @@ EnvModelImplementation generateEnvModel() {
 
 abstract class EnvModelImplementation {
   final String baseUrl;
-  final String apiSecretKey;
   final List<String> certificateSHA256s;
 
   EnvModelImplementation({
     required this.baseUrl,
-    required this.apiSecretKey,
     // required this.noAuthUrl,
     this.certificateSHA256s = const [],
   });

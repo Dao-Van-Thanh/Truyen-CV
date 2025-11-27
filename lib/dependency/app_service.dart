@@ -17,7 +17,7 @@ class AppService {
     },
   );
 
-  static final networkApiService = Provider(
+  static final networkApi = Provider(
     (ref) {
       return NetworkApiService(ref);
     },

@@ -59,7 +59,7 @@ class ApiService {
           final response = await request(cancelToken);
           return response;
         } catch (e) {
-          return null;
+          return _handleError(e, path ?? '');
         }
       }),
       onCancel: () {
@@ -267,24 +267,24 @@ class ApiService {
     );
   }
 
-  // Response? _handleError(dynamic error, String path) {
-  //   return null;
-  //   // if (error is! DioException) {
-  //   //   return _handledResponse(path);
-  //   // }
+  Response? _handleError(dynamic error, String path) {
+    return null;
+    // if (error is! DioException) {
+    //   return _handledResponse(path);
+    // }
 
-  //   // // final response = error.response;
-  //   // // final statusCode = response?.statusCode;
+    // // final response = error.response;
+    // // final statusCode = response?.statusCode;
 
-  //   // return response ?? _handledResponse(path);
-  // }
+    // return response ?? _handledResponse(path);
+  }
 
-  // Response _handledResponse(String path) {
-  //   return Response(
-  //     data: {'_handled': true},
-  //     requestOptions: RequestOptions(path: path),
-  //   );
-  // }
+  Response _handledResponse(String path) {
+    return Response(
+      data: {'_handled': true},
+      requestOptions: RequestOptions(path: path),
+    );
+  }
 
   String _hashCacheKey(CacheKey key) {
     if (key is String) return key;

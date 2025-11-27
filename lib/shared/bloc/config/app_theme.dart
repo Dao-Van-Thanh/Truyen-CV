@@ -34,6 +34,11 @@ class AppTheme {
       titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
     ),
+    tabBarTheme: const TabBarTheme(
+      indicatorColor: Colors.black87,
+      labelColor: Colors.black87,
+      unselectedLabelColor: Colors.black54,
+    ),
   );
 
   static ThemeData dark = ThemeData(
@@ -66,6 +71,11 @@ class AppTheme {
       bodyMedium: TextStyle(fontSize: 14, height: 1.4, color: Colors.white70),
       titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+    ),
+    tabBarTheme: const TabBarTheme(
+      indicatorColor: Colors.white70,
+      labelColor: Colors.white70,
+      unselectedLabelColor: Colors.white54,
     ),
   );
 }
