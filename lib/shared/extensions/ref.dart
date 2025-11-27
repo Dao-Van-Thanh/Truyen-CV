@@ -6,5 +6,5 @@ import 'package:flutter_template/dependency/router/router_service.dart';
 extension WidgetRefExtension on WidgetRef {
   RouterService get router => read(AppService.router);
 
-  NetworkApiService get network => read(AppService.networkApiService);
+  NetworkApiService get network => read(AppService.networkApi);
 }

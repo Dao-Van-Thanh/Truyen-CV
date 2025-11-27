@@ -1,9 +1,11 @@
+import 'package:flutter_template/dependency/network_api/error/error_response_model.dart';
+
 enum ApiStatus { success, error, handled }
 
 class ApiResult<T> {
   final ApiStatus status;
   final T? data;
-  final Object? error;
+  final ErrorResponseModel? error;
 
   ApiResult._(this.status, {this.data, this.error});
 
@@ -11,7 +13,7 @@ class ApiResult<T> {
   factory ApiResult.success(T data) =>
       ApiResult._(ApiStatus.success, data: data);
 
-  factory ApiResult.error(Object error, {T? data}) =>
+  factory ApiResult.error(ErrorResponseModel error, {T? data}) =>
       ApiResult._(ApiStatus.error, error: error, data: data);
 
   factory ApiResult.handled() => ApiResult._(ApiStatus.handled);
@@ -23,12 +25,12 @@ class ApiResult<T> {
 
   bool get isHandled => status == ApiStatus.handled;
 
-  (T?, Object?) get toTuple => (data, error);
+  (T?, ErrorResponseModel?) get toTuple => (data, error);
 
   // Classic exhaustive `when`
   R when<R>({
     required R Function(T data) success,
-    required R Function(Object error) error,
+    required R Function(ErrorResponseModel error) error,
     required R Function() handled,
   }) {
     switch (status) {
@@ -44,7 +46,7 @@ class ApiResult<T> {
   // Flexible version: maybeWhen (with fallback)
   R maybeWhen<R>({
     R Function(T data)? success,
-    R Function(Object error)? error,
+    R Function(ErrorResponseModel error)? error,
     R Function()? handled,
     required R Function() orElse,
   }) {
@@ -61,7 +63,7 @@ class ApiResult<T> {
   // Super short version: whenOrNull (no orElse)
   R? whenOrNull<R>({
     R Function(T data)? success,
-    R Function(Object error)? error,
+    R Function(ErrorResponseModel error)? error,
     R Function()? handled,
   }) {
     switch (status) {

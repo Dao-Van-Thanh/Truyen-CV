@@ -6,7 +6,7 @@ import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_template/shared/bloc/theme/app_theme.dart';
+import 'package:flutter_template/shared/bloc/config/app_theme.dart';
 import 'dependency/app_service.dart';
 import 'dependency/router/utils/route_name.dart';
 import 'dependency/router/utils/route_page.dart';
@@ -29,9 +29,9 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final routerService = ref.watch(AppService.router);
-    final appThemeBloc = ref.watch(BlocProvider.appTheme);
+    final configBloc = ref.watch(BlocProvider.config);
     return ObsBuilder(
-      streams: [appThemeBloc.themeModeSubject],
+      streams: [configBloc.themeModeSubject],
       builder: (context) {
         return MaterialApp(
           locale: TranslationProvider.of(context).flutterLocale,
@@ -42,7 +42,7 @@ class MyApp extends ConsumerWidget {
           title: 'Flutter Demo',
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
-          themeMode: appThemeBloc.themeModeSubject.value,
+          themeMode: configBloc.themeModeSubject.value,
           onGenerateRoute: RoutePage.onGenerateRoute,
           navigatorKey: routerService.navigatorKey,
           builder: (context, child) {

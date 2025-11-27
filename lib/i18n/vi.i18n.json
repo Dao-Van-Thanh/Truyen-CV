@@ -17,11 +17,31 @@
         "female": "Hello Ms {name}"
     },
     "buttonPressCount": "Bạn đã nhấn nút nhiều lần",
-    "rootScreen":{
+    "rootScreen": {
         "bottomNavigationBar": {
             "library": "Thư viện",
             "explore": "khám phá",
             "individual": "Cá nhân"
         }
+    },
+    "exploreScreen": {
+        "title": "Khám phá",
+        "pages": {
+            "newlyUpdated": "Mới cập nhật",
+            "newlyPostedStory": "Mới đăng truyện",
+            "allTimeReads": "Lượt đọc toàn thời gian",
+            "monthlyReads": "Lượt đọc tháng",
+            "weeklyReads": "Lượt đọc tuần",
+            "dailyReads": "Lượt đọc ngày",
+            "allTimeNominations": "Đề cử toàn thời gian",
+            "monthlyNominations": "Đề cử tháng",
+            "voteScore": "Điểm vote",
+            "chapterCount": "Số chương",
+            "genre": "Thể loại"
+        }
+    },
+    "story": {
+        "reload": "Tải lại",
+        "noData": "Không có truyện nào"
     }
 }

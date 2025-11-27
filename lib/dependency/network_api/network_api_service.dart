@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/api/api_service.dart';
 import 'package:flutter_template/dependency/api/interceptors/certificate_pinning_interceptor.dart';
+import 'package:flutter_template/dependency/network_api/story/story_repository.dart';
 import 'package:flutter_template/shared/env/env_model.dart';
 
 void _addSSLPinningInterceptor(ApiService apiService) {
@@ -16,15 +17,6 @@ void _addSSLPinningInterceptor(ApiService apiService) {
 
 final _apiProvider = Provider((ref) {
   final apiService = ApiService(ref);
-
-  // final networkApi = ref.read(AppService.networkApi);
-
-  // apiService.addInterceptors([
-  //   ApiAuthInterceptor(
-  //     appBloc: appBloc,
-  //     networkApiService: networkApi,
-  //   ),
-  // ]);
   _addSSLPinningInterceptor(apiService);
   return apiService;
 });
@@ -39,4 +31,6 @@ class NetworkApiService {
   }
 
   late final _apiService = ref.watch(_apiProvider);
+
+  late final storyRepository = StoryRepository(_apiService);
 }
