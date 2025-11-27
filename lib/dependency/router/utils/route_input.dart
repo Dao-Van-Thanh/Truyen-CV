@@ -10,4 +10,9 @@ class RouteInput {
   });
 
   RouteInput.counter() : routeName = RouteName.counter;
+  RouteInput.root() : routeName = RouteName.root;
+  RouteInput.unknown() : routeName = RouteName.unknown;
+  RouteInput.library() : routeName = RouteName.library;
+  RouteInput.explore() : routeName = RouteName.explore;
+  RouteInput.individual() : routeName = RouteName.individual;
 }

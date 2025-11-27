@@ -63,7 +63,7 @@ class MyApp extends ConsumerWidget {
               ),
             );
           },
-          initialRoute: RouteName.counter,
+          initialRoute: RouteName.root,
         );
       },
     );

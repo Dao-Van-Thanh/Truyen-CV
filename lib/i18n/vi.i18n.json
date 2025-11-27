@@ -16,5 +16,12 @@
         "male": "Hello <br>Mr</br> Hoa",
         "female": "Hello Ms {name}"
     },
-    "buttonPressCount": "Bạn đã nhấn nút nhiều lần"
+    "buttonPressCount": "Bạn đã nhấn nút nhiều lần",
+    "rootScreen":{
+        "bottomNavigationBar": {
+            "library": "Thư viện",
+            "explore": "khám phá",
+            "individual": "Cá nhân"
+        }
+    }
 }
