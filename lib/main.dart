@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
@@ -43,6 +45,24 @@ class MyApp extends ConsumerWidget {
           themeMode: appThemeBloc.themeModeSubject.value,
           onGenerateRoute: RoutePage.onGenerateRoute,
           navigatorKey: routerService.navigatorKey,
+          builder: (context, child) {
+            if (child == null) return const SizedBox.shrink();
+
+            if (!Platform.isIOS) {
+              return child;
+            }
+            // Only apply fixed text scaling if the platform is iOS
+            return MediaQuery(
+              data: MediaQuery.of(context)
+                  .copyWith(textScaler: const TextScaler.linear(1.0)),
+              child: ScrollConfiguration(
+                behavior: const ScrollBehavior().copyWith(
+                  physics: const ClampingScrollPhysics(),
+                ),
+                child: child,
+              ),
+            );
+          },
           initialRoute: RouteName.counter,
         );
       },
