@@ -66,6 +66,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 
 	/// vi: 'Bạn đã nhấn nút nhiều lần'
 	String get buttonPressCount => 'Bạn đã nhấn nút nhiều lần';
+
+	late final TranslationsRootScreenVi rootScreen = TranslationsRootScreenVi.internal(_root);
 }
 
 // Path: login
@@ -89,6 +91,34 @@ class TranslationsLoginVi {
 	String get forgotPassword => 'Quên mật khẩu?';
 }
 
+// Path: rootScreen
+class TranslationsRootScreenVi {
+	TranslationsRootScreenVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final TranslationsRootScreenBottomNavigationBarVi bottomNavigationBar = TranslationsRootScreenBottomNavigationBarVi.internal(_root);
+}
+
+// Path: rootScreen.bottomNavigationBar
+class TranslationsRootScreenBottomNavigationBarVi {
+	TranslationsRootScreenBottomNavigationBarVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// vi: 'Thư viện'
+	String get library => 'Thư viện';
+
+	/// vi: 'khám phá'
+	String get explore => 'khám phá';
+
+	/// vi: 'Cá nhân'
+	String get individual => 'Cá nhân';
+}
+
 /// The flat map containing all translations for locale <vi>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -108,6 +138,9 @@ extension on Translations {
 			'list.2' => 'Mục ba',
 			'greet' => ({required SexEnum context, required Object name}) { switch (context) { case SexEnum.male: return 'Hello <br>Mr</br> Hoa'; case SexEnum.female: return 'Hello Ms ${name}'; } }, 
 			'buttonPressCount' => 'Bạn đã nhấn nút nhiều lần',
+			'rootScreen.bottomNavigationBar.library' => 'Thư viện',
+			'rootScreen.bottomNavigationBar.explore' => 'khám phá',
+			'rootScreen.bottomNavigationBar.individual' => 'Cá nhân',
 			_ => null,
 		};
 	}

@@ -44,11 +44,12 @@ flutter pub run build_runner build
 
 ## Generate SHA-256 certificate fingerprint
 
- ```shell
+```shell
 make sha256_cert url=https://openbanking-sandbox.mbbank.com.vn:9004
 ```
 
 ## Build APK with obfuscation and split debug info
+
 ```shell
 flutter build apk --release \
   --target-platform android-arm,android-arm64,android-x64 \
@@ -57,6 +58,7 @@ flutter build apk --release \
 ```
 
 ## Build iOS
+
 ```shell
 flutter clean &&
 flutter pub get &&
@@ -66,11 +68,15 @@ cd ..
 ```
 
 ## Generate SVG icons & PNG images
+
 ```shell
 npm run gen:assets
 ```
 
 ## Generate SHA-256 certificate fingerprint for a specific URL
+
 ```shell
 make sha256_cert url=example.com:443
 ```
+
+gen locale
