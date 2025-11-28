@@ -38,6 +38,11 @@
             "voteScore": "Điểm vote",
             "chapterCount": "Số chương",
             "genre": "Thể loại"
+        },
+        "listType": {
+            "list": "Danh sách",
+            "listCompact": "Danh sách (gọn)",
+            "grid": "Lưới"
         }
     },
     "story": {

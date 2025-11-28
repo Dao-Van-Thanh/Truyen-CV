@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
+import 'package:flutter_template/dependency/router/arguments/explore_argument.dart';
 import 'package:flutter_template/features/counter/counter_bloc.dart';
 import 'package:flutter_template/features/counter/counter_screen.dart';
 import 'package:flutter_template/features/explore/explore_bloc.dart';
@@ -52,8 +53,9 @@ class RouteScreen {
   }
 
   static PageRoute explorePageRoute(RouteSettings settings) {
+    final args = settings.arguments as ExploreArgument?;
     BlocProvider.explore = createAutoDisposeBloc(
-      (ref) => ExploreBloc(ref),
+      (ref) => ExploreBloc(ref, args: args),
     );
     return MaterialPageRoute(
       settings: settings,

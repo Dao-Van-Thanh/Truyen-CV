@@ -3,12 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/filter/story_filter_request.dart';
 import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
-import 'package:flutter_template/features/explore/enum/explore_enum.dart';
-import 'package:flutter_template/features/explore/widgets/story_grid_list.dart';
+import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
+import 'package:flutter_template/shared/widgets/story_list/story_list.dart';
 
 class ExplorePageWidget extends ConsumerStatefulWidget {
-  final ExploreEnum exploreEnum;
-  const ExplorePageWidget({super.key, required this.exploreEnum});
+  final StoryFilterRequest request;
+  final StoryListType listType;
+  const ExplorePageWidget({
+    super.key,
+    required this.listType,
+    required this.request,
+  });
 
   @override
   ConsumerState<ExplorePageWidget> createState() => _ExplorePageWidgetState();
@@ -37,7 +42,9 @@ class _ExplorePageWidgetState extends ConsumerState<ExplorePageWidget> {
     try {
       final res = await networkApiService.storyRepository.getStoryFilter(
         req: StoryFilterRequest(
-          sort: widget.exploreEnum.page,
+          cat: widget.request.cat,
+          sort: widget.request.sort,
+          status: widget.request.status,
           page: _currentPage,
         ),
       );
@@ -89,13 +96,14 @@ class _ExplorePageWidgetState extends ConsumerState<ExplorePageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StoryGridList(
+    return StoryList(
       stories: _stories,
       isLoading: _isLoading,
       isFirstLoad: _isFirstLoad,
       hasMore: _hasMore,
       onRefresh: _onRefresh,
       onLoadMore: _loadData,
+      listType: widget.listType,
     );
   }
 }

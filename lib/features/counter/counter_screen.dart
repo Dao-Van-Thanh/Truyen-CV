@@ -23,10 +23,12 @@ class CounterScreen extends ConsumerWidget {
               );
             },
             itemBuilder: (context) => AppLocale.values
-                .map((locale) => PopupMenuItem<AppLocale>(
-                      value: locale,
-                      child: Text(locale.languageCode.toUpperCase()),
-                    ))
+                .map(
+                  (locale) => PopupMenuItem<AppLocale>(
+                    value: locale,
+                    child: Text(locale.languageCode.toUpperCase()),
+                  ),
+                )
                 .toList(),
           ),
         ],

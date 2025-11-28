@@ -28,14 +28,19 @@ class CategoryPageWidget extends ConsumerWidget {
           ),
           itemCount: categories.length,
           itemBuilder: (context, index) {
-            return Container(
-              decoration: BoxDecoration(
-                color:
-                    Theme.of(context).colorScheme.scrim.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Text(categories[index].name ?? ''),
+            return GestureDetector(
+              onTap: () => bloc.onSelectCategory(categories[index]),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .scrim
+                      .withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Text(categories[index].name ?? ''),
+                ),
               ),
             );
           },

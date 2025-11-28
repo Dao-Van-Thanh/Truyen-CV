@@ -53,8 +53,14 @@ class AppTheme {
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
+      scrolledUnderElevation: 0,
     ),
     cardColor: Colors.grey[100],
+    popupMenuTheme: PopupMenuThemeData(
+      color: Colors.white,
+      iconColor: Colors.black87,
+      textStyle: const TextStyle(color: Colors.black87),
+    ),
   );
 
   static ThemeData dark = ThemeData(
@@ -107,7 +113,14 @@ class AppTheme {
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
+      scrolledUnderElevation: 0,
     ),
     cardColor: Colors.grey[800],
+    popupMenuTheme: PopupMenuThemeData(
+      color: Colors.grey[800],
+      iconColor: Colors.white70,
+      textStyle: const TextStyle(color: Colors.white70),
+      iconSize: 20,
+    ),
   );
 }
