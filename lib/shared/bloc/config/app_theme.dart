@@ -4,13 +4,14 @@ class AppTheme {
   static final String _defaultFont = 'AvertaStdCY';
 
   static ThemeData light = ThemeData(
-    useMaterial3: true,
     brightness: Brightness.light,
     fontFamily: _defaultFont,
     scaffoldBackgroundColor: Colors.grey[50],
     colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple, brightness: Brightness.light),
-    iconTheme: const IconThemeData(color: Colors.black87),
+      seedColor: Colors.grey[50]!,
+      brightness: Brightness.light,
+    ),
+    iconTheme: const IconThemeData(color: Colors.black87, size: 20),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
       selectedItemColor: Colors.black87,
@@ -34,21 +35,37 @@ class AppTheme {
       titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
     ),
-    tabBarTheme: const TabBarTheme(
+    tabBarTheme: TabBarTheme(
       indicatorColor: Colors.black87,
       labelColor: Colors.black87,
       unselectedLabelColor: Colors.black54,
     ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black87,
+      elevation: 0,
+      iconTheme: IconThemeData(
+        color: Colors.black87,
+        size: 20,
+      ),
+      titleTextStyle: TextStyle(
+        color: Colors.black87,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    cardColor: Colors.grey[100],
   );
 
   static ThemeData dark = ThemeData(
-    useMaterial3: true,
     brightness: Brightness.dark,
     fontFamily: _defaultFont,
     scaffoldBackgroundColor: Colors.grey[900],
     colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple, brightness: Brightness.dark),
-    iconTheme: const IconThemeData(color: Colors.white70),
+      seedColor: Colors.grey[900]!,
+      brightness: Brightness.dark,
+    ),
+    iconTheme: const IconThemeData(color: Colors.white70, size: 20),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.black87,
       selectedItemColor: Colors.white70,
@@ -77,5 +94,20 @@ class AppTheme {
       labelColor: Colors.white70,
       unselectedLabelColor: Colors.white54,
     ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.black87,
+      foregroundColor: Colors.white70,
+      elevation: 0,
+      iconTheme: IconThemeData(
+        color: Colors.white70,
+        size: 20,
+      ),
+      titleTextStyle: TextStyle(
+        color: Colors.white70,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    cardColor: Colors.grey[800],
   );
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/features/explore/enum/explore_enum.dart';
+import 'package:flutter_template/features/explore/widgets/category_page_widget.dart';
 import 'package:flutter_template/features/explore/widgets/explore_page_widget.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/widgets/page_view/app_page_view.dart';
@@ -35,17 +36,26 @@ class ExploreScreen extends ConsumerWidget {
         isScrollTabView: true,
         isScrollable: true,
         onPageChanged: (index) {},
-        items: ExploreEnum.values
-            .map(
-              (e) => AppPageViewItems(
+        items: ExploreEnum.values.map(
+          (e) {
+            if (e == ExploreEnum.genres) {
+              return AppPageViewItems(
                 label: e.label(context),
-                child: ExplorePageWidget(exploreEnum: e),
+                child: const CategoryPageWidget(),
                 labelStyle: TextStyle(
                   fontWeight: FontWeight.w700,
                 ),
+              );
+            }
+            return AppPageViewItems(
+              label: e.label(context),
+              child: ExplorePageWidget(exploreEnum: e),
+              labelStyle: TextStyle(
+                fontWeight: FontWeight.w700,
               ),
-            )
-            .toList(),
+            );
+          },
+        ).toList(),
       ),
     );
   }
