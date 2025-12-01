@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class AppCacheNetworkImage extends StatelessWidget {
   final String imageUrl;
@@ -9,6 +8,7 @@ class AppCacheNetworkImage extends StatelessWidget {
   final BoxFit fit;
   final double? width;
   final double? height;
+  final int? memCacheWidth;
 
   const AppCacheNetworkImage({
     super.key,
@@ -18,31 +18,34 @@ class AppCacheNetworkImage extends StatelessWidget {
     this.fit = BoxFit.cover,
     this.width,
     this.height,
+    this.memCacheWidth,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
     return CachedNetworkImage(
       imageUrl: imageUrl,
       fit: fit,
       width: width,
       height: height,
+      memCacheWidth: memCacheWidth,
       placeholder: placeholderBuilder ??
-          (context, url) => Container(
-                color: isDark ? Colors.grey[800] : Colors.grey[300],
-                alignment: Alignment.center,
-                child: LoadingAnimationWidget.staggeredDotsWave(
-                  color: theme.colorScheme.primary,
-                  size: 30,
-                ),
+          (context, url) => Image.asset(
+                'assets/images/image_default.jpeg',
+                width: width,
+                height: height,
+                fit: fit,
+                cacheWidth: memCacheWidth ??
+                    (width != null ? (width! * 2).toInt() : null),
               ),
       errorWidget: errorBuilder ??
-          (context, url, error) => Container(
-                color: isDark ? Colors.grey[800] : Colors.grey[300],
-                alignment: Alignment.center,
+          (context, url, error) => Image.asset(
+                'assets/images/image_default.jpeg',
+                width: width,
+                height: height,
+                fit: fit,
+                cacheWidth: memCacheWidth ??
+                    (width != null ? (width! * 2).toInt() : null),
               ),
     );
   }
