@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
+import 'package:flutter_template/shared/widgets/cache_network_image/app_cache_network_image.dart';
 
 class StoryGridItem extends ConsumerWidget {
   final StoryModel story;
@@ -30,20 +30,10 @@ class StoryGridItem extends ConsumerWidget {
           children: [
             AspectRatio(
               aspectRatio: 3 / 4,
-              child: CachedNetworkImage(
+              child: AppCacheNetworkImage(
                 imageUrl: story.thumb ?? '',
                 fit: BoxFit.cover,
                 memCacheWidth: 250,
-                placeholder: (context, url) => Container(
-                  color: isDark ? Colors.grey[800] : Colors.grey[300],
-                  child: const Center(
-                      child: Icon(Icons.image, color: Colors.grey)),
-                ),
-                errorWidget: (context, url, error) => Container(
-                  color: isDark ? Colors.grey[800] : Colors.grey[300],
-                  alignment: Alignment.center,
-                  child: const Icon(Icons.error, size: 20),
-                ),
               ),
             ),
             Expanded(
