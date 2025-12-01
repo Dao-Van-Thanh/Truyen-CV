@@ -11,6 +11,8 @@ class RoutePage {
         return RouteScreen.rootPageRoute(settings);
       case RouteName.explore:
         return RouteScreen.explorePageRoute(settings);
+      case RouteName.storyDetail:
+        return RouteScreen.storyDetailPageRoute(settings);
     }
 
     return RouteScreen.unknownPageRoute(settings);

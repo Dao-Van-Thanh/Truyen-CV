@@ -61,6 +61,10 @@ class AppTheme {
       iconColor: Colors.black87,
       textStyle: const TextStyle(color: Colors.black87),
     ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: Colors.black87,
+      foregroundColor: Colors.white70,
+    ),
   );
 
   static ThemeData dark = ThemeData(
@@ -121,6 +125,10 @@ class AppTheme {
       iconColor: Colors.white70,
       textStyle: const TextStyle(color: Colors.white70),
       iconSize: 20,
+    ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: Colors.white70,
+      foregroundColor: Colors.black87,
     ),
   );
 }

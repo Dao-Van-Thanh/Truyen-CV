@@ -4,6 +4,7 @@ import 'package:flutter_template/features/explore/explore_bloc.dart';
 import 'package:flutter_template/features/individual/individual_bloc.dart';
 import 'package:flutter_template/features/library/library_bloc.dart';
 import 'package:flutter_template/features/root/root_bloc.dart';
+import 'package:flutter_template/features/story/detail/story_detail_bloc.dart';
 import 'package:flutter_template/shared/bloc/app_bloc.dart';
 import 'package:flutter_template/shared/bloc/config/app_config_bloc.dart';
 
@@ -15,6 +16,7 @@ class BlocProvider {
   static late AutoDisposeProvider<LibraryBloc> library;
   static late AutoDisposeProvider<IndividualBloc> individual;
   static late AutoDisposeProvider<ExploreBloc> explore;
+  static late AutoDisposeProvider<StoryDetailBloc> storyDetail;
 
   const BlocProvider._();
 }

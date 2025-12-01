@@ -3,6 +3,7 @@ import 'package:flutter_template/dependency/api/extension/response_extension.dar
 import 'package:flutter_template/dependency/api/model/api_result.dart';
 import 'package:flutter_template/dependency/network_api/base/base_data_response_model.dart';
 import 'package:flutter_template/dependency/network_api/story/category/category_model.dart';
+import 'package:flutter_template/dependency/network_api/story/detail/story_detail_response.dart';
 import 'package:flutter_template/dependency/network_api/story/filter/story_filter_request.dart';
 import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
 
@@ -38,6 +39,24 @@ class StoryRepository {
 
     return res.parseData(
       (json) => StoryFilterResponse.fromJson(json),
+    );
+  }
+
+  Future<ApiResult<BaseDataResponseModel<StoryDetailResponse>>> storyDetail(
+    String storyId,
+  ) async {
+    final res = await apiService.get(
+      '/story',
+      queryParameters: {
+        'story_id': storyId,
+      },
+    );
+
+    return res.parseData(
+      (json) => BaseDataResponseModel<StoryDetailResponse>.fromJson(
+        json,
+        (data) => StoryDetailResponse.fromJson(data as Map<String, dynamic>),
+      ),
     );
   }
 }

@@ -6,4 +6,5 @@ class RouteName {
   static const library = 'library';
   static const explore = 'explore';
   static const individual = 'individual';
+  static const storyDetail = 'storyDetail';
 }

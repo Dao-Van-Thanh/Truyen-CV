@@ -1,4 +1,63 @@
 {
     "hello": "Hello",
-    "buttonPressCount": "You have pushed the button this many times"
+    "welcome": "Welcome to our application",
+    "login": {
+        "username": "Username {username: String} - {name: String} - {age: int} years old",
+        "password": "Password",
+        "submit": "Log in",
+        "forgot_password": "Forgot password?"
+    },
+    "list": [
+        "Item one",
+        "Item two",
+        "Item three"
+    ],
+    "greet(context=SexEnum)": {
+        "male": "Hello <br>Mr</br> Hoa",
+        "female": "Hello Ms {name}"
+    },
+    "buttonPressCount": "You have pushed the button this many times",
+    "rootScreen": {
+        "bottomNavigationBar": {
+            "library": "Library",
+            "explore": "Explore",
+            "individual": "Profile"
+        }
+    },
+    "exploreScreen": {
+        "title": "Explore",
+        "pages": {
+            "newlyUpdated": "Newly updated",
+            "newlyPostedStory": "Newly posted stories",
+            "allTimeReads": "All-time reads",
+            "monthlyReads": "Monthly reads",
+            "weeklyReads": "Weekly reads",
+            "dailyReads": "Daily reads",
+            "allTimeNominations": "All-time nominations",
+            "monthlyNominations": "Monthly nominations",
+            "voteScore": "Vote score",
+            "chapterCount": "Chapter count",
+            "genre": "Genre"
+        },
+        "listType": {
+            "list": "List",
+            "listCompact": "Compact list",
+            "grid": "Grid"
+        }
+    },
+    "story": {
+        "reload": "Reload",
+        "noData": "No stories available"
+    },
+    "storyDetail": {
+        "loadingError": "Failed to load story details",
+        "retry": "Retry",
+        "info": "Information",
+        "introduce": "Introduction",
+        "chapters": "Chapters",
+        "copyStoryNameSuccess": "Copied story name: {name: String}",
+        "readNow": "Read now",
+        "continueReading": "Continue reading",
+        "tableOfContents": "Table of contents"
+    }
 }

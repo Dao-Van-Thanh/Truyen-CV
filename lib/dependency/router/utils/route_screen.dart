@@ -12,6 +12,8 @@ import 'package:flutter_template/features/library/library_bloc.dart';
 import 'package:flutter_template/features/library/library_screen.dart';
 import 'package:flutter_template/features/root/root_bloc.dart';
 import 'package:flutter_template/features/root/root_screen.dart';
+import 'package:flutter_template/features/story/detail/story_detail_bloc.dart';
+import 'package:flutter_template/features/story/detail/story_detail_screen.dart';
 import 'package:flutter_template/features/unknown/unknown_screen.dart';
 
 class RouteScreen {
@@ -70,6 +72,17 @@ class RouteScreen {
     return MaterialPageRoute(
       settings: settings,
       builder: (_) => const IndividualScreen(),
+    );
+  }
+
+  static PageRoute storyDetailPageRoute(RouteSettings settings) {
+    final args = settings.arguments as String;
+    BlocProvider.storyDetail = createAutoDisposeBloc(
+      (ref) => StoryDetailBloc(ref, storyId: args),
+    );
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (_) => const StoryDetailScreen(),
     );
   }
 }
