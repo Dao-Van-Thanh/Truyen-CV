@@ -79,4 +79,6 @@ npm run gen:assets
 make sha256_cert url=example.com:443
 ```
 
-gen locale
+```shell
+dart run slang watch
+```

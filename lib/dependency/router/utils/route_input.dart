@@ -19,4 +19,8 @@ class RouteInput {
     ExploreArgument? this.arguments,
   }) : routeName = RouteName.explore;
   RouteInput.individual() : routeName = RouteName.individual;
+  RouteInput.storyDetail({
+    required String storyId,
+  })  : routeName = RouteName.storyDetail,
+        arguments = storyId;
 }

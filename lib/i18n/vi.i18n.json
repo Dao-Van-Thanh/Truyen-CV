@@ -48,5 +48,16 @@
     "story": {
         "reload": "Tải lại",
         "noData": "Không có truyện nào"
+    },
+    "storyDetail": {
+        "loadingError": "Lỗi tải chi tiết truyện",
+        "retry": "Thử lại",
+        "info": "Thông tin",
+        "introduce": "Giới thiệu",
+        "chapters": "Chương",
+        "copyStoryNameSuccess": "Đã sao chép tên truyện: {name: String}",
+        "readNow": "Đọc ngay",
+        "continueReading": "Dọc tiếp",
+        "tableOfContents": "Mục lục"
     }
 }
