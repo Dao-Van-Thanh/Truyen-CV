@@ -71,6 +71,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsExploreScreenVi exploreScreen = TranslationsExploreScreenVi.internal(_root);
 	late final TranslationsStoryVi story = TranslationsStoryVi.internal(_root);
 	late final TranslationsStoryDetailVi storyDetail = TranslationsStoryDetailVi.internal(_root);
+	late final TranslationsListChapterVi listChapter = TranslationsListChapterVi.internal(_root);
 }
 
 // Path: login
@@ -168,6 +169,24 @@ class TranslationsStoryDetailVi {
 
 	/// vi: 'Mục lục'
 	String get tableOfContents => 'Mục lục';
+}
+
+// Path: listChapter
+class TranslationsListChapterVi {
+	TranslationsListChapterVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// vi: 'Đang tải chương...'
+	String get loadingChapter => 'Đang tải chương...';
+
+	/// vi: 'Mới nhất'
+	String get sortNew => 'Mới nhất';
+
+	/// vi: 'Cũ nhất'
+	String get sortOld => 'Cũ nhất';
 }
 
 // Path: rootScreen.bottomNavigationBar
@@ -296,6 +315,9 @@ extension on Translations {
 			'storyDetail.readNow' => 'Đọc ngay',
 			'storyDetail.continueReading' => 'Dọc tiếp',
 			'storyDetail.tableOfContents' => 'Mục lục',
+			'listChapter.loadingChapter' => 'Đang tải chương...',
+			'listChapter.sortNew' => 'Mới nhất',
+			'listChapter.sortOld' => 'Cũ nhất',
 			_ => null,
 		};
 	}

@@ -180,13 +180,13 @@ class StoryDetailScreen extends ConsumerWidget {
               },
             ),
           ),
-          bottomNavigationBar: _buildBottomNavigationBar(context),
+          bottomNavigationBar: _buildBottomNavigationBar(context, bloc),
         );
       },
     );
   }
 
-  Widget _buildBottomNavigationBar(BuildContext context) {
+  Widget _buildBottomNavigationBar(BuildContext context, StoryDetailBloc bloc) {
     final theme = Theme.of(context);
     return SafeArea(
       child: Container(
@@ -203,7 +203,7 @@ class StoryDetailScreen extends ConsumerWidget {
           children: [
             Expanded(
               child: AppGestureDetector(
-                onTap: () {},
+                onTap: bloc.onTapNextListChapter,
                 child: IntrinsicHeight(
                   child: Container(
                     alignment: Alignment.center,

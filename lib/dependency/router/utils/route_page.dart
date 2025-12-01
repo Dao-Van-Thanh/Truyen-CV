@@ -13,6 +13,8 @@ class RoutePage {
         return RouteScreen.explorePageRoute(settings);
       case RouteName.storyDetail:
         return RouteScreen.storyDetailPageRoute(settings);
+      case RouteName.listChapter:
+        return RouteScreen.listChapterPageRoute(settings);
     }
 
     return RouteScreen.unknownPageRoute(settings);

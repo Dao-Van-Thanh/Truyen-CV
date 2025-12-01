@@ -7,4 +7,5 @@ class RouteName {
   static const explore = 'explore';
   static const individual = 'individual';
   static const storyDetail = 'storyDetail';
+  static const listChapter = 'listChapter';
 }

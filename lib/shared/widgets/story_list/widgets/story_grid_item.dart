@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
-import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class StoryGridItem extends ConsumerWidget {
   final StoryModel story;
@@ -16,25 +14,17 @@ class StoryGridItem extends ConsumerWidget {
     final routerService = ref.read(AppService.router);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    return AppGestureDetector(
-      onTap: () {
-        routerService.push(RouteInput.storyDetail(storyId: story.id ?? ''));
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: theme.cardColor,
-          borderRadius: BorderRadius.circular(6),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.3),
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
-          shape: BoxShape.rectangle,
-        ),
-        clipBehavior: Clip.antiAlias,
+
+    return Card(
+      elevation: 2,
+      shadowColor: isDark ? Colors.black54 : Colors.grey.withValues(alpha: 0.5),
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () {
+          routerService.push(RouteInput.storyDetail(storyId: story.id ?? ''));
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -43,20 +33,17 @@ class StoryGridItem extends ConsumerWidget {
               child: CachedNetworkImage(
                 imageUrl: story.thumb ?? '',
                 fit: BoxFit.cover,
+                memCacheWidth: 250,
                 placeholder: (context, url) => Container(
                   color: isDark ? Colors.grey[800] : Colors.grey[300],
-                  alignment: Alignment.center,
-                  child: LoadingAnimationWidget.staggeredDotsWave(
-                    color: theme.colorScheme.primary,
-                    size: 30,
-                  ),
+                  child: const Center(
+                      child: Icon(Icons.image, color: Colors.grey)),
                 ),
-                errorWidget: (context, url, error) {
-                  return Container(
-                    color: isDark ? Colors.grey[800] : Colors.grey[300],
-                    alignment: Alignment.center,
-                  );
-                },
+                errorWidget: (context, url, error) => Container(
+                  color: isDark ? Colors.grey[800] : Colors.grey[300],
+                  alignment: Alignment.center,
+                  child: const Icon(Icons.error, size: 20),
+                ),
               ),
             ),
             Expanded(
@@ -87,7 +74,7 @@ class StoryGridItem extends ConsumerWidget {
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: theme.colorScheme.onSurface
                                   .withValues(alpha: 0.6),
-                              fontSize: 12,
+                              fontSize: 11,
                             ),
                           ),
                         ),
@@ -105,14 +92,13 @@ class StoryGridItem extends ConsumerWidget {
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: theme.colorScheme.onSurface
                                     .withValues(alpha: 0.6),
-                                fontSize: 12,
+                                fontSize: 11,
                               ),
                             ),
                           ],
                         ),
                       ],
                     ),
-                    const SizedBox(height: 2),
                     Text(
                       story.process ?? '',
                       style: theme.textTheme.bodySmall?.copyWith(
