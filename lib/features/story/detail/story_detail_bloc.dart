@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/detail/story_detail_response.dart';
+import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
+import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:rxdart/rxdart.dart';
@@ -78,5 +80,13 @@ class StoryDetailBloc extends BlocBase {
         content: Text(t.storyDetail.copyStoryNameSuccess(name: storyName)),
       ),
     );
+  }
+
+  void onTapNextListChapter() {
+    final args = ListChapterArgument(
+      storyId: storyId,
+      storyName: storyDetailSubject.value?.name ?? '',
+    );
+    routerService.push(RouteInput.listChapter(args: args));
   }
 }

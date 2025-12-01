@@ -100,6 +100,7 @@ class AppPageViewState extends State<AppPageView>
                   children: [
                     for (final item in widget.items)
                       _KeepAliveWrapper(
+                        key: item.key,
                         keepAlive: item.keepAlive,
                         child: KeyedSubtree(
                           key: PageStorageKey(item.label),
@@ -118,12 +119,14 @@ class AppPageViewState extends State<AppPageView>
 }
 
 class AppPageViewItems {
+  final Key? key;
   final Widget child;
   final String label;
   final TextStyle? labelStyle;
   final bool keepAlive;
 
   const AppPageViewItems({
+    this.key,
     required this.child,
     required this.label,
     this.labelStyle,

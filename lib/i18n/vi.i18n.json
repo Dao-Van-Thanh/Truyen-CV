@@ -59,5 +59,10 @@
         "readNow": "Đọc ngay",
         "continueReading": "Dọc tiếp",
         "tableOfContents": "Mục lục"
+    },
+    "listChapter": {
+        "loadingChapter": "Đang tải chương...",
+        "sortNew": "Mới nhất",
+        "sortOld": "Cũ nhất"
     }
 }

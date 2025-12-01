@@ -101,6 +101,7 @@ class ExploreScreen extends ConsumerWidget {
               (e) {
                 if (e == ExploreEnum.genres) {
                   return AppPageViewItems(
+                    key: ValueKey('categoryPage_${e.label(context)}'),
                     label: e.label(context),
                     child: const CategoryPageWidget(),
                     labelStyle: TextStyle(
@@ -111,6 +112,7 @@ class ExploreScreen extends ConsumerWidget {
                 return AppPageViewItems(
                   label: e.label(context),
                   child: ExplorePageWidget(
+                    key: ValueKey('explorePage_${e.label(context)}'),
                     request: StoryFilterRequest(
                       sort: e.page,
                     ),

@@ -6,6 +6,7 @@ import 'package:flutter_template/dependency/network_api/story/category/category_
 import 'package:flutter_template/dependency/network_api/story/detail/story_detail_response.dart';
 import 'package:flutter_template/dependency/network_api/story/filter/story_filter_request.dart';
 import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
+import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 
 class StoryRepository {
   final ApiService apiService;
@@ -56,6 +57,26 @@ class StoryRepository {
       (json) => BaseDataResponseModel<StoryDetailResponse>.fromJson(
         json,
         (data) => StoryDetailResponse.fromJson(data as Map<String, dynamic>),
+      ),
+    );
+  }
+
+  Future<ApiResult<BaseDataResponseModel<List<ListChapterRes>>>> getListChapter(
+    String storyId,
+  ) async {
+    final response = await apiService.get(
+      '/listchap',
+      queryParameters: {
+        'story_id': storyId,
+      },
+    );
+
+    return response.parseData(
+      (json) => BaseDataResponseModel<List<ListChapterRes>>.fromJson(
+        json,
+        (data) => (data as List<dynamic>)
+            .map((e) => ListChapterRes.fromJson(e as Map<String, dynamic>))
+            .toList(),
       ),
     );
   }

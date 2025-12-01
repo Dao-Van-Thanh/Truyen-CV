@@ -97,6 +97,9 @@ class _ExplorePageWidgetState extends ConsumerState<ExplorePageWidget> {
   @override
   Widget build(BuildContext context) {
     return StoryList(
+      key: PageStorageKey(
+        'explore_${widget.request.cat}_${widget.request.sort}',
+      ),
       stories: _stories,
       isLoading: _isLoading,
       isFirstLoad: _isFirstLoad,

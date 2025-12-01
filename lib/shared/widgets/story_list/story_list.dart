@@ -78,18 +78,19 @@ class _StoryListState extends State<StoryList> {
     );
   }
 
-  Widget _buildGrid() {
-    final height = MediaQuery.of(context).size.height;
+  Widget _buildGrid(double heightItem) {
     final itemCount = widget.stories.length + (widget.hasMore ? 1 : 0);
 
     return GridView.builder(
       controller: _scrollController,
       padding: const EdgeInsets.all(12),
+      cacheExtent: 500,
+      addRepaintBoundaries: true,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        mainAxisExtent: height * 0.29,
+        mainAxisExtent: heightItem,
       ),
       itemCount: itemCount,
       itemBuilder: (context, index) {
@@ -118,7 +119,8 @@ class _StoryListState extends State<StoryList> {
   Widget _buildListView() {
     switch (widget.listType) {
       case StoryListType.grid:
-        return _buildGrid();
+        final heightItem = MediaQuery.of(context).size.height * 0.29;
+        return _buildGrid(heightItem);
       case StoryListType.list:
       case StoryListType.listCompact:
         return _buildList();
@@ -164,6 +166,7 @@ class _StoryListState extends State<StoryList> {
                 ScaleTransition(scale: animation, child: child),
             child: _showScrollToTop
                 ? FloatingActionButton(
+                    heroTag: widget.key,
                     onPressed: () {
                       _scrollController.animateTo(
                         0,
