@@ -23,6 +23,8 @@ class AppCacheNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int? assetCacheWidth = memCacheWidth ??
+        ((width != null && width!.isFinite) ? (width! * 2).toInt() : null);
     return CachedNetworkImage(
       imageUrl: imageUrl,
       fit: fit,
@@ -35,8 +37,7 @@ class AppCacheNetworkImage extends StatelessWidget {
                 width: width,
                 height: height,
                 fit: fit,
-                cacheWidth: memCacheWidth ??
-                    (width != null ? (width! * 2).toInt() : null),
+                cacheWidth: assetCacheWidth,
               ),
       errorWidget: errorBuilder ??
           (context, url, error) => Image.asset(
@@ -44,8 +45,7 @@ class AppCacheNetworkImage extends StatelessWidget {
                 width: width,
                 height: height,
                 fit: fit,
-                cacheWidth: memCacheWidth ??
-                    (width != null ? (width! * 2).toInt() : null),
+                cacheWidth: assetCacheWidth,
               ),
     );
   }
