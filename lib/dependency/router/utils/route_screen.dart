@@ -3,6 +3,7 @@ import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/dependency/router/arguments/explore_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/features/counter/counter_bloc.dart';
 import 'package:flutter_template/features/counter/counter_screen.dart';
 import 'package:flutter_template/features/explore/explore_bloc.dart';
@@ -17,6 +18,8 @@ import 'package:flutter_template/features/story/detail/story_detail_bloc.dart';
 import 'package:flutter_template/features/story/detail/story_detail_screen.dart';
 import 'package:flutter_template/features/story/list_chapter/list_chapter_bloc.dart';
 import 'package:flutter_template/features/story/list_chapter/list_chapter_screen.dart';
+import 'package:flutter_template/features/story/read_story/read_story_bloc.dart';
+import 'package:flutter_template/features/story/read_story/read_story_screen.dart';
 import 'package:flutter_template/features/unknown/unknown_screen.dart';
 
 class RouteScreen {
@@ -89,7 +92,6 @@ class RouteScreen {
     );
   }
 
-
   static PageRoute listChapterPageRoute(RouteSettings settings) {
     final args = settings.arguments as ListChapterArgument;
     BlocProvider.listChapter = createAutoDisposeBloc(
@@ -98,6 +100,17 @@ class RouteScreen {
     return MaterialPageRoute(
       settings: settings,
       builder: (_) => const ListChapterScreen(),
+    );
+  }
+
+  static PageRoute readStoryPageRoute(RouteSettings settings) {
+    final args = settings.arguments as ReadStoryArgument;
+    BlocProvider.readStory = createAutoDisposeBloc(
+      (ref) => ReadStoryBloc(ref, args: args),
+    );
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (_) => const ReadStoryScreen(),
     );
   }
 }

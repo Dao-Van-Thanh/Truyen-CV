@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'router_provider_interface.dart';
-import 'utils/route_input.dart';
+import 'package:flutter_template/dependency/router/router_provider_interface.dart';
+import 'package:flutter_template/dependency/router/utils/route_input.dart';
 
 class RouterProvider extends RouterProviderInterface {
   @override

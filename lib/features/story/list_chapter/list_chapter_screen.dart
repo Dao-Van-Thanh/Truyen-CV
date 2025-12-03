@@ -71,7 +71,12 @@ class ListChapterScreen extends ConsumerWidget {
                             separatorBuilder: (_, __) => Divider(height: 1),
                             itemBuilder: (context, index) {
                               final chapter = listChapter[index];
-                              return _buildItem(chapter.name ?? '');
+                              return _buildItem(
+                                chapter.name ?? '',
+                                onTap: () {
+                                  bloc.onTapChapter(chapter);
+                                },
+                              );
                             },
                           ),
                         ),
@@ -84,14 +89,17 @@ class ListChapterScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildItem(String chapterName) {
-    return Container(
-      padding:
-          EdgeInsetsConstants.vertical12 + EdgeInsetsConstants.horizontal20,
-      child: Text(
-        chapterName,
-        style: const TextStyle(
-          fontSize: 16,
+  Widget _buildItem(String chapterName, {required VoidCallback? onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding:
+            EdgeInsetsConstants.vertical12 + EdgeInsetsConstants.horizontal20,
+        child: Text(
+          chapterName,
+          style: const TextStyle(
+            fontSize: 16,
+          ),
         ),
       ),
     );

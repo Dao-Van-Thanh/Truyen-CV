@@ -172,7 +172,7 @@ class StoryDetailScreen extends ConsumerWidget {
                               ),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),

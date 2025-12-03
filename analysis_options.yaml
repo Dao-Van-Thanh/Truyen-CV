@@ -26,7 +26,7 @@ linter:
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
     use_key_in_widget_constructors: false
     always_declare_return_types: true
-    # always_use_package_imports: true
+    always_use_package_imports: true
     #    prefer_const_constructors: true
     #    avoid_print: true
     #    avoid_dynamic_calls: true

@@ -1,7 +1,8 @@
 import 'package:flutter_template/dependency/router/arguments/explore_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 
-import 'route_name.dart';
+import 'package:flutter_template/dependency/router/utils/route_name.dart';
 
 class RouteInput {
   String routeName;
@@ -28,5 +29,10 @@ class RouteInput {
   RouteInput.listChapter({
     required ListChapterArgument args,
   })  : routeName = RouteName.listChapter,
+        arguments = args;
+
+  RouteInput.readStory({
+    required ReadStoryArgument args,
+  })  : routeName = RouteName.readStory,
         arguments = args;
 }

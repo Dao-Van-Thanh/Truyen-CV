@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppTheme {
   static final String _defaultFont = 'AvertaStdCY';
@@ -54,6 +55,11 @@ class AppTheme {
         fontWeight: FontWeight.bold,
       ),
       scrolledUnderElevation: 0,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
     ),
     cardColor: Colors.grey[100],
     popupMenuTheme: PopupMenuThemeData(
@@ -118,6 +124,11 @@ class AppTheme {
         fontWeight: FontWeight.bold,
       ),
       scrolledUnderElevation: 0,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
     ),
     cardColor: Colors.grey[800],
     popupMenuTheme: PopupMenuThemeData(

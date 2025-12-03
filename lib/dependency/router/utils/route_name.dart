@@ -8,4 +8,5 @@ class RouteName {
   static const individual = 'individual';
   static const storyDetail = 'storyDetail';
   static const listChapter = 'listChapter';
+  static const readStory = 'readStory';
 }

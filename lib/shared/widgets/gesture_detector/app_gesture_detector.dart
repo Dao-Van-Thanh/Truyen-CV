@@ -6,6 +6,7 @@ class AppGestureDetector extends GestureDetector {
     required Widget child,
     bool isDisable = false,
     VoidCallback? onTap,
+    super.behavior,
   }) : super(
           onTap: () {
             if (isDisable) return;
