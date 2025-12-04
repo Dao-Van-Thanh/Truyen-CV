@@ -6,7 +6,7 @@ import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/chapter/chapter_response.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
-import 'package:flutter_template/features/story/read_story/enum/read_theme_mode.dart';
+import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
 import 'package:flutter_template/features/story/read_story/utils/read_story_util.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
@@ -79,10 +79,10 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     final t = context.t;
     return ObsBuilder(
       streams: [
-        bloc.themeModeSubject,
+        bloc.configStorySubject,
       ],
       builder: (context) {
-        final themeMode = bloc.themeModeSubject.value;
+        final config = bloc.configStorySubject.value;
         if (chapter == null && isLoading) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -96,7 +96,7 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
                   t.readStory.loadingError,
                   style: TextStyle(
                     fontSize: 16,
-                    color: themeMode.textColor,
+                    color: config.themeMode.textColor,
                   ),
                 ),
                 SizedBoxConstants.s4,
@@ -117,14 +117,14 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
           child: ListView.separated(
             itemCount: paragraphs.length,
             controller: _scrollController,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(16),
             physics: const NeverScrollableScrollPhysics(),
             separatorBuilder: (context, index) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
               return _buildParagraphItem(
                 paragraphs[index],
                 index,
-                themeMode,
+                config,
               );
             },
           ),
@@ -136,13 +136,14 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
   Widget _buildParagraphItem(
     String content,
     int index,
-    ReadThemeMode themeMode,
+    ConfigStoryModel config,
   ) {
-    double fontSize = 17.0;
-    final lineHeight = 1.5;
-    final color = themeMode.textColor;
+    double fontSize = config.fontSize;
+    final lineHeight = config.lineHeight;
+    final color = config.themeMode.textColor;
     FontWeight fontWeight = FontWeight.w400;
     TextAlign textAlign = TextAlign.justify;
+    final fontFamily = config.fontFamily;
 
     if (index == 0) {
       fontSize += 2.0;
@@ -157,6 +158,7 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
         height: lineHeight,
         color: color,
         fontWeight: fontWeight,
+        fontFamily: fontFamily,
       ),
       textAlign: textAlign,
     );

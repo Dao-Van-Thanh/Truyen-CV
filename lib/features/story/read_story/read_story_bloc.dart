@@ -5,6 +5,7 @@ import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/features/story/read_story/enum/read_theme_mode.dart';
+import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
 import 'package:flutter_template/features/story/read_story/widgets/read_story_settings.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -19,8 +20,8 @@ class ReadStoryBloc extends BlocBase {
       BehaviorSubject<ListChapterRes?>.seeded(null);
   final isMenuVisibleSubject = BehaviorSubject<bool>.seeded(false);
 
-  final themeModeSubject =
-      BehaviorSubject<ReadThemeMode>.seeded(ReadThemeMode.dark);
+  final configStorySubject =
+      BehaviorSubject<ConfigStoryModel>.seeded(defaultConfigStory);
   final pageController = PageController();
 
   ReadStoryBloc(this.ref, {required this.args}) {
@@ -32,7 +33,7 @@ class ReadStoryBloc extends BlocBase {
     super.dispose();
     currentListChapterItemSubject.close();
     isMenuVisibleSubject.close();
-    themeModeSubject.close();
+    configStorySubject.close();
     if (pageController.hasClients) {
       pageController.dispose();
     }
@@ -43,7 +44,10 @@ class ReadStoryBloc extends BlocBase {
     isMenuVisibleSubject.add(!current);
   }
 
-  void onChangeReadProgress(double value) {}
+  void onChangeReadProgress(double value) {
+    final pageIndex = value.toInt();
+    pageController.jumpToPage(pageIndex);
+  }
 
   void _init() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -79,11 +83,37 @@ class ReadStoryBloc extends BlocBase {
   }
 
   void onTapSettings() {
+    toggleMenuVisibility();
     showModalBottomSheet(
       context: routerService.rootContext,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.transparent,
+      isScrollControlled: true,
+      useSafeArea: true,
       builder: (context) {
         return ReadStorySettings();
       },
     );
+  }
+
+  void onSelectedThemeMode(ReadThemeMode mode) {
+    final currentConfig = configStorySubject.value;
+    configStorySubject.add(currentConfig.copyWith(themeMode: mode));
+  }
+
+  void onChangeFontSize(double fontSize) {
+    final currentConfig = configStorySubject.value;
+    configStorySubject.add(currentConfig.copyWith(fontSize: fontSize));
+  }
+
+  void onChangeLineHeight(double lineHeight) {
+    final currentConfig = configStorySubject.value;
+    configStorySubject.add(currentConfig.copyWith(lineHeight: lineHeight));
+  }
+
+  void onChangeFontFamily(String? fontFamily) {
+    if (fontFamily == null) return;
+    final currentConfig = configStorySubject.value;
+    configStorySubject.add(currentConfig.copyWith(fontFamily: fontFamily));
   }
 }

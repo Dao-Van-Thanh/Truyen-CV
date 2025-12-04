@@ -143,8 +143,19 @@ flutter:
         - asset: assets/fonts/AvertaStdCY/AvertaStdCY-ExtrathinItalic.otf
           weight: 100
           style: italic
-
-
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/OpenSans/OpenSans-VariableFont_wdth,wght.ttf
+        - asset: assets/fonts/OpenSans/OpenSans-Italic-VariableFont_wdth,wght.ttf
+          style: italic
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato/Lato-Regular.ttf
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat/Montserrat-VariableFont_wght.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf
+          style: italic
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

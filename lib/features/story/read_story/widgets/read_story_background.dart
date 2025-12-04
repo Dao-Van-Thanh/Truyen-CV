@@ -10,12 +10,12 @@ class ReadStoryBackground extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final bloc = ref.watch(BlocProvider.readStory);
     return ObsBuilder(
-      streams: [bloc.themeModeSubject],
+      streams: [bloc.configStorySubject],
       builder: (context) {
-        final themeMode = bloc.themeModeSubject.value;
+        final config = bloc.configStorySubject.value;
         return Container(
           decoration: BoxDecoration(
-            color: themeMode.backgroundColor,
+            color: config.themeMode.backgroundColor,
           ),
         );
       },

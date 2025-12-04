@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/extensions/color.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 
 class ReadStoryController extends ConsumerWidget {
@@ -17,20 +16,18 @@ class ReadStoryController extends ConsumerWidget {
     return ObsBuilder(
       streams: [
         bloc.isMenuVisibleSubject,
-        bloc.themeModeSubject,
+        bloc.configStorySubject,
         bloc.currentListChapterItemSubject,
       ],
       builder: (context) {
         final isVisible = bloc.isMenuVisibleSubject.value;
-        final chapter = bloc.currentListChapterItemSubject.value;
+        final currentListChapterItem = bloc.currentListChapterItemSubject.value;
         const duration = Duration(milliseconds: 300);
         const curve = Curves.easeInOut;
-        final themeMode = bloc.themeModeSubject.value;
-        const double alpha = 0.95;
-        final backgroundColor =
-            themeMode.backgroundColor.withValues(alpha: alpha).darkenColor();
+        final config = bloc.configStorySubject.value;
+        final backgroundColor = config.themeMode.backgroundControllerColor;
 
-        final textColor = themeMode.textColor;
+        final textColor = config.themeMode.textColor;
 
         return IgnorePointer(
           ignoring: !isVisible,
@@ -86,7 +83,7 @@ class ReadStoryController extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        chapter?.name ?? '',
+                        currentListChapterItem?.name ?? '',
                         style: TextStyle(
                           color: textColor,
                         ),
@@ -110,7 +107,9 @@ class ReadStoryController extends ConsumerWidget {
                           Expanded(
                             flex: 4,
                             child: Slider(
-                              value: 0.0,
+                              value: (bloc.pageController.page ?? 0),
+                              min: 0,
+                              max: bloc.args.listChapter.length - 1,
                               onChanged: bloc.onChangeReadProgress,
                               activeColor: textColor,
                               inactiveColor: textColor.withValues(alpha: 0.5),
