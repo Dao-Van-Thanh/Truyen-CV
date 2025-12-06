@@ -51,22 +51,27 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     );
   }
 
-  void _loadChapter() {
+  Future<void> _loadChapter() async {
     setState(() => isLoading = true);
-    _fetchChapter(chapterId: widget.listChapterItem?.id ?? '').then((value) {
-      if (!mounted) return;
-      setState(() {
-        chapter = value;
-        isLoading = false;
-      });
+    final res =
+        await _fetchChapter(chapterId: widget.listChapterItem?.id ?? '');
+    if (!mounted) return;
+    setState(() {
+      chapter = res;
+      isLoading = false;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _loadChapter();
     _scrollController = widget.controller;
+    _loadChapter().then((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (widget.listChapterItem?.id != bloc.args.selectedChapterId) return;
+        _scrollController.jumpTo(bloc.args.scrollOffset);
+      });
+    });
   }
 
   @override

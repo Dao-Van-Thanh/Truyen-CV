@@ -30,6 +30,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final routerService = ref.watch(AppService.router);
     final configBloc = ref.watch(BlocProvider.config);
+    final _ = ref.read(AppService.localApi)..initDb();
     return ObsBuilder(
       streams: [configBloc.themeModeSubject],
       builder: (context) {
