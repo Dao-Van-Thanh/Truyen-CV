@@ -7,9 +7,9 @@ import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_template/shared/bloc/config/app_theme.dart';
-import 'dependency/app_service.dart';
-import 'dependency/router/utils/route_name.dart';
-import 'dependency/router/utils/route_page.dart';
+import 'package:flutter_template/dependency/app_service.dart';
+import 'package:flutter_template/dependency/router/utils/route_name.dart';
+import 'package:flutter_template/dependency/router/utils/route_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

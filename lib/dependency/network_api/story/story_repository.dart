@@ -3,6 +3,7 @@ import 'package:flutter_template/dependency/api/extension/response_extension.dar
 import 'package:flutter_template/dependency/api/model/api_result.dart';
 import 'package:flutter_template/dependency/network_api/base/base_data_response_model.dart';
 import 'package:flutter_template/dependency/network_api/story/category/category_model.dart';
+import 'package:flutter_template/dependency/network_api/story/chapter/chapter_response.dart';
 import 'package:flutter_template/dependency/network_api/story/detail/story_detail_response.dart';
 import 'package:flutter_template/dependency/network_api/story/filter/story_filter_request.dart';
 import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
@@ -77,6 +78,25 @@ class StoryRepository {
         (data) => (data as List<dynamic>)
             .map((e) => ListChapterRes.fromJson(e as Map<String, dynamic>))
             .toList(),
+      ),
+    );
+  }
+
+  Future<ApiResult<BaseDataResponseModel<ChapterResponse>>> getChapter(
+    String chapterId,
+  ) async {
+    final res = await apiService.get(
+      '/chapter',
+      queryParameters: {
+        'chapter_id': chapterId,
+      },
+    );
+
+    // ChapterResponse
+    return res.parseData(
+      (json) => BaseDataResponseModel<ChapterResponse>.fromJson(
+        json,
+        (data) => ChapterResponse.fromJson(data as Map<String, dynamic>),
       ),
     );
   }

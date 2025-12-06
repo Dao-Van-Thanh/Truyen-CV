@@ -6,6 +6,7 @@ import 'package:flutter_template/features/library/library_bloc.dart';
 import 'package:flutter_template/features/root/root_bloc.dart';
 import 'package:flutter_template/features/story/detail/story_detail_bloc.dart';
 import 'package:flutter_template/features/story/list_chapter/list_chapter_bloc.dart';
+import 'package:flutter_template/features/story/read_story/read_story_bloc.dart';
 import 'package:flutter_template/shared/bloc/app_bloc.dart';
 import 'package:flutter_template/shared/bloc/config/app_config_bloc.dart';
 
@@ -19,6 +20,7 @@ class BlocProvider {
   static late AutoDisposeProvider<ExploreBloc> explore;
   static late AutoDisposeProvider<StoryDetailBloc> storyDetail;
   static late AutoDisposeProvider<ListChapterBloc> listChapter;
+  static late AutoDisposeProvider<ReadStoryBloc> readStory;
 
   const BlocProvider._();
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'route_name.dart';
-import 'route_screen.dart';
+import 'package:flutter_template/dependency/router/utils/route_name.dart';
+import 'package:flutter_template/dependency/router/utils/route_screen.dart';
 
 class RoutePage {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -15,6 +15,8 @@ class RoutePage {
         return RouteScreen.storyDetailPageRoute(settings);
       case RouteName.listChapter:
         return RouteScreen.listChapterPageRoute(settings);
+      case RouteName.readStory:
+        return RouteScreen.readStoryPageRoute(settings);
     }
 
     return RouteScreen.unknownPageRoute(settings);

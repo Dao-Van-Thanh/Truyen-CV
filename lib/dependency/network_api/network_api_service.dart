@@ -17,7 +17,7 @@ void _addSSLPinningInterceptor(ApiService apiService) {
 
 final _apiProvider = Provider((ref) {
   final apiService = ApiService(ref);
-  _addSSLPinningInterceptor(apiService);
+  // _addSSLPinningInterceptor(apiService); // http no SSL pinning
   return apiService;
 });
 

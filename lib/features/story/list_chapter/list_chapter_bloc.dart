@@ -4,6 +4,8 @@ import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
+import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/features/story/list_chapter/enum/list_sort_enum.dart';
 import 'package:flutter_template/shared/extensions/text_editing_controller_extension.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
@@ -15,6 +17,7 @@ class ListChapterBloc extends BlocBase {
   ListChapterArgument args;
 
   late final networkApiService = ref.read(AppService.networkApi);
+  late final routerService = ref.read(AppService.router);
 
   final isLoadingSubject = BehaviorSubject<bool>.seeded(false);
   final listChapterSubject = BehaviorSubject<List<ListChapterRes>>.seeded([]);
@@ -97,5 +100,16 @@ class ListChapterBloc extends BlocBase {
 
   void _removeListens() {
     searchController.removeListener(_listens);
+  }
+
+  void onTapChapter(ListChapterRes chapter) {
+    routerService.push(
+      RouteInput.readStory(
+        args: ReadStoryArgument(
+          selectedChapterId: chapter.id ?? '',
+          listChapter: listChapterSubject.value,
+        ),
+      ),
+    );
   }
 }

@@ -64,5 +64,21 @@
         "loadingChapter": "Đang tải chương...",
         "sortNew": "Mới nhất",
         "sortOld": "Cũ nhất"
+    },
+    "readStory": {
+        "prev": "Trước",
+        "next": "Sau",
+        "chapter": "Chương {chapterNumber: int}",
+        "loadingContent": "Đang tải nội dung...",
+        "loadingError": "Lỗi tải nội dung chương",
+        "retry": "Thử lại",
+        "fontSize": "Cỡ chữ",
+        "lineHeight": "Chiều cao dòng",
+        "theme": "Chủ đề",
+        "themeLight": "Sáng",
+        "themeDark": "Tối",
+        "themeSepia": "Sepia",
+        "settings": "Cài đặt",
+        "close": "Đóng"
     }
 }
