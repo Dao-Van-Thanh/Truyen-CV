@@ -98,6 +98,7 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     if (state == AppLifecycleState.inactive ||
         state == AppLifecycleState.paused) {
       _handleUpsertLocal();
+      bloc.saveConfigLocal(bloc.configStorySubject.value);
     }
   }
 
