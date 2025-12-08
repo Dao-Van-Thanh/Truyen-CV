@@ -5,6 +5,7 @@ import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/constants/font_family_enum.dart';
 import 'package:flutter_template/features/story/read_story/enum/read_theme_mode.dart';
+import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 
 class ReadStorySettings extends ConsumerWidget {
   const ReadStorySettings({super.key});
@@ -32,7 +33,7 @@ class ReadStorySettings extends ConsumerWidget {
           child: SafeArea(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 SizedBoxConstants.s16,
                 SingleChildScrollView(
@@ -161,6 +162,21 @@ class ReadStorySettings extends ConsumerWidget {
                       ),
                     ),
                   ],
+                ),
+                SizedBoxConstants.s16,
+                Padding(
+                  padding: EdgeInsetsConstants.right16,
+                  child: AppGestureDetector(
+                    onTap: bloc.onTapResetSetting,
+                    child: Text(
+                      'Reset to Default',
+                      style: TextStyle(
+                        color: theme.colorScheme.error,
+                        decoration: TextDecoration.underline,
+                        decorationColor: theme.colorScheme.error,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

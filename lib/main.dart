@@ -10,11 +10,24 @@ import 'package:flutter_template/shared/bloc/config/app_theme.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/router/utils/route_name.dart';
 import 'package:flutter_template/dependency/router/utils/route_page.dart';
+import 'package:flutter_template/shared/utilities/logger.dart';
 
-void main() {
+Future<void> _initLocalServices(ProviderContainer container) async {
+  try {
+    final localApiService = container.read(AppService.localApi);
+    // await localApiService.deleteDatabaseFile();
+    await localApiService.initDb();
+    await localApiService.configRepository.initDefaultConfig();
+  } catch (e) {
+    logger.e('Error initializing services: $e');
+  }
+}
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final container = ProviderContainer();
+  await _initLocalServices(container);
 
   runApp(
     UncontrolledProviderScope(
@@ -30,7 +43,6 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final routerService = ref.watch(AppService.router);
     final configBloc = ref.watch(BlocProvider.config);
-    final _ = ref.read(AppService.localApi)..initDb();
     return ObsBuilder(
       streams: [configBloc.themeModeSubject],
       builder: (context) {

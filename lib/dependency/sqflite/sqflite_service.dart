@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_template/dependency/sqflite/schema.dart';
+import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -35,7 +36,14 @@ class SqfliteService {
   }
 
   Future<void> close() async {
-    final db = await database;
+    final db = database;
     return db.close();
+  }
+
+  Future<void> deleteDatabaseFile() async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, _dbName);
+    await deleteDatabase(path);
+    logger.i('Database file deleted at $path');
   }
 }

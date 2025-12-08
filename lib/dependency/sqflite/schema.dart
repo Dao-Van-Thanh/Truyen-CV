@@ -3,7 +3,7 @@ class SqfliteSchema {
   static const _textType = 'TEXT';
   static const _boolType = 'INTEGER'; // 0: false, 1: true
   static const _realType = 'REAL'; // Dùng cho scroll offset (double)
-  static const _intType = 'INTEGER';
+  // static const _intType = 'INTEGER';
 
   /// *format time as String = isO8601String()*
 
@@ -13,7 +13,8 @@ class SqfliteSchema {
         id $_idType,
         fontFamily $_textType,
         fontSize $_realType,
-        themeMode $_intType
+        lineHeight $_realType,
+        themeMode $_textType,
         timeStamp $_textType
       )
     ''';
@@ -21,8 +22,8 @@ class SqfliteSchema {
   static const createSystemConfigsTable = '''
       CREATE TABLE system_configs (
         id $_idType,
-        themeMode $_intType,
-        locale $_textType
+        themeMode $_textType,
+        locale $_textType,
         timeStamp $_textType 
       )
     ''';
@@ -45,7 +46,7 @@ class SqfliteSchema {
         id $_idType,
         routeName $_textType,
         bookId $_textType,
-        timeStamp $_textType
+        timeStamp $_textType,
         FOREIGN KEY (bookId) REFERENCES books (id) ON DELETE CASCADE
       )
     ''';

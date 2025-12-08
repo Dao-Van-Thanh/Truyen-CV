@@ -94,6 +94,13 @@ enum ReadThemeMode {
   Color get backgroundControllerColor =>
       backgroundColor.withValues(alpha: _alpha).darkenColor();
 
+  static ReadThemeMode fromName(String name) {
+    return ReadThemeMode.values.firstWhere(
+      (mode) => mode.name == name,
+      orElse: () => ReadThemeMode.light,
+    );
+  }
+
   const ReadThemeMode({
     required this.backgroundColor,
     required this.textColor,

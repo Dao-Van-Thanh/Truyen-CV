@@ -15,13 +15,26 @@ class StoryGridItem extends ConsumerWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    return Card(
-      elevation: 2,
-      shadowColor: isDark ? Colors.black54 : Colors.grey.withValues(alpha: 0.5),
-      margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(6),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black54
+                : Colors.grey.withValues(
+                    alpha: 0.2,
+                  ),
+            blurRadius: 2,
+            offset: Offset(0, 1),
+          ),
+        ],
+      ),
       clipBehavior: Clip.antiAlias,
+      margin: EdgeInsets.zero,
       child: InkWell(
+        borderRadius: BorderRadius.circular(6),
         onTap: () {
           routerService.push(RouteInput.storyDetail(storyId: story.id ?? ''));
         },
@@ -62,8 +75,8 @@ class StoryGridItem extends ConsumerWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface
-                                  .withValues(alpha: 0.6),
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.6),
                               fontSize: 11,
                             ),
                           ),
@@ -73,15 +86,15 @@ class StoryGridItem extends ConsumerWidget {
                             Icon(
                               Icons.remove_red_eye,
                               size: 12,
-                              color: theme.colorScheme.onSurface
-                                  .withValues(alpha: 0.6),
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.6),
                             ),
                             const SizedBox(width: 3),
                             Text(
                               story.viewed ?? '0',
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: theme.colorScheme.onSurface
-                                    .withValues(alpha: 0.6),
+                                    .withOpacity(0.6),
                                 fontSize: 11,
                               ),
                             ),
@@ -92,8 +105,7 @@ class StoryGridItem extends ConsumerWidget {
                     Text(
                       story.process ?? '',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color:
-                            theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
                         fontSize: 12,
                       ),
                     ),

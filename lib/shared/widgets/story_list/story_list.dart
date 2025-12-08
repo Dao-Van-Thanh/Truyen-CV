@@ -86,6 +86,7 @@ class _StoryListState extends State<StoryList> {
       padding: const EdgeInsets.all(12),
       cacheExtent: 500,
       addRepaintBoundaries: true,
+      addAutomaticKeepAlives: true,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 10,
@@ -105,6 +106,9 @@ class _StoryListState extends State<StoryList> {
 
     return ListView.builder(
       controller: _scrollController,
+      cacheExtent: 500,
+      addRepaintBoundaries: true,
+      addAutomaticKeepAlives: true,
       itemCount: itemCount,
       itemBuilder: (context, index) {
         if (index >= widget.stories.length) return _loader();

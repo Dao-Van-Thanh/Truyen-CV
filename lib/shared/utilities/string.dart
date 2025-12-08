@@ -8,5 +8,14 @@ class StringUtilities {
     return parsedString.trim();
   }
 
+  static String convertListMapToString(List<Map<String, dynamic>> list) {
+    return list.map((e) => e.toString()).join('||');
+  }
+
+  static List<String> convertStringToListMap(String input) {
+    if (input.isEmpty) return [];
+    return input.split('||');
+  }
+
   const StringUtilities._();
 }
