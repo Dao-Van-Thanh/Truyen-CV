@@ -36,6 +36,7 @@ class ReadStoryBloc extends BlocBase {
   void dispose() {
     super.dispose();
     saveConfigLocal(configStorySubject.value);
+    clearRouterLocal();
     currentListChapterItemSubject.close();
     isMenuVisibleSubject.close();
     configStorySubject.close();
@@ -67,6 +68,7 @@ class ReadStoryBloc extends BlocBase {
     isLoadingSubject.value = true;
     await Future.wait([
       getConfigLocal(),
+      saveRouterLocal(),
     ]);
     isLoadingSubject.value = false;
   }

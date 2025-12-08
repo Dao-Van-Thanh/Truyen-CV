@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/book_repository.dart';
 import 'package:flutter_template/dependency/local_api/repository/config/config_repository.dart';
+import 'package:flutter_template/dependency/local_api/repository/router/router_repository.dart';
 import 'package:flutter_template/dependency/sqflite/sqflite_service.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -27,4 +28,7 @@ class LocalApiService {
 
   ConfigRepository get configRepository =>
       ConfigRepository(db: _sqfliteService.database);
+
+  RouterRepository get routerRepository =>
+      RouterRepository(db: _sqfliteService.database);
 }

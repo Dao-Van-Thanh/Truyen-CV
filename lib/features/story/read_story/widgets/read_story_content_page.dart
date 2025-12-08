@@ -28,7 +28,7 @@ class ReadStoryContentPage extends ConsumerStatefulWidget {
 }
 
 class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   ChapterResponse? chapter;
   bool isLoading = true;
   late ScrollController _scrollController;
@@ -71,6 +71,7 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _scrollController = widget.controller;
     _listenScroll();
     _loadChapter().then((_) {
@@ -92,7 +93,17 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused) {
+      _handleUpsertLocal();
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
     _handleUpsertLocal();
     if (_scrollController.hasClients) {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class StringUtilities {
   static String clearHtml(String input) {
     String parsedString = input.replaceAll(RegExp(r'<br\s*/?>\s*'), '\n');
@@ -9,12 +11,18 @@ class StringUtilities {
   }
 
   static String convertListMapToString(List<Map<String, dynamic>> list) {
-    return list.map((e) => e.toString()).join('||');
+    return jsonEncode(list);
   }
 
-  static List<String> convertStringToListMap(String input) {
+  static List<Map<String, dynamic>> convertStringToListMap(String input) {
     if (input.isEmpty) return [];
-    return input.split('||');
+    try {
+      final List<dynamic> jsonList = jsonDecode(input);
+
+      return jsonList.map((e) => Map<String, dynamic>.from(e)).toList();
+    } catch (e) {
+      return [];
+    }
   }
 
   const StringUtilities._();

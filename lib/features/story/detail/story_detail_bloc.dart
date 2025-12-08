@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -229,7 +230,7 @@ class StoryDetailBloc extends BlocBase {
         listChapterData: StringUtilities.convertListMapToString(
           listChapter.map((e) => e.toJson()).toList(),
         ),
-        storyData: (storyDetailSubject.value?.toJson() ?? '').toString(),
+        storyData: jsonEncode(storyDetailSubject.value?.toJson()),
         currentChapterId: selectedChapterId,
         scrollOffset: scrollOffset ?? 0.0,
         isFavorite: isFavorite,

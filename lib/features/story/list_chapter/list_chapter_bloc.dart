@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
@@ -160,7 +162,7 @@ class ListChapterBloc extends BlocBase {
         listChapterData: StringUtilities.convertListMapToString(
           listChapter.map((e) => e.toJson()).toList(),
         ),
-        storyData: (args.storyData?.toJson() ?? '').toString(),
+        storyData: jsonEncode(args.storyData?.toJson()),
         currentChapterId: selectedChapterId,
         scrollOffset: scrollOffset,
         lastReadTime: DateTime.now().toIso8601String(),
