@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
@@ -10,6 +13,7 @@ import 'package:flutter_template/features/story/list_chapter/enum/list_sort_enum
 import 'package:flutter_template/shared/extensions/text_editing_controller_extension.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
+import 'package:flutter_template/shared/utilities/string.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ListChapterBloc extends BlocBase {
@@ -18,6 +22,7 @@ class ListChapterBloc extends BlocBase {
 
   late final networkApiService = ref.read(AppService.networkApi);
   late final routerService = ref.read(AppService.router);
+  late final localApiService = ref.read(AppService.localApi);
 
   final isLoadingSubject = BehaviorSubject<bool>.seeded(false);
   final listChapterSubject = BehaviorSubject<List<ListChapterRes>>.seeded([]);
@@ -29,9 +34,18 @@ class ListChapterBloc extends BlocBase {
   final searchController = TextEditingController();
 
   final isSearchingSubject = BehaviorSubject<bool>.seeded(false);
+  final isContinueReadingSubject = BehaviorSubject<bool>.seeded(false);
+
+  bool _isLoadingLocal = false;
 
   ListChapterBloc(this.ref, {required this.args}) {
-    init();
+    if (args.listChapter.isNotEmpty) {
+      listChapterSubject.value = args.listChapter;
+      listChapterTemp = args.listChapter;
+    } else {
+      init();
+    }
+    _getBookLocal();
     _listens();
   }
 
@@ -44,13 +58,14 @@ class ListChapterBloc extends BlocBase {
     scrollController.dispose();
     isSearchingSubject.close();
     searchController.dispose();
+    isContinueReadingSubject.close();
     _removeListens();
   }
 
   Future<void> init() async {
     isLoadingSubject.value = true;
     final res = await networkApiService.storyRepository.getListChapter(
-      args.storyId,
+      args.storyData?.id ?? '',
     );
     if (isDispose) return;
     isLoadingSubject.value = false;
@@ -103,11 +118,77 @@ class ListChapterBloc extends BlocBase {
   }
 
   void onTapChapter(ListChapterRes chapter) {
+    _upsertBookToLocal(
+      chapter.id ?? '',
+      0.0,
+    ).then(
+      (_) {
+        routerService.push(
+          RouteInput.readStory(
+            args: ReadStoryArgument(
+              storyId: args.storyData?.id ?? '',
+              selectedChapterId: chapter.id ?? '',
+              listChapter: listChapterSubject.value,
+              scrollOffset: 0.0,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _getBookLocal() async {
+    final bookEntityLocal = await localApiService.bookRepository.getBookById(
+      args.storyData?.id ?? '',
+    );
+    if (isDispose) return;
+    if (bookEntityLocal != null && bookEntityLocal.currentChapterId != null) {
+      isContinueReadingSubject.value = true;
+    } else {
+      isContinueReadingSubject.value = false;
+    }
+  }
+
+  Future<void> _upsertBookToLocal(
+    String selectedChapterId,
+    double scrollOffset,
+  ) async {
+    if (_isLoadingLocal) return;
+
+    try {
+      final listChapter = listChapterSubject.value;
+      final bookEntity = BookEntity(
+        id: args.storyData?.id ?? '',
+        listChapterData: StringUtilities.convertListMapToString(
+          listChapter.map((e) => e.toJson()).toList(),
+        ),
+        storyData: jsonEncode(args.storyData?.toJson()),
+        currentChapterId: selectedChapterId,
+        scrollOffset: scrollOffset,
+        lastReadTime: DateTime.now().toIso8601String(),
+        timeStamp: DateTime.now().toIso8601String(),
+      );
+      _isLoadingLocal = true;
+      await localApiService.bookRepository.upsertBook(bookEntity);
+      _isLoadingLocal = false;
+    } catch (e) {
+      logger.e('Error saving book to local: $e');
+    }
+  }
+
+  void onTapContinueReading() async {
+    final bookEntityLocal = await localApiService.bookRepository.getBookById(
+      args.storyData?.id ?? '',
+    );
+    if (isDispose) return;
+    if (bookEntityLocal == null) return;
     routerService.push(
       RouteInput.readStory(
         args: ReadStoryArgument(
-          selectedChapterId: chapter.id ?? '',
+          storyId: args.storyData?.id ?? '',
+          selectedChapterId: bookEntityLocal.currentChapterId ?? '',
           listChapter: listChapterSubject.value,
+          scrollOffset: bookEntityLocal.scrollOffset,
         ),
       ),
     );

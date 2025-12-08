@@ -54,7 +54,7 @@ make sha256_cert url=https://openbanking-sandbox.mbbank.com.vn:9004
 flutter build apk --release \
   --target-platform android-arm,android-arm64,android-x64 \
   --obfuscate \
-  --split-debug-info=/TRUYENCV/lib
+  --split-debug-info=/MERCHANT-APP/lib
 ```
 
 ## Build iOS
@@ -77,8 +77,6 @@ npm run gen:assets
 
 ```shell
 make sha256_cert url=example.com:443
-
-echo | openssl s_client -connect api.example.com:443 -servername api.example.com 2>/dev/null | openssl x509 -noout -pubkey | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl base64
 ```
 
 ```shell

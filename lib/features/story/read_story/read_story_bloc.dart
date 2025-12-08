@@ -5,6 +5,7 @@ import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/features/story/read_story/enum/read_theme_mode.dart';
+import 'package:flutter_template/features/story/read_story/extension/read_story_local_extension.dart';
 import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
 import 'package:flutter_template/features/story/read_story/widgets/read_story_settings.dart';
 import 'package:rxdart/rxdart.dart';
@@ -15,6 +16,7 @@ class ReadStoryBloc extends BlocBase {
 
   late final networkApiService = ref.read(AppService.networkApi);
   late final routerService = ref.read(AppService.router);
+  late final localApiService = ref.read(AppService.localApi);
 
   final currentListChapterItemSubject =
       BehaviorSubject<ListChapterRes?>.seeded(null);
@@ -24,6 +26,8 @@ class ReadStoryBloc extends BlocBase {
       BehaviorSubject<ConfigStoryModel>.seeded(defaultConfigStory);
   final pageController = PageController();
 
+  final isLoadingSubject = BehaviorSubject<bool>.seeded(false);
+
   ReadStoryBloc(this.ref, {required this.args}) {
     _init();
   }
@@ -31,9 +35,12 @@ class ReadStoryBloc extends BlocBase {
   @override
   void dispose() {
     super.dispose();
+    saveConfigLocal(configStorySubject.value);
+    clearRouterLocal();
     currentListChapterItemSubject.close();
     isMenuVisibleSubject.close();
     configStorySubject.close();
+    isLoadingSubject.close();
     if (pageController.hasClients) {
       pageController.dispose();
     }
@@ -49,7 +56,7 @@ class ReadStoryBloc extends BlocBase {
     pageController.jumpToPage(pageIndex);
   }
 
-  void _init() {
+  void _init() async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final selectedIndex = args.listChapter.indexWhere(
         (chapter) => chapter.id == args.selectedChapterId,
@@ -58,6 +65,12 @@ class ReadStoryBloc extends BlocBase {
         pageController.jumpToPage(selectedIndex);
       }
     });
+    isLoadingSubject.value = true;
+    await Future.wait([
+      getConfigLocal(),
+      saveRouterLocal(),
+    ]);
+    isLoadingSubject.value = false;
   }
 
   void handlePageChanged(int p1) {
@@ -115,5 +128,17 @@ class ReadStoryBloc extends BlocBase {
     if (fontFamily == null) return;
     final currentConfig = configStorySubject.value;
     configStorySubject.add(currentConfig.copyWith(fontFamily: fontFamily));
+  }
+
+  bool isCurrentPage(String? chapterId) {
+    if (chapterId == null) return false;
+    final currentPageIndex = pageController.page?.toInt();
+    if (currentPageIndex == null) return false;
+    final currentChapterId = args.listChapter[currentPageIndex].id;
+    return chapterId == currentChapterId;
+  }
+
+  void onTapResetSetting() {
+    configStorySubject.add(defaultConfigStory);
   }
 }

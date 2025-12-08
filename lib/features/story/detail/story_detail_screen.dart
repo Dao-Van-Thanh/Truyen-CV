@@ -109,12 +109,20 @@ class StoryDetailScreen extends ConsumerWidget {
                   ),
                   actions: [
                     //button save to library
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.bookmark_border,
-                        color: iconColor,
-                      ),
+                    ObsBuilder(
+                      streams: [bloc.isFavoriteSubject],
+                      builder: (context) {
+                        final isFavorite = bloc.isFavoriteSubject.value;
+                        return IconButton(
+                          onPressed: () {
+                            bloc.onTapFavoriteStory();
+                          },
+                          icon: Icon(
+                            isFavorite ? Icons.bookmark : Icons.bookmark_border,
+                            color: iconColor,
+                          ),
+                        );
+                      },
                     ),
                     // button share
                     IconButton(
@@ -237,39 +245,49 @@ class StoryDetailScreen extends ConsumerWidget {
               ),
             ),
             Expanded(
-              child: AppGestureDetector(
-                onTap: () {},
-                child: Container(
-                  color: theme.colorScheme.primary,
-                  child: IntrinsicHeight(
+              child: ObsBuilder(
+                streams: [bloc.isContinueReadingSubject],
+                builder: (context) {
+                  final isContinueReading = bloc.isContinueReadingSubject.value;
+                  return AppGestureDetector(
+                    onTap: bloc.onTapReadNow,
                     child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(),
-                      child: Column(
-                        children: [
-                          SizedBoxConstants.s8,
-                          Icon(
-                            Icons.play_arrow,
-                            color: theme.brightness == Brightness.dark
-                                ? Colors.black87
-                                : Colors.white70,
+                      color: theme.colorScheme.primary,
+                      child: IntrinsicHeight(
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(),
+                          child: Column(
+                            children: [
+                              SizedBoxConstants.s8,
+                              Icon(
+                                isContinueReading
+                                    ? Icons.fast_forward
+                                    : Icons.play_arrow,
+                                color: theme.brightness == Brightness.dark
+                                    ? Colors.black87
+                                    : Colors.white70,
+                              ),
+                              SizedBoxConstants.s4,
+                              Text(
+                                isContinueReading
+                                    ? t.storyDetail.continueReading
+                                    : t.storyDetail.readNow,
+                                style: theme.textTheme.labelLarge?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: theme.brightness == Brightness.dark
+                                      ? Colors.black87
+                                      : Colors.white70,
+                                ),
+                              ),
+                              SizedBoxConstants.s4,
+                            ],
                           ),
-                          SizedBoxConstants.s4,
-                          Text(
-                            t.storyDetail.readNow,
-                            style: theme.textTheme.labelLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: theme.brightness == Brightness.dark
-                                  ? Colors.black87
-                                  : Colors.white70,
-                            ),
-                          ),
-                          SizedBoxConstants.s4,
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
           ],

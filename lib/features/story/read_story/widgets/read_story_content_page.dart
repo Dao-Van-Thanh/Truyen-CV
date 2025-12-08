@@ -6,6 +6,7 @@ import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/chapter/chapter_response.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
+import 'package:flutter_template/features/story/read_story/extension/read_story_local_extension.dart';
 import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
 import 'package:flutter_template/features/story/read_story/utils/read_story_util.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
@@ -27,12 +28,17 @@ class ReadStoryContentPage extends ConsumerStatefulWidget {
 }
 
 class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   ChapterResponse? chapter;
   bool isLoading = true;
   late ScrollController _scrollController;
   late final networkApiService = ref.read(AppService.networkApi);
   late final bloc = ref.read(BlocProvider.readStory);
+
+  double _offSet = 0.0;
+
+  bool get isCurrentChapter =>
+      widget.listChapterItem?.id == bloc.args.selectedChapterId;
 
   Future<ChapterResponse?> _fetchChapter({required String chapterId}) async {
     final res = await networkApiService.storyRepository.getChapter(
@@ -51,22 +57,68 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     );
   }
 
-  void _loadChapter() {
+  Future<void> _loadChapter() async {
     setState(() => isLoading = true);
-    _fetchChapter(chapterId: widget.listChapterItem?.id ?? '').then((value) {
-      if (!mounted) return;
-      setState(() {
-        chapter = value;
-        isLoading = false;
-      });
+    final res =
+        await _fetchChapter(chapterId: widget.listChapterItem?.id ?? '');
+    if (!mounted) return;
+    setState(() {
+      chapter = res;
+      isLoading = false;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _loadChapter();
+    WidgetsBinding.instance.addObserver(this);
     _scrollController = widget.controller;
+    _listenScroll();
+    _loadChapter().then((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (widget.listChapterItem?.id != bloc.args.selectedChapterId) return;
+        _scrollController.jumpTo(bloc.args.scrollOffset);
+      });
+    });
+  }
+
+  void _listenScroll() {
+    _scrollController.addListener(() {
+      _offSet = _scrollController.offset;
+    });
+  }
+
+  void _removeScrollListener() {
+    _scrollController.removeListener(() {});
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused) {
+      _handleUpsertLocal();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+    _handleUpsertLocal();
+    if (_scrollController.hasClients) {
+      _scrollController.dispose();
+    }
+  }
+
+  void _handleUpsertLocal() {
+    final isCurrentPage = bloc.isCurrentPage(widget.listChapterItem?.id);
+    if (!isCurrentPage) return;
+    bloc.upsertBookLocal(
+      chapterId: widget.listChapterItem?.id ?? '',
+      scrollOffset: _offSet,
+    );
+    _removeScrollListener();
   }
 
   @override

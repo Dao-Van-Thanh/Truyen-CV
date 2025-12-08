@@ -86,6 +86,20 @@ class ListChapterScreen extends ConsumerWidget {
           );
         },
       ),
+      floatingActionButton: ObsBuilder(
+        streams: [bloc.isContinueReadingSubject, bloc.isLoadingSubject],
+        builder: (context) {
+          final isShow = bloc.isContinueReadingSubject.value;
+          final isLoading = bloc.isLoadingSubject.value;
+          if (!isShow || isLoading) return const SizedBox.shrink();
+          return FloatingActionButton(
+            onPressed: () {
+              bloc.onTapContinueReading();
+            },
+            child: const Icon(Icons.fast_forward),
+          );
+        },
+      ),
     );
   }
 

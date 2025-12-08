@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
+import 'package:flutter_template/shared/widgets/story_list/entities/story_list_item_entity.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 import 'package:flutter_template/shared/widgets/story_list/widgets/story_grid_item.dart';
 import 'package:flutter_template/shared/widgets/story_list/widgets/story_list_item.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class StoryList extends StatefulWidget {
-  final List<StoryModel> stories;
+  final List<StoryListItemEntity> stories;
   final bool isLoading;
   final bool isFirstLoad;
   final bool hasMore;
@@ -86,6 +86,7 @@ class _StoryListState extends State<StoryList> {
       padding: const EdgeInsets.all(12),
       cacheExtent: 500,
       addRepaintBoundaries: true,
+      addAutomaticKeepAlives: true,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 10,
@@ -105,6 +106,9 @@ class _StoryListState extends State<StoryList> {
 
     return ListView.builder(
       controller: _scrollController,
+      cacheExtent: 500,
+      addRepaintBoundaries: true,
+      addAutomaticKeepAlives: true,
       itemCount: itemCount,
       itemBuilder: (context, index) {
         if (index >= widget.stories.length) return _loader();

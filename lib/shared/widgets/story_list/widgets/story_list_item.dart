@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/shared/widgets/cache_network_image/app_cache_network_image.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
+import 'package:flutter_template/shared/widgets/story_list/entities/story_list_item_entity.dart';
 
 class StoryListItem extends ConsumerWidget {
-  final StoryModel story;
+  final StoryListItemEntity story;
   final bool isCompact;
   const StoryListItem({super.key, required this.story, this.isCompact = false});
 
@@ -17,7 +17,7 @@ class StoryListItem extends ConsumerWidget {
     final theme = Theme.of(context);
     return AppGestureDetector(
       onTap: () {
-        routerService.push(RouteInput.storyDetail(storyId: story.id ?? ''));
+        routerService.push(RouteInput.storyDetail(storyId: story.storyId));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -28,7 +28,7 @@ class StoryListItem extends ConsumerWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(6),
                 child: AppCacheNetworkImage(
-                  imageUrl: story.thumb ?? '',
+                  imageUrl: story.thumbUrl,
                   width: 70,
                   height: 95,
                   fit: BoxFit.cover,
@@ -41,7 +41,7 @@ class StoryListItem extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    story.name ?? '',
+                    story.name,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.titleMedium?.copyWith(
@@ -53,7 +53,7 @@ class StoryListItem extends ConsumerWidget {
                   Row(
                     children: [
                       Text(
-                        '★ ${story.rating ?? 0}',
+                        '★ ${story.rating}',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurface
                               .withValues(alpha: 0.7),
@@ -68,7 +68,7 @@ class StoryListItem extends ConsumerWidget {
                       ),
                       const SizedBox(width: 3),
                       Text(
-                        story.viewed ?? '0',
+                        story.viewed,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurface
                               .withValues(alpha: 0.7),
@@ -78,7 +78,7 @@ class StoryListItem extends ConsumerWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    story.process ?? '',
+                    story.process,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),

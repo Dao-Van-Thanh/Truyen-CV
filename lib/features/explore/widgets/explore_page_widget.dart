@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/filter/story_filter_request.dart';
 import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
+import 'package:flutter_template/shared/widgets/story_list/entities/story_list_item_entity.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 import 'package:flutter_template/shared/widgets/story_list/story_list.dart';
 
@@ -100,7 +101,8 @@ class _ExplorePageWidgetState extends ConsumerState<ExplorePageWidget> {
       key: PageStorageKey(
         'explore_${widget.request.cat}_${widget.request.sort}',
       ),
-      stories: _stories,
+      stories:
+          _stories.map((e) => StoryListItemEntity.fromStoryModel(e)).toList(),
       isLoading: _isLoading,
       isFirstLoad: _isFirstLoad,
       hasMore: _hasMore,
