@@ -80,5 +80,20 @@
         "themeSepia": "Sepia",
         "settings": "Cài đặt",
         "close": "Đóng"
+    },
+    "libraryScreen": {
+        "bookmarks": "Đánh dấu",
+        "listBookmarksEmpty": "Chưa có đánh dấu nào",
+        "downloads": "Tải về",
+        "history": "Lịch sử",
+        "listHistoryEmpty": "Chưa có lịch sử nào"
+    },
+    "common": {
+        "minuteAgo": "phút trước",
+        "hourAgo": "giờ trước",
+        "dayAgo": "ngày trước",
+        "justNow": "vừa xong",
+        "today": "Hôm nay",
+        "yesterday": "Hôm qua"
     }
 }

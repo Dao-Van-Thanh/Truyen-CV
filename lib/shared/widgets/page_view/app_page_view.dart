@@ -7,6 +7,10 @@ class AppPageView extends StatefulWidget {
   final bool isScrollTabView;
   final int initPageView;
   final Function(int index)? onPageChanged;
+  final List<Widget>? actions;
+  final Widget? leading;
+  final Color? dividerColor;
+  final double? dividerHeight;
 
   const AppPageView({
     super.key,
@@ -15,6 +19,10 @@ class AppPageView extends StatefulWidget {
     this.isScrollable = false,
     this.isScrollTabView = true,
     this.onPageChanged,
+    this.actions,
+    this.leading,
+    this.dividerColor,
+    this.dividerHeight,
   });
 
   @override
@@ -64,32 +72,43 @@ class AppPageViewState extends State<AppPageView>
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ValueListenableBuilder(
-                valueListenable: currentPage,
-                builder: (context, value, child) {
-                  return TabBar(
-                    controller: _tabController,
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    labelPadding: EdgeInsets.symmetric(
-                      horizontal: paddingHorizontal,
-                      vertical: 1,
-                    ),
-                    padding: EdgeInsets.zero,
-                    indicatorPadding: EdgeInsets.zero,
-                    isScrollable: widget.isScrollable,
-                    tabAlignment:
-                        widget.isScrollable ? TabAlignment.start : null,
-                    tabs: [
-                      for (int i = 0; i < widget.items.length; i++)
-                        Tab(
-                          child: Text(
-                            widget.items[i].label,
-                            style: widget.items[i].labelStyle,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (widget.leading != null) widget.leading!,
+                  Expanded(
+                    child: ValueListenableBuilder(
+                      valueListenable: currentPage,
+                      builder: (context, value, child) {
+                        return TabBar(
+                          controller: _tabController,
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          labelPadding: EdgeInsets.symmetric(
+                            horizontal: paddingHorizontal,
+                            vertical: 1,
                           ),
-                        ),
-                    ],
-                  );
-                },
+                          dividerColor: widget.dividerColor,
+                          dividerHeight: widget.dividerHeight,
+                          padding: EdgeInsets.zero,
+                          indicatorPadding: EdgeInsets.zero,
+                          isScrollable: widget.isScrollable,
+                          tabAlignment:
+                              widget.isScrollable ? TabAlignment.start : null,
+                          tabs: [
+                            for (int i = 0; i < widget.items.length; i++)
+                              Tab(
+                                child: Text(
+                                  widget.items[i].label,
+                                  style: widget.items[i].labelStyle,
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  if (widget.actions != null) ...widget.actions!,
+                ],
               ),
               Expanded(
                 child: TabBarView(
@@ -120,8 +139,8 @@ class AppPageViewState extends State<AppPageView>
 
 class AppPageViewItems {
   final Key? key;
-  final Widget child;
   final String label;
+  final Widget child;
   final TextStyle? labelStyle;
   final bool keepAlive;
 

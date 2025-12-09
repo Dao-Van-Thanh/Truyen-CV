@@ -73,6 +73,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsStoryDetailVi storyDetail = TranslationsStoryDetailVi.internal(_root);
 	late final TranslationsListChapterVi listChapter = TranslationsListChapterVi.internal(_root);
 	late final TranslationsReadStoryVi readStory = TranslationsReadStoryVi.internal(_root);
+	late final TranslationsLibraryScreenVi libraryScreen = TranslationsLibraryScreenVi.internal(_root);
+	late final TranslationsCommonVi common = TranslationsCommonVi.internal(_root);
 }
 
 // Path: login
@@ -241,6 +243,57 @@ class TranslationsReadStoryVi {
 	String get close => 'Đóng';
 }
 
+// Path: libraryScreen
+class TranslationsLibraryScreenVi {
+	TranslationsLibraryScreenVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// vi: 'Đánh dấu'
+	String get bookmarks => 'Đánh dấu';
+
+	/// vi: 'Chưa có đánh dấu nào'
+	String get listBookmarksEmpty => 'Chưa có đánh dấu nào';
+
+	/// vi: 'Tải về'
+	String get downloads => 'Tải về';
+
+	/// vi: 'Lịch sử'
+	String get history => 'Lịch sử';
+
+	/// vi: 'Chưa có lịch sử nào'
+	String get listHistoryEmpty => 'Chưa có lịch sử nào';
+}
+
+// Path: common
+class TranslationsCommonVi {
+	TranslationsCommonVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// vi: 'phút trước'
+	String get minuteAgo => 'phút trước';
+
+	/// vi: 'giờ trước'
+	String get hourAgo => 'giờ trước';
+
+	/// vi: 'ngày trước'
+	String get dayAgo => 'ngày trước';
+
+	/// vi: 'vừa xong'
+	String get justNow => 'vừa xong';
+
+	/// vi: 'Hôm nay'
+	String get today => 'Hôm nay';
+
+	/// vi: 'Hôm qua'
+	String get yesterday => 'Hôm qua';
+}
+
 // Path: rootScreen.bottomNavigationBar
 class TranslationsRootScreenBottomNavigationBarVi {
 	TranslationsRootScreenBottomNavigationBarVi.internal(this._root);
@@ -384,6 +437,17 @@ extension on Translations {
 			'readStory.themeSepia' => 'Sepia',
 			'readStory.settings' => 'Cài đặt',
 			'readStory.close' => 'Đóng',
+			'libraryScreen.bookmarks' => 'Đánh dấu',
+			'libraryScreen.listBookmarksEmpty' => 'Chưa có đánh dấu nào',
+			'libraryScreen.downloads' => 'Tải về',
+			'libraryScreen.history' => 'Lịch sử',
+			'libraryScreen.listHistoryEmpty' => 'Chưa có lịch sử nào',
+			'common.minuteAgo' => 'phút trước',
+			'common.hourAgo' => 'giờ trước',
+			'common.dayAgo' => 'ngày trước',
+			'common.justNow' => 'vừa xong',
+			'common.today' => 'Hôm nay',
+			'common.yesterday' => 'Hôm qua',
 			_ => null,
 		};
 	}

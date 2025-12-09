@@ -33,9 +33,21 @@ class BookRepository {
       _tableName,
       where: 'isFavorite = ?',
       whereArgs: [1],
-      orderBy: 'lastReadTime DESC',
+      orderBy: 'timeStamp DESC',
     );
 
+    return maps.map((e) => BookEntity.fromMap(e)).toList();
+  }
+
+  Future<List<BookEntity>> getRecentReadBooks({DateTime? fromDate}) async {
+    final now = fromDate ?? DateTime.now();
+    final oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
+    final maps = await db.query(
+      _tableName,
+      where: 'lastReadTime >= ?',
+      whereArgs: [oneMonthAgo.toIso8601String()],
+      orderBy: 'lastReadTime DESC',
+    );
     return maps.map((e) => BookEntity.fromMap(e)).toList();
   }
 
@@ -67,29 +79,6 @@ class BookRepository {
       return BookEntity.fromMap(maps.first);
     }
     return null;
-  }
-
-  Future<void> updateReadingProgress({
-    required String bookId,
-    required String currentChapterId,
-    required double scrollOffset,
-  }) async {
-    final now = DateTime.now().toIso8601String();
-
-    await db.rawUpdate('''
-      UPDATE $_tableName
-      SET currentChapterId = ?, 
-          scrollOffset = ?, 
-          lastReadTime = ?,
-          timeStamp = ?
-      WHERE id = ?
-    ''', [
-      currentChapterId,
-      scrollOffset,
-      now,
-      now,
-      bookId,
-    ]);
   }
 
   Future<void> deleteBook(String id) async {

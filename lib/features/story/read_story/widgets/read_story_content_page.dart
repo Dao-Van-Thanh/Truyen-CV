@@ -118,6 +118,7 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     bloc.upsertBookLocal(
       chapterId: widget.listChapterItem?.id ?? '',
       scrollOffset: _offSet,
+      lastReadTime: DateTime.now().toIso8601String(),
     );
     _removeScrollListener();
   }

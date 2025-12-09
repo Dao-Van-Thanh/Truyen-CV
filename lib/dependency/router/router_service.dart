@@ -12,6 +12,11 @@ class RouterService {
 
   BuildContext get rootContext => routerInterface.rootContext;
 
+  final RouteObserver<ModalRoute<void>> _routeObserver =
+      RouteObserver<ModalRoute<void>>();
+
+  RouteObserver<ModalRoute<void>> get routeObserver => _routeObserver;
+
   String? get currentPath => _getCurrentPath();
 
   String? _getCurrentPath() {
