@@ -75,6 +75,9 @@ class RootBloc extends BlocBase {
     if (selectedNavigationBarSubject.value != BottomNavigationBarEnum.library) {
       return;
     }
-    ref.read(BlocProvider.library).refreshData();
+    Future.delayed(const Duration(milliseconds: 300), () {
+      final libraryBloc = ref.read(BlocProvider.library);
+      libraryBloc.refreshData();
+    });
   }
 }

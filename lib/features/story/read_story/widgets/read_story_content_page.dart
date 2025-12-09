@@ -57,6 +57,15 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     );
   }
 
+  Future<void> _onWillPop(BuildContext context) async {
+    final isCurrentPage = bloc.isCurrentPage(widget.listChapterItem?.id);
+    if (!isCurrentPage) return;
+    await _handleUpsertLocal();
+    if (context.mounted) {
+      Navigator.of(context).pop();
+    }
+  }
+
   Future<void> _loadChapter() async {
     setState(() => isLoading = true);
     final res =
@@ -106,16 +115,15 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-    _handleUpsertLocal();
     if (_scrollController.hasClients) {
       _scrollController.dispose();
     }
   }
 
-  void _handleUpsertLocal() {
+  Future<void> _handleUpsertLocal() async {
     final isCurrentPage = bloc.isCurrentPage(widget.listChapterItem?.id);
     if (!isCurrentPage) return;
-    bloc.upsertBookLocal(
+    await bloc.upsertBookLocal(
       chapterId: widget.listChapterItem?.id ?? '',
       scrollOffset: _offSet,
       lastReadTime: DateTime.now().toIso8601String(),
@@ -131,59 +139,66 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
       widget.listChapterItem?.name ?? '',
     );
     final t = context.t;
-    return ObsBuilder(
-      streams: [
-        bloc.configStorySubject,
-      ],
-      builder: (context) {
-        final config = bloc.configStorySubject.value;
-        if (chapter == null && isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _onWillPop(context);
+      },
+      child: ObsBuilder(
+        streams: [
+          bloc.configStorySubject,
+        ],
+        builder: (context) {
+          final config = bloc.configStorySubject.value;
+          if (chapter == null && isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-        if (chapter == null && !isLoading) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  t.readStory.loadingError,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: config.themeMode.textColor,
+          if (chapter == null && !isLoading) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    t.readStory.loadingError,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: config.themeMode.textColor,
+                    ),
                   ),
-                ),
-                SizedBoxConstants.s4,
-                ElevatedButton(
-                  onPressed: () {
-                    _loadChapter();
-                  },
-                  child: Text(t.readStory.retry),
-                ),
-              ],
+                  SizedBoxConstants.s4,
+                  ElevatedButton(
+                    onPressed: () {
+                      _loadChapter();
+                    },
+                    child: Text(t.readStory.retry),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return AppGestureDetector(
+            onTap: () => bloc.toggleMenuVisibility(),
+            behavior: HitTestBehavior.translucent,
+            child: ListView.separated(
+              itemCount: paragraphs.length,
+              controller: _scrollController,
+              padding: const EdgeInsets.all(16),
+              physics: const NeverScrollableScrollPhysics(),
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                return _buildParagraphItem(
+                  paragraphs[index],
+                  index,
+                  config,
+                );
+              },
             ),
           );
-        }
-
-        return AppGestureDetector(
-          onTap: () => bloc.toggleMenuVisibility(),
-          behavior: HitTestBehavior.translucent,
-          child: ListView.separated(
-            itemCount: paragraphs.length,
-            controller: _scrollController,
-            padding: const EdgeInsets.all(16),
-            physics: const NeverScrollableScrollPhysics(),
-            separatorBuilder: (context, index) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              return _buildParagraphItem(
-                paragraphs[index],
-                index,
-                config,
-              );
-            },
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 
