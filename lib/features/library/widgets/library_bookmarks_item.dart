@@ -1,44 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_template/bloc/bloc_provider.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/shared/widgets/cache_network_image/app_cache_network_image.dart';
+import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 
 class LibraryBookmarksItem extends ConsumerWidget {
-  final String thumbUrl;
-  final String name;
-  final String currentChapter;
+  final BookEntity item;
   const LibraryBookmarksItem({
     super.key,
-    required this.thumbUrl,
-    required this.name,
-    required this.currentChapter,
+    required this.item,
   });
 
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(6),
-        boxShadow: [
-          BoxShadow(
-            color: isDark
-                ? Colors.black54
-                : Colors.grey.withValues(
-                    alpha: 0.2,
-                  ),
-            blurRadius: 2,
-            offset: Offset(0, 1),
-          ),
-        ],
-      ),
-      clipBehavior: Clip.antiAlias,
-      margin: EdgeInsets.zero,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(6),
-        onTap: () {},
+    final name = item.storyModel.name ?? '';
+    final thumbUrl = item.storyModel.thumb ?? '';
+    final currentChapter = item.lastReadChapter?.name ?? '';
+    final bloc = ref.read(BlocProvider.library);
+    return AppGestureDetector(
+      onTap: () {
+        bloc.onTapReadStory(item);
+      },
+      onLongPress: () {
+        bloc.onUnfavoriteBook(item);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.cardColor,
+          borderRadius: BorderRadius.circular(6),
+          boxShadow: [
+            BoxShadow(
+              color: isDark
+                  ? Colors.black54
+                  : Colors.grey.withValues(
+                      alpha: 0.2,
+                    ),
+              blurRadius: 2,
+              offset: Offset(0, 1),
+            ),
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
+        margin: EdgeInsets.zero,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

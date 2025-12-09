@@ -86,7 +86,9 @@
         "listBookmarksEmpty": "Chưa có đánh dấu nào",
         "downloads": "Tải về",
         "history": "Lịch sử",
-        "listHistoryEmpty": "Chưa có lịch sử nào"
+        "listHistoryEmpty": "Chưa có lịch sử nào",
+        "unfavoriteConfirmationTitle": "Xác nhận bỏ yêu thích",
+        "unfavoriteConfirmationMessage": "Bạn có chắc chắn muốn bỏ yêu thích truyện này không?"
     },
     "common": {
         "minuteAgo": "phút trước",
@@ -94,6 +96,8 @@
         "dayAgo": "ngày trước",
         "justNow": "vừa xong",
         "today": "Hôm nay",
-        "yesterday": "Hôm qua"
+        "yesterday": "Hôm qua",
+        "cancel": "Hủy",
+        "confirm": "Xác nhận"
     }
 }

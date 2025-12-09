@@ -265,6 +265,12 @@ class TranslationsLibraryScreenVi {
 
 	/// vi: 'Chưa có lịch sử nào'
 	String get listHistoryEmpty => 'Chưa có lịch sử nào';
+
+	/// vi: 'Xác nhận bỏ yêu thích'
+	String get unfavoriteConfirmationTitle => 'Xác nhận bỏ yêu thích';
+
+	/// vi: 'Bạn có chắc chắn muốn bỏ yêu thích truyện này không?'
+	String get unfavoriteConfirmationMessage => 'Bạn có chắc chắn muốn bỏ yêu thích truyện này không?';
 }
 
 // Path: common
@@ -292,6 +298,12 @@ class TranslationsCommonVi {
 
 	/// vi: 'Hôm qua'
 	String get yesterday => 'Hôm qua';
+
+	/// vi: 'Hủy'
+	String get cancel => 'Hủy';
+
+	/// vi: 'Xác nhận'
+	String get confirm => 'Xác nhận';
 }
 
 // Path: rootScreen.bottomNavigationBar
@@ -442,12 +454,16 @@ extension on Translations {
 			'libraryScreen.downloads' => 'Tải về',
 			'libraryScreen.history' => 'Lịch sử',
 			'libraryScreen.listHistoryEmpty' => 'Chưa có lịch sử nào',
+			'libraryScreen.unfavoriteConfirmationTitle' => 'Xác nhận bỏ yêu thích',
+			'libraryScreen.unfavoriteConfirmationMessage' => 'Bạn có chắc chắn muốn bỏ yêu thích truyện này không?',
 			'common.minuteAgo' => 'phút trước',
 			'common.hourAgo' => 'giờ trước',
 			'common.dayAgo' => 'ngày trước',
 			'common.justNow' => 'vừa xong',
 			'common.today' => 'Hôm nay',
 			'common.yesterday' => 'Hôm qua',
+			'common.cancel' => 'Hủy',
+			'common.confirm' => 'Xác nhận',
 			_ => null,
 		};
 	}

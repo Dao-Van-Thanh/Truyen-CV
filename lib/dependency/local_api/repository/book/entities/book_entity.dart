@@ -1,10 +1,17 @@
+import 'dart:convert';
+
+import 'package:collection/collection.dart';
+import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
+import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
+import 'package:flutter_template/shared/utilities/string.dart';
+
 class BookEntity {
   final String id;
-  final String storyData;       // JSON String
+  final String storyData; // JSON String
   final String listChapterData; // JSON String
   final String? currentChapterId;
   final double scrollOffset;
-  final bool isFavorite;        // SQLite lưu int (0/1), Dart dùng bool
+  final bool isFavorite; // SQLite lưu int (0/1), Dart dùng bool
   final String? lastReadTime;
   final String timeStamp;
 
@@ -19,6 +26,26 @@ class BookEntity {
     required this.timeStamp,
   });
 
+  List<ListChapterRes> get listChapters {
+    return StringUtilities.convertStringToListMap(listChapterData)
+        .map((e) => ListChapterRes.fromJson(e))
+        .toList();
+  }
+
+  ListChapterRes? get lastReadChapter {
+    if (listChapters.isEmpty) return null;
+    if (currentChapterId == null) return listChapters[0];
+    return listChapters.firstWhereOrNull(
+      (chapter) => chapter.id == currentChapterId,
+    );
+  }
+
+  StoryModel get storyModel {
+    return StoryModel.fromJson(
+      jsonDecode(storyData) as Map<String, dynamic>,
+    );
+  }
+
   factory BookEntity.fromMap(Map<String, dynamic> map) {
     return BookEntity(
       id: map['id'] as String,
@@ -30,7 +57,8 @@ class BookEntity {
       // SQLite lưu 1 là true, 0 là false
       isFavorite: (map['isFavorite'] as int?) == 1,
       lastReadTime: map['lastReadTime'] as String?,
-      timeStamp: map['timeStamp'] as String? ?? DateTime.now().toIso8601String(),
+      timeStamp:
+          map['timeStamp'] as String? ?? DateTime.now().toIso8601String(),
     );
   }
 

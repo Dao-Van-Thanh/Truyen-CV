@@ -1,13 +1,18 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
+import 'package:flutter_template/dependency/router/utils/route_input.dart';
+import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LibraryBloc extends BlocBase {
   Ref ref;
 
   late final localApiService = ref.read(AppService.localApi);
+  late final routerService = ref.read(AppService.router);
 
   final listBookmarksSubject = BehaviorSubject<List<BookEntity>>.seeded([]);
   final listHistorySubject = BehaviorSubject<List<BookEntity>>.seeded([]);
@@ -52,5 +57,54 @@ class LibraryBloc extends BlocBase {
         await localApiService.bookRepository.getRecentReadBooks(fromDate: now);
     if (isDispose) return;
     listHistorySubject.add(history);
+  }
+
+  Future<bool> _showDialogConfirmUnfavorite() async {
+    return await showDialog<bool>(
+          context: routerService.rootContext,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(t.libraryScreen.unfavoriteConfirmationTitle),
+              content: Text(t.libraryScreen.unfavoriteConfirmationMessage),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text(t.common.cancel),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(t.common.confirm),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
+  }
+
+  void onUnfavoriteBook(BookEntity item) async {
+    final confirm = await _showDialogConfirmUnfavorite();
+    if (!confirm) return;
+    await localApiService.bookRepository.upsertBook(
+      item.copyWith(isFavorite: false),
+    );
+    refreshData();
+  }
+
+  void onTapReadStory(BookEntity item) {
+    routerService.push(
+      RouteInput.readStory(
+        args: ReadStoryArgument(
+          storyId: item.id,
+          selectedChapterId: item.currentChapterId ?? '',
+          listChapter: item.listChapters,
+          scrollOffset: item.scrollOffset,
+        ),
+      ),
+    );
   }
 }

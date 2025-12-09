@@ -1,18 +1,12 @@
-import 'dart:convert';
-
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/constants/size_box.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
-import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
-import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/features/library/widgets/library_bookmarks_item.dart';
 import 'package:flutter_template/features/library/widgets/library_bookmarks_page_slider.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/utilities/string.dart';
 
 class LibraryBookmarksPage extends ConsumerWidget {
   const LibraryBookmarksPage({super.key});
@@ -59,29 +53,8 @@ class LibraryBookmarksPage extends ConsumerWidget {
                 ),
                 itemCount: remainingItems.length,
                 itemBuilder: (context, index) {
-                  final item = remainingItems[index];
-                  final storyData = StoryModel.fromJson(
-                    jsonDecode(item.storyData) as Map<String, dynamic>,
-                  );
-
-                  final listChapters = StringUtilities.convertStringToListMap(
-                          item.listChapterData)
-                      .map((e) => ListChapterRes.fromJson(e))
-                      .toList();
-
-                  ListChapterRes? lastReadChapter =
-                      listChapters.firstWhereOrNull(
-                    (chapter) => chapter.id == item.currentChapterId,
-                  );
-
-                  if (lastReadChapter == null && listChapters.isNotEmpty) {
-                    lastReadChapter = listChapters[0];
-                  }
-
                   return LibraryBookmarksItem(
-                    thumbUrl: storyData.thumb ?? '',
-                    name: storyData.name ?? '',
-                    currentChapter: lastReadChapter?.name ?? '',
+                    item: remainingItems[index],
                   );
                 },
               ),

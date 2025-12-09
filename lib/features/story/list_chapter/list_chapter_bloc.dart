@@ -123,7 +123,8 @@ class ListChapterBloc extends BlocBase {
       0.0,
     ).then(
       (_) {
-        routerService.push(
+        routerService
+            .push(
           RouteInput.readStory(
             args: ReadStoryArgument(
               storyId: args.storyData?.id ?? '',
@@ -132,7 +133,10 @@ class ListChapterBloc extends BlocBase {
               scrollOffset: 0.0,
             ),
           ),
-        );
+        )
+            .then((_) {
+          _getBookLocal();
+        });
       },
     );
   }
