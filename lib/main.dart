@@ -57,6 +57,7 @@ class MyApp extends ConsumerWidget {
           darkTheme: AppTheme.dark,
           themeMode: configBloc.themeModeSubject.value,
           onGenerateRoute: RoutePage.onGenerateRoute,
+          navigatorObservers: [routerService.routeObserver],
           navigatorKey: routerService.navigatorKey,
           builder: (context, child) {
             if (child == null) return const SizedBox.shrink();

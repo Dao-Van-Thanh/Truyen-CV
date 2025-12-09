@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
+import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
@@ -68,5 +69,12 @@ class RootBloc extends BlocBase {
         ),
       ),
     );
+  }
+
+  void onRefreshLibrary() {
+    if (selectedNavigationBarSubject.value != BottomNavigationBarEnum.library) {
+      return;
+    }
+    ref.read(BlocProvider.library).refreshData();
   }
 }

@@ -53,6 +53,7 @@ extension ReadStoryLocalExtension on ReadStoryBloc {
   Future<void> upsertBookLocal({
     required String chapterId,
     required double scrollOffset,
+    required String lastReadTime,
   }) async {
     final currentBook = await localApiService.bookRepository.getBookById(
       args.storyId,
@@ -66,6 +67,8 @@ extension ReadStoryLocalExtension on ReadStoryBloc {
       currentBook.copyWith(
         currentChapterId: chapterId,
         scrollOffset: scrollOffset,
+        lastReadTime: lastReadTime,
+        timeStamp: DateTime.now().toIso8601String(),
       ),
     );
   }
