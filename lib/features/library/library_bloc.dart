@@ -5,7 +5,7 @@ import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
+import 'package:flutter_template/features/library/widgets/library_bookmarks_option.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LibraryBloc extends BlocBase {
@@ -59,40 +59,34 @@ class LibraryBloc extends BlocBase {
     listHistorySubject.add(history);
   }
 
-  Future<bool> _showDialogConfirmUnfavorite() async {
-    return await showDialog<bool>(
-          context: routerService.rootContext,
-          builder: (context) {
-            return AlertDialog(
-              title: Text(t.libraryScreen.unfavoriteConfirmationTitle),
-              content: Text(t.libraryScreen.unfavoriteConfirmationMessage),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                  child: Text(t.common.cancel),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: Text(t.common.confirm),
-                ),
-              ],
-            );
+  void onTapLongPressStory(BookEntity item) async {
+    showModalBottomSheet(
+      context: routerService.rootContext,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return LibraryBookmarksOption(
+          item,
+          onTapRemoveBookmark: () {
+            _handleRemoveBookmark(item);
           },
-        ) ??
-        false;
+          onTapViewInfo: () {
+            _handleViewInfo(item);
+          },
+        );
+      },
+    );
   }
 
-  void onUnfavoriteBook(BookEntity item) async {
-    final confirm = await _showDialogConfirmUnfavorite();
-    if (!confirm) return;
+  void _handleRemoveBookmark(BookEntity item) async {
     await localApiService.bookRepository.upsertBook(
       item.copyWith(isFavorite: false),
     );
     refreshData();
+  }
+
+  void _handleViewInfo(BookEntity item) {
+    routerService.push(RouteInput.storyDetail(storyId: item.id));
   }
 
   void onTapReadStory(BookEntity item) {

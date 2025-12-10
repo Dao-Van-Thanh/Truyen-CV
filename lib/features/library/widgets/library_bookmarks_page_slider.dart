@@ -34,7 +34,7 @@ class LibraryBookmarksPageSlider extends ConsumerWidget {
               bloc.onTapReadStory(book);
             },
             onLongPress: () {
-              bloc.onUnfavoriteBook(book);
+              bloc.onTapLongPressStory(book);
             },
             child: Container(
               clipBehavior: Clip.antiAlias,

@@ -9,5 +9,6 @@ targets:
           fallback_strategy: base_locale
           key_case: camel
           key_map_case: pascal
-          param_case: snake
+          param_case: camel
           string_interpolation: braces
+          

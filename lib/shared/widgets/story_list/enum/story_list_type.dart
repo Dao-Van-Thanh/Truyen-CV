@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 
-enum StoryListType { grid, list, listCompact }
+enum StoryListType {
+  grid,
+  list,
+  listCompact;
+
+
+  static StoryListType fromName(String name) {
+    return StoryListType.values.firstWhere(
+      (e) => e.name == name,
+      orElse: () => StoryListType.list,
+    );
+  }
+}
 
 extension StoryListTypeExtension on StoryListType {
   bool get isGrid => this == StoryListType.grid;
