@@ -88,7 +88,14 @@
         "history": "Lịch sử",
         "listHistoryEmpty": "Chưa có lịch sử nào",
         "unfavoriteConfirmationTitle": "Xác nhận bỏ yêu thích",
-        "unfavoriteConfirmationMessage": "Bạn có chắc chắn muốn bỏ yêu thích truyện này không?"
+        "unfavoriteConfirmationMessage": "Bạn có chắc chắn muốn bỏ yêu thích truyện này không?",
+        "optionsBottomSheet": {
+            "lastChapter": "Chương đọc gần nhất: {chapterName: String}",
+            "totalChapters": "Tổng số chương: {chapterCount: int}",
+            "removeBookmark": "Xóa đánh dấu",
+            "viewInfo": "Xem thông tin",
+            "confirmRemoveBookmark": "Xác nhận xóa đánh dấu"
+        }
     },
     "common": {
         "minuteAgo": "phút trước",

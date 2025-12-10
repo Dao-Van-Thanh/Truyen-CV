@@ -32,6 +32,8 @@ class ExploreScreen extends ConsumerWidget {
     final t = context.t;
     final initialRequest = bloc.args?.request;
     final title = bloc.args?.title ?? t.exploreScreen.title;
+    final appConfigBloc = ref.read(BlocProvider.config);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -45,9 +47,9 @@ class ExploreScreen extends ConsumerWidget {
           ),
           PopupMenuButton<StoryListType>(
             icon: const Icon(Icons.more_vert),
-            onSelected: bloc.onChangeListType,
+            onSelected: appConfigBloc.onChangeTypeListDisplay,
             itemBuilder: (context) {
-              final current = bloc.listTypeSubject.value;
+              final current = appConfigBloc.typeListDisplaySubject.value;
 
               return StoryListType.values.map((type) {
                 final isSelected = type == current;
@@ -85,12 +87,12 @@ class ExploreScreen extends ConsumerWidget {
         ],
       ),
       body: ObsBuilder(
-        streams: [bloc.listTypeSubject],
+        streams: [appConfigBloc.typeListDisplaySubject],
         builder: (context) {
           if (initialRequest != null) {
             return ExplorePageWidget(
               request: initialRequest,
-              listType: bloc.listTypeSubject.value,
+              listType: appConfigBloc.typeListDisplaySubject.value,
             );
           }
           return AppPageView(
@@ -116,7 +118,7 @@ class ExploreScreen extends ConsumerWidget {
                     request: StoryFilterRequest(
                       sort: e.page,
                     ),
-                    listType: bloc.listTypeSubject.value,
+                    listType: appConfigBloc.typeListDisplaySubject.value,
                   ),
                   labelStyle: TextStyle(
                     fontWeight: FontWeight.w700,

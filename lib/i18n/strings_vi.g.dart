@@ -207,7 +207,7 @@ class TranslationsReadStoryVi {
 	String get next => 'Sau';
 
 	/// vi: 'Chương {chapterNumber: int}'
-	String chapter({required int chapter_number}) => 'Chương ${chapter_number}';
+	String chapter({required int chapterNumber}) => 'Chương ${chapterNumber}';
 
 	/// vi: 'Đang tải nội dung...'
 	String get loadingContent => 'Đang tải nội dung...';
@@ -271,6 +271,8 @@ class TranslationsLibraryScreenVi {
 
 	/// vi: 'Bạn có chắc chắn muốn bỏ yêu thích truyện này không?'
 	String get unfavoriteConfirmationMessage => 'Bạn có chắc chắn muốn bỏ yêu thích truyện này không?';
+
+	late final TranslationsLibraryScreenOptionsBottomSheetVi optionsBottomSheet = TranslationsLibraryScreenOptionsBottomSheetVi.internal(_root);
 }
 
 // Path: common
@@ -384,6 +386,30 @@ class TranslationsExploreScreenListTypeVi {
 	String get grid => 'Lưới';
 }
 
+// Path: libraryScreen.optionsBottomSheet
+class TranslationsLibraryScreenOptionsBottomSheetVi {
+	TranslationsLibraryScreenOptionsBottomSheetVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// vi: 'Chương đọc gần nhất: {chapterName: String}'
+	String lastChapter({required String chapterName}) => 'Chương đọc gần nhất: ${chapterName}';
+
+	/// vi: 'Tổng số chương: {chapterCount: int}'
+	String totalChapters({required int chapterCount}) => 'Tổng số chương: ${chapterCount}';
+
+	/// vi: 'Xóa đánh dấu'
+	String get removeBookmark => 'Xóa đánh dấu';
+
+	/// vi: 'Xem thông tin'
+	String get viewInfo => 'Xem thông tin';
+
+	/// vi: 'Xác nhận xóa đánh dấu'
+	String get confirmRemoveBookmark => 'Xác nhận xóa đánh dấu';
+}
+
 /// The flat map containing all translations for locale <vi>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -437,7 +463,7 @@ extension on Translations {
 			'listChapter.sortOld' => 'Cũ nhất',
 			'readStory.prev' => 'Trước',
 			'readStory.next' => 'Sau',
-			'readStory.chapter' => ({required int chapter_number}) => 'Chương ${chapter_number}',
+			'readStory.chapter' => ({required int chapterNumber}) => 'Chương ${chapterNumber}',
 			'readStory.loadingContent' => 'Đang tải nội dung...',
 			'readStory.loadingError' => 'Lỗi tải nội dung chương',
 			'readStory.retry' => 'Thử lại',
@@ -456,6 +482,11 @@ extension on Translations {
 			'libraryScreen.listHistoryEmpty' => 'Chưa có lịch sử nào',
 			'libraryScreen.unfavoriteConfirmationTitle' => 'Xác nhận bỏ yêu thích',
 			'libraryScreen.unfavoriteConfirmationMessage' => 'Bạn có chắc chắn muốn bỏ yêu thích truyện này không?',
+			'libraryScreen.optionsBottomSheet.lastChapter' => ({required String chapterName}) => 'Chương đọc gần nhất: ${chapterName}',
+			'libraryScreen.optionsBottomSheet.totalChapters' => ({required int chapterCount}) => 'Tổng số chương: ${chapterCount}',
+			'libraryScreen.optionsBottomSheet.removeBookmark' => 'Xóa đánh dấu',
+			'libraryScreen.optionsBottomSheet.viewInfo' => 'Xem thông tin',
+			'libraryScreen.optionsBottomSheet.confirmRemoveBookmark' => 'Xác nhận xóa đánh dấu',
 			'common.minuteAgo' => 'phút trước',
 			'common.hourAgo' => 'giờ trước',
 			'common.dayAgo' => 'ngày trước',

@@ -23,6 +23,7 @@ class SqfliteSchema {
       CREATE TABLE system_configs (
         id $_idType,
         themeMode $_textType,
+        typeListDisplay $_textType,
         locale $_textType,
         timeStamp $_textType 
       )

@@ -25,7 +25,7 @@ class LibraryBookmarksItem extends ConsumerWidget {
         bloc.onTapReadStory(item);
       },
       onLongPress: () {
-        bloc.onUnfavoriteBook(item);
+        bloc.onTapLongPressStory(item);
       },
       child: Container(
         decoration: BoxDecoration(
