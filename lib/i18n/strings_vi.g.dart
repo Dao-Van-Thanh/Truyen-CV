@@ -241,6 +241,18 @@ class TranslationsReadStoryVi {
 
 	/// vi: 'Đóng'
 	String get close => 'Đóng';
+
+	/// vi: 'Phông chữ'
+	String get fontFamily => 'Phông chữ';
+
+	/// vi: 'Đặt lại mặc định'
+	String get resetToDefault => 'Đặt lại mặc định';
+
+	/// vi: 'Nhấn 1 lần nữa để đặt lại cài đặt'
+	String get resetSettingsToDefaultConfirm => 'Nhấn 1 lần nữa để đặt lại cài đặt';
+
+	/// vi: 'Đã đặt lại cài đặt về mặc định'
+	String get resetSettingsToDefaultSuccess => 'Đã đặt lại cài đặt về mặc định';
 }
 
 // Path: libraryScreen
@@ -403,11 +415,11 @@ class TranslationsLibraryScreenOptionsBottomSheetVi {
 	/// vi: 'Xóa đánh dấu'
 	String get removeBookmark => 'Xóa đánh dấu';
 
-	/// vi: 'Xem thông tin'
-	String get viewInfo => 'Xem thông tin';
-
 	/// vi: 'Xác nhận xóa đánh dấu'
 	String get confirmRemoveBookmark => 'Xác nhận xóa đánh dấu';
+
+	/// vi: 'Xem thông tin'
+	String get viewInfo => 'Xem thông tin';
 }
 
 /// The flat map containing all translations for locale <vi>.
@@ -475,6 +487,10 @@ extension on Translations {
 			'readStory.themeSepia' => 'Sepia',
 			'readStory.settings' => 'Cài đặt',
 			'readStory.close' => 'Đóng',
+			'readStory.fontFamily' => 'Phông chữ',
+			'readStory.resetToDefault' => 'Đặt lại mặc định',
+			'readStory.resetSettingsToDefaultConfirm' => 'Nhấn 1 lần nữa để đặt lại cài đặt',
+			'readStory.resetSettingsToDefaultSuccess' => 'Đã đặt lại cài đặt về mặc định',
 			'libraryScreen.bookmarks' => 'Đánh dấu',
 			'libraryScreen.listBookmarksEmpty' => 'Chưa có đánh dấu nào',
 			'libraryScreen.downloads' => 'Tải về',
@@ -485,8 +501,8 @@ extension on Translations {
 			'libraryScreen.optionsBottomSheet.lastChapter' => ({required String chapterName}) => 'Chương đọc gần nhất: ${chapterName}',
 			'libraryScreen.optionsBottomSheet.totalChapters' => ({required int chapterCount}) => 'Tổng số chương: ${chapterCount}',
 			'libraryScreen.optionsBottomSheet.removeBookmark' => 'Xóa đánh dấu',
-			'libraryScreen.optionsBottomSheet.viewInfo' => 'Xem thông tin',
 			'libraryScreen.optionsBottomSheet.confirmRemoveBookmark' => 'Xác nhận xóa đánh dấu',
+			'libraryScreen.optionsBottomSheet.viewInfo' => 'Xem thông tin',
 			'common.minuteAgo' => 'phút trước',
 			'common.hourAgo' => 'giờ trước',
 			'common.dayAgo' => 'ngày trước',

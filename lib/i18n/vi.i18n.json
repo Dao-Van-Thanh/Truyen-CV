@@ -79,7 +79,11 @@
         "themeDark": "Tối",
         "themeSepia": "Sepia",
         "settings": "Cài đặt",
-        "close": "Đóng"
+        "close": "Đóng",
+        "fontFamily": "Phông chữ",
+        "resetToDefault": "Đặt lại mặc định",
+        "resetSettingsToDefaultConfirm": "Nhấn 1 lần nữa để đặt lại cài đặt",
+        "resetSettingsToDefaultSuccess": "Đã đặt lại cài đặt về mặc định"
     },
     "libraryScreen": {
         "bookmarks": "Đánh dấu",
@@ -93,8 +97,8 @@
             "lastChapter": "Chương đọc gần nhất: {chapterName: String}",
             "totalChapters": "Tổng số chương: {chapterCount: int}",
             "removeBookmark": "Xóa đánh dấu",
-            "viewInfo": "Xem thông tin",
-            "confirmRemoveBookmark": "Xác nhận xóa đánh dấu"
+            "confirmRemoveBookmark": "Xác nhận xóa đánh dấu",
+            "viewInfo": "Xem thông tin"
         }
     },
     "common": {

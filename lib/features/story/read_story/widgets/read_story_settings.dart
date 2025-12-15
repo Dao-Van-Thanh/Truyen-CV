@@ -5,6 +5,7 @@ import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/constants/font_family_enum.dart';
 import 'package:flutter_template/features/story/read_story/enum/read_theme_mode.dart';
+import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 
 class ReadStorySettings extends ConsumerWidget {
@@ -14,6 +15,7 @@ class ReadStorySettings extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final bloc = ref.watch(BlocProvider.readStory);
     final theme = Theme.of(context);
+    final t = context.t;
     return ObsBuilder(
       streams: [
         bloc.configStorySubject,
@@ -79,7 +81,7 @@ class ReadStorySettings extends ConsumerWidget {
                     SizedBoxConstants.s16,
                     Expanded(
                       child: Text(
-                        'Font Size',
+                        t.readStory.fontSize,
                         style: TextStyle(
                           color: textColor,
                         ),
@@ -108,7 +110,7 @@ class ReadStorySettings extends ConsumerWidget {
                     SizedBoxConstants.s16,
                     Expanded(
                       child: Text(
-                        'Line Height',
+                        t.readStory.lineHeight,
                         style: TextStyle(
                           color: textColor,
                         ),
@@ -137,7 +139,7 @@ class ReadStorySettings extends ConsumerWidget {
                     SizedBoxConstants.s16,
                     Expanded(
                       child: Text(
-                        'Font Family',
+                        t.readStory.fontFamily,
                         style: TextStyle(
                           color: textColor,
                         ),
@@ -167,9 +169,9 @@ class ReadStorySettings extends ConsumerWidget {
                 Padding(
                   padding: EdgeInsetsConstants.right16,
                   child: AppGestureDetector(
-                    onTap: bloc.onTapResetSetting,
+                    onTap: () => bloc.onTapResetSetting(context),
                     child: Text(
-                      'Reset to Default',
+                      t.readStory.resetToDefault,
                       style: TextStyle(
                         color: theme.colorScheme.error,
                         decoration: TextDecoration.underline,
@@ -178,6 +180,7 @@ class ReadStorySettings extends ConsumerWidget {
                     ),
                   ),
                 ),
+                SizedBoxConstants.s16,
               ],
             ),
           ),
