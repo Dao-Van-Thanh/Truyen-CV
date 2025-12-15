@@ -5,6 +5,7 @@ import 'package:flutter_template/dependency/network_api/network_api_service.dart
 import 'package:flutter_template/dependency/router/router_provider.dart';
 import 'package:flutter_template/dependency/router/router_service.dart';
 import 'package:flutter_template/dependency/sqflite/sqflite_service.dart';
+import 'package:flutter_template/dependency/toast/toast_service.dart';
 
 class AppProvider {
   static final router = Provider((ref) => RouterProvider());
@@ -16,6 +17,12 @@ class AppService {
       return RouterService(
         routerInterface: ref.watch(AppProvider.router),
       );
+    },
+  );
+
+  static final toast = Provider(
+    (ref) {
+      return ToastService(ref);
     },
   );
 

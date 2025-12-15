@@ -43,6 +43,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final routerService = ref.watch(AppService.router);
     final configBloc = ref.watch(BlocProvider.config);
+    final toastService = ref.watch(AppService.toast);
     return ObsBuilder(
       streams: [configBloc.themeModeSubject],
       builder: (context) {
@@ -57,13 +58,18 @@ class MyApp extends ConsumerWidget {
           darkTheme: AppTheme.dark,
           themeMode: configBloc.themeModeSubject.value,
           onGenerateRoute: RoutePage.onGenerateRoute,
-          navigatorObservers: [routerService.routeObserver],
+          navigatorObservers: [
+            routerService.routeObserver,
+            toastService.observer,
+          ],
           navigatorKey: routerService.navigatorKey,
           builder: (context, child) {
-            if (child == null) return const SizedBox.shrink();
+            final botToastBuilder = toastService.init();
+
+            final appBuilder = botToastBuilder(context, child);
 
             if (!Platform.isIOS) {
-              return child;
+              return appBuilder;
             }
             // Only apply fixed text scaling if the platform is iOS
             return MediaQuery(
@@ -73,7 +79,7 @@ class MyApp extends ConsumerWidget {
                 behavior: const ScrollBehavior().copyWith(
                   physics: const ClampingScrollPhysics(),
                 ),
-                child: child,
+                child: appBuilder,
               ),
             );
           },

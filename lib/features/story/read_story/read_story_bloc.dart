@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_template/features/story/read_story/enum/read_theme_mode.
 import 'package:flutter_template/features/story/read_story/extension/read_story_local_extension.dart';
 import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
 import 'package:flutter_template/features/story/read_story/widgets/read_story_settings.dart';
+import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ReadStoryBloc extends BlocBase {
@@ -17,6 +20,7 @@ class ReadStoryBloc extends BlocBase {
   late final networkApiService = ref.read(AppService.networkApi);
   late final routerService = ref.read(AppService.router);
   late final localApiService = ref.read(AppService.localApi);
+  late final toastService = ref.read(AppService.toast);
 
   final currentListChapterItemSubject =
       BehaviorSubject<ListChapterRes?>.seeded(null);
@@ -27,6 +31,8 @@ class ReadStoryBloc extends BlocBase {
   final pageController = PageController();
 
   final isLoadingSubject = BehaviorSubject<bool>.seeded(false);
+
+  Timer? _resetConfirmTimer;
 
   ReadStoryBloc(this.ref, {required this.args}) {
     _init();
@@ -63,6 +69,7 @@ class ReadStoryBloc extends BlocBase {
       );
       if (selectedIndex != -1) {
         pageController.jumpToPage(selectedIndex);
+        handlePageChanged(selectedIndex);
       }
     });
     isLoadingSubject.value = true;
@@ -74,6 +81,7 @@ class ReadStoryBloc extends BlocBase {
   }
 
   void handlePageChanged(int p1) {
+    if (p1 < 0 || p1 >= args.listChapter.length) return;
     currentListChapterItemSubject.value = args.listChapter[p1];
   }
 
@@ -138,7 +146,18 @@ class ReadStoryBloc extends BlocBase {
     return chapterId == currentChapterId;
   }
 
-  void onTapResetSetting() {
-    configStorySubject.add(defaultConfigStory);
+  void onTapResetSetting(BuildContext context) {
+    if (_resetConfirmTimer != null && _resetConfirmTimer!.isActive) {
+      _resetConfirmTimer?.cancel();
+      _resetConfirmTimer = null;
+      toastService.showText(message: t.readStory.resetSettingsToDefaultSuccess);
+      configStorySubject.add(defaultConfigStory);
+      return;
+    }
+
+    _resetConfirmTimer = Timer(const Duration(seconds: 3), () {
+      _resetConfirmTimer = null;
+    });
+    toastService.showText(message: t.readStory.resetSettingsToDefaultConfirm);
   }
 }
