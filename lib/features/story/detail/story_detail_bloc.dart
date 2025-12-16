@@ -14,7 +14,6 @@ import 'package:flutter_template/dependency/router/arguments/read_story_argument
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
-import 'package:flutter_template/shared/utilities/string.dart';
 import 'package:rxdart/rxdart.dart';
 
 class StoryDetailBloc extends BlocBase {
@@ -227,9 +226,7 @@ class StoryDetailBloc extends BlocBase {
       final listChapter = listChapterSubject.value;
       final bookEntity = BookEntity(
         id: storyId,
-        listChapterData: StringUtilities.convertListMapToString(
-          listChapter.map((e) => e.toJson()).toList(),
-        ),
+        listChapters: listChapter,
         storyData: jsonEncode(storyDetailSubject.value?.toJson()),
         currentChapterId: selectedChapterId,
         scrollOffset: scrollOffset ?? 0.0,

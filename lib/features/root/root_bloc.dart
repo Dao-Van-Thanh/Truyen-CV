@@ -3,10 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
-import 'package:flutter_template/shared/utilities/string.dart';
 import 'package:flutter_template/shared/widgets/bottom_navigation_bar/enum/bottom_navigation_bar_enum.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -61,10 +59,7 @@ class RootBloc extends BlocBase {
         args: ReadStoryArgument(
           storyId: bookLocal.id,
           selectedChapterId: bookLocal.currentChapterId ?? '',
-          listChapter:
-              StringUtilities.convertStringToListMap(bookLocal.listChapterData)
-                  .map((e) => ListChapterRes.fromJson(e))
-                  .toList(),
+          listChapter: bookLocal.listChapters,
           scrollOffset: bookLocal.scrollOffset,
         ),
       ),

@@ -32,7 +32,10 @@ class SqfliteService {
       db.execute(SqfliteSchema.createSystemConfigsTable),
       db.execute(SqfliteSchema.createBooksTable),
     ]);
-    await db.execute(SqfliteSchema.createRouterTable);
+    await Future.wait([
+      db.execute(SqfliteSchema.createRouterTable),
+      db.execute(SqfliteSchema.createChaptersTable),
+    ]);
   }
 
   Future<void> close() async {

@@ -13,7 +13,6 @@ import 'package:flutter_template/features/story/list_chapter/enum/list_sort_enum
 import 'package:flutter_template/shared/extensions/text_editing_controller_extension.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
-import 'package:flutter_template/shared/utilities/string.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ListChapterBloc extends BlocBase {
@@ -163,9 +162,7 @@ class ListChapterBloc extends BlocBase {
       final listChapter = listChapterSubject.value;
       final bookEntity = BookEntity(
         id: args.storyData?.id ?? '',
-        listChapterData: StringUtilities.convertListMapToString(
-          listChapter.map((e) => e.toJson()).toList(),
-        ),
+        listChapters: listChapter,
         storyData: jsonEncode(args.storyData?.toJson()),
         currentChapterId: selectedChapterId,
         scrollOffset: scrollOffset,

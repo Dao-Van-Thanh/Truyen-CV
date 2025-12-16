@@ -3,22 +3,21 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
-import 'package:flutter_template/shared/utilities/string.dart';
 
 class BookEntity {
   final String id;
-  final String storyData; // JSON String
-  final String listChapterData; // JSON String
+  final String storyData;
+  final List<ListChapterRes> listChapters;
   final String? currentChapterId;
   final double scrollOffset;
-  final bool isFavorite; // SQLite lưu int (0/1), Dart dùng bool
+  final bool isFavorite;
   final String? lastReadTime;
   final String timeStamp;
 
   const BookEntity({
     required this.id,
     required this.storyData,
-    required this.listChapterData,
+    this.listChapters = const [],
     this.currentChapterId,
     this.scrollOffset = 0.0,
     this.isFavorite = false,
@@ -26,17 +25,35 @@ class BookEntity {
     required this.timeStamp,
   });
 
-  List<ListChapterRes> get listChapters {
-    return StringUtilities.convertStringToListMap(listChapterData)
-        .map((e) => ListChapterRes.fromJson(e))
-        .toList();
+  factory BookEntity.fromMap(Map<String, dynamic> map) {
+    return BookEntity(
+      id: map['id'] as String,
+      storyData: map['storyData'] as String,
+      currentChapterId: map['currentChapterId'] as String?,
+      scrollOffset: (map['scrollOffset'] as num?)?.toDouble() ?? 0.0,
+      isFavorite: (map['isFavorite'] as int? ?? 0) == 1,
+      lastReadTime: map['lastReadTime'] as String?,
+      timeStamp: map['timeStamp'] as String,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'storyData': storyData,
+      'currentChapterId': currentChapterId,
+      'scrollOffset': scrollOffset,
+      'isFavorite': isFavorite ? 1 : 0,
+      'lastReadTime': lastReadTime,
+      'timeStamp': timeStamp,
+    };
   }
 
   ListChapterRes? get lastReadChapter {
     if (listChapters.isEmpty) return null;
-    if (currentChapterId == null) return listChapters[0];
+    if (currentChapterId == null) return listChapters.first;
     return listChapters.firstWhereOrNull(
-      (chapter) => chapter.id == currentChapterId,
+      (c) => c.id == currentChapterId,
     );
   }
 
@@ -46,39 +63,10 @@ class BookEntity {
     );
   }
 
-  factory BookEntity.fromMap(Map<String, dynamic> map) {
-    return BookEntity(
-      id: map['id'] as String,
-      storyData: map['storyData'] as String,
-      listChapterData: map['listChapterData'] as String,
-      currentChapterId: map['currentChapterId'] as String?,
-      // SQLite trả về num (int hoặc double), cần cast cẩn thận
-      scrollOffset: (map['scrollOffset'] as num?)?.toDouble() ?? 0.0,
-      // SQLite lưu 1 là true, 0 là false
-      isFavorite: (map['isFavorite'] as int?) == 1,
-      lastReadTime: map['lastReadTime'] as String?,
-      timeStamp:
-          map['timeStamp'] as String? ?? DateTime.now().toIso8601String(),
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'storyData': storyData,
-      'listChapterData': listChapterData,
-      'currentChapterId': currentChapterId,
-      'scrollOffset': scrollOffset,
-      'isFavorite': isFavorite ? 1 : 0, // Convert bool -> int
-      'lastReadTime': lastReadTime,
-      'timeStamp': timeStamp,
-    };
-  }
-
   BookEntity copyWith({
     String? id,
     String? storyData,
-    String? listChapterData,
+    List<ListChapterRes>? listChapters,
     String? currentChapterId,
     double? scrollOffset,
     bool? isFavorite,
@@ -88,7 +76,7 @@ class BookEntity {
     return BookEntity(
       id: id ?? this.id,
       storyData: storyData ?? this.storyData,
-      listChapterData: listChapterData ?? this.listChapterData,
+      listChapters: listChapters ?? this.listChapters,
       currentChapterId: currentChapterId ?? this.currentChapterId,
       scrollOffset: scrollOffset ?? this.scrollOffset,
       isFavorite: isFavorite ?? this.isFavorite,

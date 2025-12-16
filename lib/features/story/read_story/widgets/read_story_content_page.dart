@@ -1,23 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/chapter/chapter_response.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_local_extension.dart';
 import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
-import 'package:flutter_template/features/story/read_story/utils/read_story_util.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 class ReadStoryContentPage extends ConsumerStatefulWidget {
+  final int index;
   final ListChapterRes? listChapterItem;
-  final ScrollController controller;
+  final AutoScrollController controller;
   const ReadStoryContentPage({
     super.key,
+    required this.index,
     required this.listChapterItem,
     required this.controller,
   });
@@ -29,9 +30,7 @@ class ReadStoryContentPage extends ConsumerStatefulWidget {
 
 class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
-  ChapterResponse? chapter;
-  bool isLoading = true;
-  late ScrollController _scrollController;
+  late AutoScrollController _scrollController;
   late final networkApiService = ref.read(AppService.networkApi);
   late final bloc = ref.read(BlocProvider.readStory);
 
@@ -40,21 +39,9 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
   bool get isCurrentChapter =>
       widget.listChapterItem?.id == bloc.args.selectedChapterId;
 
-  Future<ChapterResponse?> _fetchChapter({required String chapterId}) async {
-    final res = await networkApiService.storyRepository.getChapter(
-      chapterId,
-    );
-    if (!mounted) return null;
-    return res.whenOrNull<ChapterResponse?>(
-      success: (data) {
-        final chapter = data.data;
-        return chapter;
-      },
-      error: (error) {
-        logger.e('Failed to load chapter: $error');
-        return null;
-      },
-    );
+  ChapterResponse? get _chapterFromCache {
+    final chapterId = widget.listChapterItem?.id ?? '';
+    return bloc.chaptersMapSubject.value[chapterId];
   }
 
   Future<void> _onWillPop(BuildContext context) async {
@@ -66,29 +53,16 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     }
   }
 
-  Future<void> _loadChapter() async {
-    setState(() => isLoading = true);
-    final res =
-        await _fetchChapter(chapterId: widget.listChapterItem?.id ?? '');
-    if (!mounted) return;
-    setState(() {
-      chapter = res;
-      isLoading = false;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _scrollController = widget.controller;
     _listenScroll();
-    _loadChapter().then((_) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (widget.listChapterItem?.id != bloc.args.selectedChapterId) return;
-        _scrollController.jumpTo(bloc.args.scrollOffset);
-      });
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (widget.listChapterItem?.id != bloc.args.selectedChapterId) return;
+    //   _scrollController.jumpTo(bloc.args.scrollOffset);
+    // });
   }
 
   void _listenScroll() {
@@ -134,11 +108,6 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final paragraphs = ReadStoryUtil.parseContent(
-      chapter?.content ?? '',
-      widget.listChapterItem?.name ?? '',
-    );
-    final t = context.t;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
@@ -148,51 +117,42 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
       child: ObsBuilder(
         streams: [
           bloc.configStorySubject,
+          bloc.chaptersMapSubject,
         ],
         builder: (context) {
           final config = bloc.configStorySubject.value;
-          if (chapter == null && isLoading) {
+          final chapterData = _chapterFromCache;
+          if (chapterData == null) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (chapter == null && !isLoading) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    t.readStory.loadingError,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: config.themeMode.textColor,
-                    ),
-                  ),
-                  SizedBoxConstants.s4,
-                  ElevatedButton(
-                    onPressed: () {
-                      _loadChapter();
-                    },
-                    child: Text(t.readStory.retry),
-                  ),
-                ],
-              ),
-            );
-          }
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (widget.listChapterItem?.id != bloc.args.selectedChapterId) {
+              return;
+            }
+            _scrollController.jumpTo(bloc.args.scrollOffset);
+          });
 
           return AppGestureDetector(
             onTap: () => bloc.toggleMenuVisibility(),
             behavior: HitTestBehavior.translucent,
             child: ListView.separated(
-              itemCount: paragraphs.length,
+              itemCount: chapterData.paragraphs.length,
               controller: _scrollController,
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.only(top: 16, bottom: 16),
               physics: const NeverScrollableScrollPhysics(),
               separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                return _buildParagraphItem(
-                  paragraphs[index],
-                  index,
-                  config,
+                return AutoScrollTag(
+                  key: Key('paragraph_$index'),
+                  index: index,
+                  controller: _scrollController,
+                  child: _buildParagraphItem(
+                    isHightLight: false,
+                    content: chapterData.paragraphs[index],
+                    index: index,
+                    config: config,
+                  ),
                 );
               },
             ),
@@ -202,11 +162,12 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     );
   }
 
-  Widget _buildParagraphItem(
-    String content,
-    int index,
-    ConfigStoryModel config,
-  ) {
+  Widget _buildParagraphItem({
+    required bool isHightLight,
+    required String content,
+    required int index,
+    required ConfigStoryModel config,
+  }) {
     double fontSize = config.fontSize;
     final lineHeight = config.lineHeight;
     final color = config.themeMode.textColor;
@@ -220,16 +181,20 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
       textAlign = TextAlign.center;
     }
 
-    return Text(
-      content,
-      style: TextStyle(
-        fontSize: fontSize,
-        height: lineHeight,
-        color: color,
-        fontWeight: fontWeight,
-        fontFamily: fontFamily,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      color: isHightLight ? color.withValues(alpha: 0.3) : Colors.transparent,
+      child: Text(
+        content,
+        style: TextStyle(
+          fontSize: fontSize,
+          height: lineHeight,
+          color: color,
+          fontWeight: fontWeight,
+          fontFamily: fontFamily,
+        ),
+        textAlign: textAlign,
       ),
-      textAlign: textAlign,
     );
   }
 

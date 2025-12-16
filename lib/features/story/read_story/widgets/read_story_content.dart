@@ -18,6 +18,7 @@ class ReadStoryContent extends ConsumerWidget {
         itemBuilder: (context, index, controller) {
           final chapter = bloc.args.listChapter[index];
           return ReadStoryContentPage(
+            index: index,
             listChapterItem: chapter,
             controller: controller,
           );
