@@ -29,11 +29,20 @@ class SqfliteSchema {
       )
     ''';
 
+  static const createChaptersTable = '''
+      CREATE TABLE chapters (
+        id $_idType,
+        bookId $_textType,
+        listChapterItemData $_textType,
+        timeStamp $_textType,
+        FOREIGN KEY (bookId) REFERENCES books (id) ON DELETE CASCADE
+      )
+    ''';
+
   static const createBooksTable = '''
       CREATE TABLE books (
         id $_idType, 
         storyData $_textType,
-        listChapterData $_textType,
         currentChapterId $_textType,
         scrollOffset $_realType,
         isFavorite $_boolType,

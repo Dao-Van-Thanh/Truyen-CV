@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
+import 'package:flutter_template/features/story/read_story/extension/read_story_tts_extension.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 
@@ -26,6 +27,7 @@ class ReadStoryController extends ConsumerWidget {
         const curve = Curves.easeInOut;
         final config = bloc.configStorySubject.value;
         final backgroundColor = config.themeMode.backgroundControllerColor;
+        final listChapters = bloc.args.listChapter;
 
         final textColor = config.themeMode.textColor;
 
@@ -109,7 +111,10 @@ class ReadStoryController extends ConsumerWidget {
                             child: Slider(
                               value: (bloc.pageController.page ?? 0),
                               min: 0,
-                              max: bloc.args.listChapter.length - 1,
+                              max: (listChapters.isEmpty
+                                      ? 1
+                                      : listChapters.length) -
+                                  1,
                               onChanged: bloc.onChangeReadProgress,
                               activeColor: textColor,
                               inactiveColor: textColor.withValues(alpha: 0.5),
@@ -138,7 +143,7 @@ class ReadStoryController extends ConsumerWidget {
                             onPressed: () {},
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: bloc.onTapStartTts,
                             icon: Icon(Icons.headphones, color: textColor),
                           ),
                           IconButton(

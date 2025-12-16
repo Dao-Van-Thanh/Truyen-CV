@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/book_repository.dart';
+import 'package:flutter_template/dependency/local_api/repository/chapter/chapter_repository.dart';
 import 'package:flutter_template/dependency/local_api/repository/config/config_repository.dart';
 import 'package:flutter_template/dependency/local_api/repository/router/router_repository.dart';
 import 'package:flutter_template/dependency/local_api/repository/system_config/system_config_repository.dart';
@@ -24,8 +25,10 @@ class LocalApiService {
   Future<void> deleteDatabaseFile() async =>
       _sqfliteService.deleteDatabaseFile();
 
-  BookRepository get bookRepository =>
-      BookRepository(db: _sqfliteService.database);
+  BookRepository get bookRepository => BookRepository(
+        db: _sqfliteService.database,
+        chapterRepository: chapterRepository,
+      );
 
   ConfigRepository get configRepository =>
       ConfigRepository(db: _sqfliteService.database);
@@ -35,4 +38,7 @@ class LocalApiService {
 
   SystemConfigRepository get systemConfigRepository =>
       SystemConfigRepository(db: _sqfliteService.database);
+
+  ChapterRepository get chapterRepository =>
+      ChapterRepository(db: _sqfliteService.database);
 }

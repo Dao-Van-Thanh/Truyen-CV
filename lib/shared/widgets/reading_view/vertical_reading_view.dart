@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 class VerticalReadingView extends StatefulWidget {
   final PageController pageController;
@@ -8,7 +9,7 @@ class VerticalReadingView extends StatefulWidget {
   final Widget Function(
     BuildContext context,
     int index,
-    ScrollController scrollController,
+    AutoScrollController scrollController,
   ) itemBuilder;
 
   const VerticalReadingView({
@@ -69,7 +70,7 @@ class _VerticalReadingViewState extends State<VerticalReadingView> {
 
 class _VerticalPageWrapper extends StatefulWidget {
   final PageController pageController;
-  final Widget Function(BuildContext, ScrollController) builder;
+  final Widget Function(BuildContext, AutoScrollController) builder;
   final double initialScrollOffset;
   final ValueChanged<double>? onScrollChanged;
 
@@ -86,12 +87,12 @@ class _VerticalPageWrapper extends StatefulWidget {
 }
 
 class _VerticalPageWrapperState extends State<_VerticalPageWrapper> {
-  late ScrollController _scrollController;
+  late AutoScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController(
+    _scrollController = AutoScrollController(
       initialScrollOffset: widget.initialScrollOffset,
     );
 
@@ -122,7 +123,7 @@ class _VerticalPageWrapperState extends State<_VerticalPageWrapper> {
 
 class _PageViewScrollableChild extends StatefulWidget {
   final Widget child;
-  final ScrollController scrollController;
+  final AutoScrollController scrollController;
   final PageController pageController;
   final Axis scrollDirection;
 

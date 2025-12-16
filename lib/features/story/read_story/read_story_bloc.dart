@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
+import 'package:flutter_template/dependency/network_api/story/chapter/chapter_response.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/features/story/read_story/enum/read_theme_mode.dart';
+import 'package:flutter_template/features/story/read_story/enum/read_tts_status.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_local_extension.dart';
 import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
 import 'package:flutter_template/features/story/read_story/widgets/read_story_settings.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
+import 'package:flutter_template/shared/utilities/debounce.dart';
+import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ReadStoryBloc extends BlocBase {
@@ -21,7 +25,6 @@ class ReadStoryBloc extends BlocBase {
   late final routerService = ref.read(AppService.router);
   late final localApiService = ref.read(AppService.localApi);
   late final toastService = ref.read(AppService.toast);
-
   final currentListChapterItemSubject =
       BehaviorSubject<ListChapterRes?>.seeded(null);
   final isMenuVisibleSubject = BehaviorSubject<bool>.seeded(false);
@@ -31,6 +34,11 @@ class ReadStoryBloc extends BlocBase {
   final pageController = PageController();
 
   final isLoadingSubject = BehaviorSubject<bool>.seeded(false);
+
+  final chaptersMapSubject =
+      BehaviorSubject<Map<String, ChapterResponse>>.seeded({});
+  final ttsControllerStatusSubject = BehaviorSubject<ReadTtsStatus>();
+  Debounce _preloadDebounce = Debounce(milliseconds: 300);
 
   Timer? _resetConfirmTimer;
 
@@ -47,9 +55,12 @@ class ReadStoryBloc extends BlocBase {
     isMenuVisibleSubject.close();
     configStorySubject.close();
     isLoadingSubject.close();
+    chaptersMapSubject.close();
     if (pageController.hasClients) {
       pageController.dispose();
     }
+    ttsControllerStatusSubject.close();
+    _preloadDebounce.dispose();
   }
 
   void toggleMenuVisibility() {
@@ -70,6 +81,8 @@ class ReadStoryBloc extends BlocBase {
       if (selectedIndex != -1) {
         pageController.jumpToPage(selectedIndex);
         handlePageChanged(selectedIndex);
+      } else {
+        preloadChapters(0);
       }
     });
     isLoadingSubject.value = true;
@@ -83,6 +96,9 @@ class ReadStoryBloc extends BlocBase {
   void handlePageChanged(int p1) {
     if (p1 < 0 || p1 >= args.listChapter.length) return;
     currentListChapterItemSubject.value = args.listChapter[p1];
+    _preloadDebounce.run(() {
+      preloadChapters(p1);
+    });
   }
 
   void onTapNextPage() {
@@ -159,5 +175,69 @@ class ReadStoryBloc extends BlocBase {
       _resetConfirmTimer = null;
     });
     toastService.showText(message: t.readStory.resetSettingsToDefaultConfirm);
+  }
+
+  Future<void> preloadChapters(int currentIndex) async {
+    final listChapter = args.listChapter;
+    final List<Future<void>> tasks = [];
+
+    // 1. Xác định Start: (Hiện tại - 2), nhưng không được nhỏ hơn 0
+    int start = currentIndex - 2;
+    if (start < 0) start = 0;
+
+    // 2. Xác định End: (Hiện tại + 2), nhưng không được vượt quá phần tử cuối
+    int end = currentIndex + 2;
+    if (end >= listChapter.length) end = listChapter.length - 1;
+
+    // 3. Loop trong khoảng [start -> end] (Bao gồm cả previous, current, next)
+    for (int i = start; i <= end; i++) {
+      final chapterItem = listChapter[i];
+
+      // Chỉ tải nếu trong Cache CHƯA CÓ
+      if (!chaptersMapSubject.value.containsKey(chapterItem.id)) {
+        // Lưu ý: task này nên chạy async độc lập,
+        // add vào list để dùng Future.wait chờ tất cả (nếu muốn)
+        tasks.add(
+          _fetchAndCache(
+            chapterItem.id ?? '',
+          ),
+        );
+      }
+    }
+
+    // 4. Kích hoạt tải đồng thời
+    if (tasks.isNotEmpty) {
+      await Future.wait(tasks);
+    }
+  }
+
+  Future<void> _fetchAndCache(String id) async {
+    // Gọi Repository tải data
+    final res = await _fetchChapter(chapterId: id);
+    if (res != null) {
+      final currentMap =
+          Map<String, ChapterResponse>.from(chaptersMapSubject.value);
+      currentMap[id] = res;
+      chaptersMapSubject.add(currentMap); // Emit map mới để UI update
+    }
+  }
+
+  Future<ChapterResponse?> _fetchChapter({
+    required String chapterId,
+  }) async {
+    final res = await networkApiService.storyRepository.getChapter(
+      chapterId,
+    );
+    if (isDispose) return null;
+    return res.whenOrNull<ChapterResponse?>(
+      success: (data) {
+        final chapter = data.data;
+        return chapter;
+      },
+      error: (error) {
+        logger.e('Failed to load chapter: $error');
+        return null;
+      },
+    );
   }
 }

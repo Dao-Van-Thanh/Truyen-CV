@@ -1,3 +1,4 @@
+import 'package:flutter_template/features/story/read_story/utils/read_story_util.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'chapter_response.freezed.dart';
@@ -19,4 +20,9 @@ abstract class ChapterResponse with _$ChapterResponse {
 
   factory ChapterResponse.fromJson(Map<String, dynamic> json) =>
       _$ChapterResponseFromJson(json);
+}
+
+extension ChapterResponseExtension on ChapterResponse {
+  List<String> get paragraphs =>
+      content != null ? ReadStoryUtil.parseContent(content ?? '', ename) : [];
 }

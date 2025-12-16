@@ -7,8 +7,9 @@ class AppGestureDetector extends GestureDetector {
     bool isDisable = false,
     VoidCallback? onTap,
     VoidCallback? onLongPress,
-    super.behavior,
+    HitTestBehavior? behavior,
   }) : super(
+          behavior: isDisable ? HitTestBehavior.translucent : behavior,
           onTap: () {
             if (isDisable) return;
             onTap?.call();
