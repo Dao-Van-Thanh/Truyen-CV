@@ -8,6 +8,7 @@ import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/chapter/chapter_response.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_local_extension.dart';
+import 'package:flutter_template/features/story/read_story/extension/read_story_tts_extension.dart';
 import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -34,10 +35,11 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
   late final networkApiService = ref.read(AppService.networkApi);
   late final bloc = ref.read(BlocProvider.readStory);
 
+  int _ttsIndex = -1;
   double _offSet = 0.0;
+  bool _isInitScrollDone = false;
 
-  bool get isCurrentChapter =>
-      widget.listChapterItem?.id == bloc.args.selectedChapterId;
+  StreamSubscription? _ttsIndexSubscription;
 
   ChapterResponse? get _chapterFromCache {
     final chapterId = widget.listChapterItem?.id ?? '';
@@ -59,10 +61,29 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     WidgetsBinding.instance.addObserver(this);
     _scrollController = widget.controller;
     _listenScroll();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (widget.listChapterItem?.id != bloc.args.selectedChapterId) return;
-    //   _scrollController.jumpTo(bloc.args.scrollOffset);
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      listen();
+    });
+  }
+
+  void listen() {
+    _ttsIndexSubscription = bloc.tts.currentIndexStream.listen(
+      (index) {
+        if (index < 0) return;
+        final isCurrentChapter =
+            widget.listChapterItem?.id == bloc.tts.currentChapterId;
+        if (!isCurrentChapter) {
+          return;
+        }
+        _scrollController.scrollToIndex(
+          index,
+          preferPosition: AutoScrollPosition.middle,
+        );
+        setState(() {
+          _ttsIndex = index;
+        });
+      },
+    );
   }
 
   void _listenScroll() {
@@ -92,6 +113,7 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     if (_scrollController.hasClients) {
       _scrollController.dispose();
     }
+    _ttsIndexSubscription?.cancel();
   }
 
   Future<void> _handleUpsertLocal() async {
@@ -118,6 +140,7 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
         streams: [
           bloc.configStorySubject,
           bloc.chaptersMapSubject,
+          bloc.currentListChapterItemSubject,
         ],
         builder: (context) {
           final config = bloc.configStorySubject.value;
@@ -127,10 +150,12 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
           }
 
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (widget.listChapterItem?.id != bloc.args.selectedChapterId) {
+            if (widget.listChapterItem?.id != bloc.args.selectedChapterId ||
+                _isInitScrollDone) {
               return;
             }
             _scrollController.jumpTo(bloc.args.scrollOffset);
+            _isInitScrollDone = true;
           });
 
           return AppGestureDetector(
@@ -143,16 +168,40 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
               physics: const NeverScrollableScrollPhysics(),
               separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                return AutoScrollTag(
-                  key: Key('paragraph_$index'),
-                  index: index,
-                  controller: _scrollController,
-                  child: _buildParagraphItem(
-                    isHightLight: false,
-                    content: chapterData.paragraphs[index],
-                    index: index,
-                    config: config,
-                  ),
+                return ObsBuilder(
+                  streams: [
+                    bloc.ttsControllerStatusSubject,
+                  ],
+                  builder: (context) {
+                    final isPlaying =
+                        !bloc.ttsControllerStatusSubject.value.isStopped;
+                    final isCurrentChapter =
+                        widget.listChapterItem?.id == bloc.tts.currentChapterId;
+                    final isHightLight =
+                        isPlaying && (index == _ttsIndex) && isCurrentChapter;
+                    return AutoScrollTag(
+                      key: Key('paragraph_$index'),
+                      index: index,
+                      controller: _scrollController,
+                      child: _buildParagraphItem(
+                        isPlaying: isPlaying,
+                        isHightLight: isHightLight,
+                        content: chapterData.paragraphs[index],
+                        index: index,
+                        config: config,
+                        onTap: () {
+                          if (isHightLight) {
+                            bloc.toggleMenuVisibility();
+                            return;
+                          }
+                          bloc.onTapPlayToIndex(
+                            index,
+                            widget.listChapterItem?.id ?? '',
+                          );
+                        },
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -167,6 +216,8 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     required String content,
     required int index,
     required ConfigStoryModel config,
+    required VoidCallback onTap,
+    required bool isPlaying,
   }) {
     double fontSize = config.fontSize;
     final lineHeight = config.lineHeight;
@@ -181,19 +232,26 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
       textAlign = TextAlign.center;
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      color: isHightLight ? color.withValues(alpha: 0.3) : Colors.transparent,
-      child: Text(
-        content,
-        style: TextStyle(
-          fontSize: fontSize,
-          height: lineHeight,
-          color: color,
-          fontWeight: fontWeight,
-          fontFamily: fontFamily,
+    return IgnorePointer(
+      ignoring: !isPlaying,
+      child: AppGestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          color:
+              isHightLight ? color.withValues(alpha: 0.3) : Colors.transparent,
+          child: Text(
+            content,
+            style: TextStyle(
+              fontSize: fontSize,
+              height: lineHeight,
+              color: color,
+              fontWeight: fontWeight,
+              fontFamily: fontFamily,
+            ),
+            textAlign: textAlign,
+          ),
         ),
-        textAlign: textAlign,
       ),
     );
   }
