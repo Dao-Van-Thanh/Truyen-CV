@@ -1,5 +1,8 @@
 enum ReadTtsStatus {
   stopped,
   playing,
-  paused,
+  paused;
+
+  bool get isPlaying => this == ReadTtsStatus.playing;
+  bool get isStopped => this == ReadTtsStatus.stopped;
 }

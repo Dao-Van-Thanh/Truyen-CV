@@ -10,7 +10,9 @@ import 'package:flutter_template/dependency/router/arguments/read_story_argument
 import 'package:flutter_template/features/story/read_story/enum/read_theme_mode.dart';
 import 'package:flutter_template/features/story/read_story/enum/read_tts_status.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_local_extension.dart';
+import 'package:flutter_template/features/story/read_story/extension/read_story_tts_extension.dart';
 import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
+import 'package:flutter_template/features/story/read_story/tts/read_story_tts.dart';
 import 'package:flutter_template/features/story/read_story/widgets/read_story_settings.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
@@ -37,8 +39,12 @@ class ReadStoryBloc extends BlocBase {
 
   final chaptersMapSubject =
       BehaviorSubject<Map<String, ChapterResponse>>.seeded({});
-  final ttsControllerStatusSubject = BehaviorSubject<ReadTtsStatus>();
-  Debounce _preloadDebounce = Debounce(milliseconds: 300);
+  final ttsControllerStatusSubject = BehaviorSubject<ReadTtsStatus>.seeded(
+    ReadTtsStatus.stopped,
+  );
+  final Debounce _preloadDebounce = Debounce(milliseconds: 300);
+  final Debounce reloadTtsStartDebounce = Debounce(milliseconds: 500);
+  final tts = ReadStoryTts();
 
   Timer? _resetConfirmTimer;
 
@@ -61,6 +67,8 @@ class ReadStoryBloc extends BlocBase {
     }
     ttsControllerStatusSubject.close();
     _preloadDebounce.dispose();
+    reloadTtsStartDebounce.dispose();
+    tts.dispose();
   }
 
   void toggleMenuVisibility() {
@@ -91,6 +99,7 @@ class ReadStoryBloc extends BlocBase {
       saveRouterLocal(),
     ]);
     isLoadingSubject.value = false;
+    initTts();
   }
 
   void handlePageChanged(int p1) {
@@ -239,5 +248,13 @@ class ReadStoryBloc extends BlocBase {
         return null;
       },
     );
+  }
+
+  bool onHandleWillPop() {
+    if (isMenuVisibleSubject.value) {
+      isMenuVisibleSubject.add(false);
+      return false;
+    }
+    return true;
   }
 }

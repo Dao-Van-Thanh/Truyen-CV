@@ -15,7 +15,7 @@ import 'package:flutter_template/shared/utilities/logger.dart';
 Future<void> _initLocalServices(ProviderContainer container) async {
   try {
     final localApiService = container.read(AppService.localApi);
-    await localApiService.deleteDatabaseFile();
+    // await localApiService.deleteDatabaseFile();
     await localApiService.initDb();
     await localApiService.configRepository.initDefaultConfig();
   } catch (e) {
