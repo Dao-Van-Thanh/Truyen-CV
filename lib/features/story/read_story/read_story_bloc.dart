@@ -11,10 +11,13 @@ import 'package:flutter_template/features/story/read_story/enum/read_theme_mode.
 import 'package:flutter_template/features/story/read_story/enum/read_tts_status.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_local_extension.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_tts_extension.dart';
+import 'package:flutter_template/features/story/read_story/helper/tts_timer.dart';
 import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
+import 'package:flutter_template/features/story/read_story/model/tts_config_model.dart';
 import 'package:flutter_template/features/story/read_story/tts/read_story_tts.dart';
 import 'package:flutter_template/features/story/read_story/widgets/read_story_settings.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
+import 'package:flutter_template/shared/helper/action_confirm.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:rxdart/rxdart.dart';
@@ -45,8 +48,15 @@ class ReadStoryBloc extends BlocBase {
   final Debounce _preloadDebounce = Debounce(milliseconds: 300);
   final Debounce reloadTtsStartDebounce = Debounce(milliseconds: 500);
   final tts = ReadStoryTts();
+  final ttsConfigSubject = BehaviorSubject<TtsConfig>.seeded(TtsConfig());
 
-  Timer? _resetConfirmTimer;
+  final ActionConfirmHelper _resetConfirmTimer = ActionConfirmHelper();
+  final ttsResetSettingsHelper = ActionConfirmHelper();
+
+  final ttsTimerHelper = TtsTimerHelper();
+
+  final timerStringSubject = BehaviorSubject<String>.seeded('');
+  final isTimerRunningSubject = BehaviorSubject<bool>.seeded(false);
 
   ReadStoryBloc(this.ref, {required this.args}) {
     _init();
@@ -61,6 +71,7 @@ class ReadStoryBloc extends BlocBase {
     isMenuVisibleSubject.close();
     configStorySubject.close();
     isLoadingSubject.close();
+    ttsConfigSubject.close();
     chaptersMapSubject.close();
     if (pageController.hasClients) {
       pageController.dispose();
@@ -69,6 +80,12 @@ class ReadStoryBloc extends BlocBase {
     _preloadDebounce.dispose();
     reloadTtsStartDebounce.dispose();
     tts.dispose();
+    _resetConfirmTimer.dispose();
+    ttsResetSettingsHelper.dispose();
+    ttsTimerHelper.dispose();
+    timerStringSubject.close();
+    isTimerRunningSubject.close();
+    ttsTimerHelper.dispose();
   }
 
   void toggleMenuVisibility() {
@@ -172,18 +189,19 @@ class ReadStoryBloc extends BlocBase {
   }
 
   void onTapResetSetting(BuildContext context) {
-    if (_resetConfirmTimer != null && _resetConfirmTimer!.isActive) {
-      _resetConfirmTimer?.cancel();
-      _resetConfirmTimer = null;
-      toastService.showText(message: t.readStory.resetSettingsToDefaultSuccess);
-      configStorySubject.add(defaultConfigStory);
-      return;
-    }
-
-    _resetConfirmTimer = Timer(const Duration(seconds: 3), () {
-      _resetConfirmTimer = null;
-    });
-    toastService.showText(message: t.readStory.resetSettingsToDefaultConfirm);
+    _resetConfirmTimer.execute(
+      onFirstTap: () {
+        toastService.showText(
+          message: t.readStory.resetSettingsToDefaultConfirm,
+        );
+      },
+      onConfirmed: () {
+        toastService.showText(
+          message: t.readStory.resetSettingsToDefaultSuccess,
+        );
+        configStorySubject.add(defaultConfigStory);
+      },
+    );
   }
 
   Future<void> preloadChapters(int currentIndex) async {

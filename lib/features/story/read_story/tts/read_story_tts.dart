@@ -1,4 +1,6 @@
 import 'package:flutter_template/features/story/read_story/enum/read_tts_status.dart';
+import 'package:flutter_template/features/story/read_story/model/tts_config_model.dart';
+import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -36,6 +38,57 @@ class ReadStoryTts {
       // Khi đọc xong 1 đoạn, hàm này sẽ chạy
       _next();
     });
+  }
+
+  Future<List<Map<String, String>>> getVoices() async {
+    try {
+      final List<dynamic> rawVoices = await _flutterTts.getVoices;
+      final List<Map<String, String>> cleanVoices = [];
+
+      for (final element in rawVoices) {
+        final voice = Map<String, dynamic>.from(element as Map);
+
+        final String name = voice['name'].toString();
+        final String locale = voice['locale'].toString();
+
+        // Xử lý tên hiển thị
+        String displayName = name; // Mặc định lấy tên gốc: vi-vn-x-gft-local
+
+        // Logic check Online (Android)
+        if (voice.containsKey('network_required')) {
+          final isNetwork = voice['network_required'].toString() == '1';
+          if (isNetwork) {
+            displayName = '$name (Online)'; // Thêm tag (Online)
+          }
+        }
+
+        // Logic check Enhanced (iOS)
+        if (voice.containsKey('quality')) {
+          final quality = voice['quality'].toString();
+          if (quality == '1' || quality == 'enhanced') {
+            displayName = '$name (Enhanced)';
+          }
+        }
+
+        cleanVoices.add({
+          'name': name, // ID định danh
+          'locale': locale, // Nhóm ngôn ngữ
+          'display': displayName, // Tên hiển thị UI
+        });
+      }
+
+      // Sắp xếp danh sách cho đẹp (Locale trước, sau đó đến Name)
+      cleanVoices.sort((a, b) {
+        final int cmp = (a['locale'] ?? '').compareTo(b['locale'] ?? '');
+        if (cmp != 0) return cmp;
+        return (a['name'] ?? '').compareTo(b['name'] ?? '');
+      });
+
+      return cleanVoices;
+    } catch (e) {
+      logger.e('Error getting TTS voices: $e');
+      return [];
+    }
   }
 
   void setData(List<String> paragraphs, {int startIndex = 0}) {
@@ -112,5 +165,27 @@ class ReadStoryTts {
     if (currentIndex > 0) {
       playToIndex(currentIndex - 1, _currentChapterId);
     }
+  }
+
+  Future<void> setConfig(TtsConfig config) async {
+    await Future.wait([
+      _flutterTts.setSpeechRate(config.rate),
+      _flutterTts.setPitch(config.pitch),
+      _flutterTts.setVolume(config.volume),
+      config.selectedVoice != null
+          ? _flutterTts.setVoice({
+              'name': config.selectedVoice!['name'] ?? '',
+              'locale': config.selectedLanguage,
+            })
+          : _flutterTts.clearVoice(), // Reset về giọng mặc định
+    ]);
+  }
+
+  Future<void> previewVoice(TtsConfig config) async {
+    setConfig(config);
+    _flutterTts.setCompletionHandler(() {});
+    await _flutterTts
+        .speak('Alo Alo, một hai ba bốn năm sáu bảy tám chín mười.');
+    _flutterTts.setCompletionHandler(_next);
   }
 }

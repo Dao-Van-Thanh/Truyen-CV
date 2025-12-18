@@ -60,7 +60,8 @@ extension ReadStoryLocalExtension on ReadStoryBloc {
     );
     if (currentBook == null) {
       logger.e(
-          'Failed to upsert book to local, book not found for storyId: ${args.storyId}');
+        'Failed to upsert book to local, book not found for storyId: ${args.storyId}',
+      );
       return;
     }
     await localApiService.bookRepository.upsertBook(

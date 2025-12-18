@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
+import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_tts_extension.dart';
+import 'package:flutter_template/features/story/read_story/widgets/blinking_red_dot.dart';
 
 const _curve = Curves.easeInOut;
 const _duration = Duration(milliseconds: 300);
@@ -85,19 +87,36 @@ class TtsController extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.schedule),
-                      iconSize: 28,
+                    ObsBuilder(
+                      streams: [bloc.isTimerRunningSubject],
+                      builder: (context) {
+                        final isTimerRunning = bloc.isTimerRunningSubject.value;
+                        return Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            IconButton(
+                              onPressed: bloc.onTapScheduleTts,
+                              icon: Icon(Icons.schedule, color: textColor),
+                              iconSize: 28,
+                            ),
+                            if (isTimerRunning)
+                              const Positioned(
+                                top: 10,
+                                right: 10,
+                                child: BlinkingRedDot(),
+                              ),
+                          ],
+                        );
+                      },
                     ),
                     IconButton(
                       onPressed: bloc.onTapStopTts,
-                      icon: Icon(Icons.power_settings_new),
+                      icon: Icon(Icons.power_settings_new, color: textColor),
                       iconSize: 28,
                     ),
                     IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.settings),
+                      onPressed: bloc.onTapSettingsTts,
+                      icon: Icon(Icons.settings, color: textColor),
                       iconSize: 28,
                     ),
                   ],
@@ -122,7 +141,7 @@ class TtsController extends ConsumerWidget {
         padding: padding,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: color.withOpacity(0.2),
+          color: color.withValues(alpha: 0.2),
         ),
         child: Icon(icon, color: color),
       ),

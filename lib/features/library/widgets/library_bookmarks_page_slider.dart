@@ -134,7 +134,7 @@ class LibraryBookmarksPageSlider extends ConsumerWidget {
                                       ),
                                     ),
                                   ],
-                                )
+                                ),
                               ],
                             ),
                           ),
