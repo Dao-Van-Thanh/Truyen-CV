@@ -71,7 +71,7 @@ class ReadStorySettings extends ConsumerWidget {
                             ),
                           ),
                         );
-                      })
+                      }),
                     ],
                   ),
                 ),

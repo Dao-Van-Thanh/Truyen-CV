@@ -19,7 +19,8 @@ enum ReadThemeMode {
     backgroundColor:
         Color(0xFF000000), // Đen tuyệt đối cho màn OLED tiết kiệm pin
     textColor: Color(
-        0xFFB3B3B3), // Xám trung tính, tránh hiện tượng "bóng ma" (smearing) khi cuộn
+      0xFFB3B3B3,
+    ), // Xám trung tính, tránh hiện tượng "bóng ma" (smearing) khi cuộn
   ),
 
   // ==========================================

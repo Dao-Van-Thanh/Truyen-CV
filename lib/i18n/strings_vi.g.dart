@@ -253,6 +253,8 @@ class TranslationsReadStoryVi {
 
 	/// vi: 'Đã đặt lại cài đặt về mặc định'
 	String get resetSettingsToDefaultSuccess => 'Đã đặt lại cài đặt về mặc định';
+
+	late final TranslationsReadStoryTtsSettingsVi ttsSettings = TranslationsReadStoryTtsSettingsVi.internal(_root);
 }
 
 // Path: libraryScreen
@@ -398,6 +400,33 @@ class TranslationsExploreScreenListTypeVi {
 	String get grid => 'Lưới';
 }
 
+// Path: readStory.ttsSettings
+class TranslationsReadStoryTtsSettingsVi {
+	TranslationsReadStoryTtsSettingsVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// vi: 'Cài đặt TTS'
+	String get title => 'Cài đặt TTS';
+
+	/// vi: 'Ngôn ngữ'
+	String get language => 'Ngôn ngữ';
+
+	/// vi: 'Giọng nói'
+	String get voice => 'Giọng nói';
+
+	/// vi: 'Tốc độ'
+	String get rate => 'Tốc độ';
+
+	/// vi: 'Giọng điệu'
+	String get pitch => 'Giọng điệu';
+
+	/// vi: 'Thử giọng nói'
+	String get tryVoice => 'Thử giọng nói';
+}
+
 // Path: libraryScreen.optionsBottomSheet
 class TranslationsLibraryScreenOptionsBottomSheetVi {
 	TranslationsLibraryScreenOptionsBottomSheetVi.internal(this._root);
@@ -491,6 +520,12 @@ extension on Translations {
 			'readStory.resetToDefault' => 'Đặt lại mặc định',
 			'readStory.resetSettingsToDefaultConfirm' => 'Nhấn 1 lần nữa để đặt lại cài đặt',
 			'readStory.resetSettingsToDefaultSuccess' => 'Đã đặt lại cài đặt về mặc định',
+			'readStory.ttsSettings.title' => 'Cài đặt TTS',
+			'readStory.ttsSettings.language' => 'Ngôn ngữ',
+			'readStory.ttsSettings.voice' => 'Giọng nói',
+			'readStory.ttsSettings.rate' => 'Tốc độ',
+			'readStory.ttsSettings.pitch' => 'Giọng điệu',
+			'readStory.ttsSettings.tryVoice' => 'Thử giọng nói',
 			'libraryScreen.bookmarks' => 'Đánh dấu',
 			'libraryScreen.listBookmarksEmpty' => 'Chưa có đánh dấu nào',
 			'libraryScreen.downloads' => 'Tải về',

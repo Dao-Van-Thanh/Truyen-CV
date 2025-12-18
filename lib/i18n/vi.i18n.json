@@ -83,7 +83,15 @@
         "fontFamily": "Phông chữ",
         "resetToDefault": "Đặt lại mặc định",
         "resetSettingsToDefaultConfirm": "Nhấn 1 lần nữa để đặt lại cài đặt",
-        "resetSettingsToDefaultSuccess": "Đã đặt lại cài đặt về mặc định"
+        "resetSettingsToDefaultSuccess": "Đã đặt lại cài đặt về mặc định",
+        "ttsSettings": {
+            "title": "Cài đặt TTS",
+            "language": "Ngôn ngữ",
+            "voice": "Giọng nói",
+            "rate": "Tốc độ",
+            "pitch": "Giọng điệu",
+            "tryVoice": "Thử giọng nói"
+        }
     },
     "libraryScreen": {
         "bookmarks": "Đánh dấu",
