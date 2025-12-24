@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_template/features/story/read_story/enum/read_tts_status.dart';
 import 'package:flutter_template/features/story/read_story/model/tts_config_model.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
@@ -5,7 +7,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ReadStoryTts {
-  final FlutterTts _flutterTts = FlutterTts();
+  late final FlutterTts _flutterTts;
 
   final _currentIndexSubject = BehaviorSubject<int>.seeded(0);
 
@@ -20,8 +22,9 @@ class ReadStoryTts {
   void Function()? onChapterFinished;
 
   Future<void> initTts() async {
+    _flutterTts = FlutterTts();
+    await _flutterTts.awaitSpeakCompletion(true);
     await Future.wait([
-      _flutterTts.setLanguage('vi-VN'),
       _flutterTts.setSpeechRate(0.5), // tốc độ đọc 0.0 - 1.0 default 0.5
       _flutterTts.setVolume(1.0), // âm lượng 0.0 - 1.0
       _flutterTts.setPitch(1.0), // độ cao giọng 0.5 - 2.0
@@ -34,6 +37,11 @@ class ReadStoryTts {
         ],
       ),
     ]);
+
+    if (Platform.isAndroid) {
+      await Future.delayed(const Duration(seconds: 1));
+    }
+
     _flutterTts.setCompletionHandler(() {
       // Khi đọc xong 1 đoạn, hàm này sẽ chạy
       _next();
@@ -42,7 +50,8 @@ class ReadStoryTts {
 
   Future<List<Map<String, String>>> getVoices() async {
     try {
-      final List<dynamic> rawVoices = await _flutterTts.getVoices;
+      final rawVoices = await _flutterTts.getVoices;
+      if (rawVoices == null) return [];
       final List<Map<String, String>> cleanVoices = [];
 
       for (final element in rawVoices) {
@@ -83,6 +92,16 @@ class ReadStoryTts {
         if (cmp != 0) return cmp;
         return (a['name'] ?? '').compareTo(b['name'] ?? '');
       });
+
+      final defaultLang = 'vi-VN';
+
+      await _flutterTts.setLanguage(
+        cleanVoices.firstWhere(
+              (e) => e['locale'] == defaultLang,
+              orElse: () => cleanVoices.first,
+            )['locale'] ??
+            defaultLang,
+      );
 
       return cleanVoices;
     } catch (e) {
@@ -183,9 +202,38 @@ class ReadStoryTts {
 
   Future<void> previewVoice(TtsConfig config) async {
     setConfig(config);
+    await pause();
     _flutterTts.setCompletionHandler(() {});
     await _flutterTts
         .speak('Alo Alo, một hai ba bốn năm sáu bảy tám chín mười.');
     _flutterTts.setCompletionHandler(_next);
+  }
+
+  Future<List<String>> getEngines() async {
+    try {
+      if (Platform.isIOS) return []; // iOS không hỗ trợ đổi engine
+      final engines = await _flutterTts.getEngines;
+      if (engines != null) {
+        return List<String>.from(engines);
+      }
+      return [];
+    } catch (e) {
+      logger.e('Error getting TTS engines: $e');
+      return [];
+    }
+  }
+
+  Future<String?> getDefaultEngine() async {
+    try {
+      if (Platform.isIOS) return null;
+      return await _flutterTts.getDefaultEngine;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> setEngine(String enginePackageName) async {
+    if (Platform.isIOS) return;
+    await _flutterTts.setEngine(enginePackageName);
   }
 }

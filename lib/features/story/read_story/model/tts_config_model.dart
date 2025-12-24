@@ -6,29 +6,31 @@ class TtsConfig {
   final double rate;
   final double pitch;
   final double volume;
-  final Map<String, String>? selectedVoice; // Giọng
-  final String selectedLanguage; // Ngôn ngữ
-  final List<Map<String, String>>
-      availableVoices; // Toàn bộ danh sách giọng (All languages)
+  final Map<String, String>? selectedVoice;
+  final String selectedLanguage;
+  final List<Map<String, String>> availableVoices;
+
+  final String? selectedEngine; // Ví dụ: com.google.android.tts
+  final List<String> availableEngines; // Danh sách các engine trong máy
 
   TtsConfig({
     this.rate = defaultRate,
     this.pitch = defaultPitch,
     this.volume = defaultVolume,
     this.selectedVoice,
-    this.selectedLanguage = 'vi-VN', // Mặc định là tiếng Việt
+    this.selectedLanguage = 'vi-VN',
     this.availableVoices = const [],
+    this.selectedEngine,
+    this.availableEngines = const [],
   });
 
-  // Lấy danh sách các ngôn ngữ duy nhất để hiển thị Dropdown Ngôn ngữ
   List<String> get uniqueLanguages {
     final languages =
         availableVoices.map((e) => e['locale'] ?? '').toSet().toList();
-    languages.sort(); // Sắp xếp A-Z
+    languages.sort();
     return languages.where((e) => e.isNotEmpty).toList();
   }
 
-  //  Lấy danh sách giọng thuộc ngôn ngữ đang chọn
   List<Map<String, String>> get voicesForSelectedLanguage {
     return availableVoices
         .where((e) => e['locale'] == selectedLanguage)
@@ -42,6 +44,8 @@ class TtsConfig {
     Map<String, String>? selectedVoice,
     String? selectedLanguage,
     List<Map<String, String>>? availableVoices,
+    String? selectedEngine,
+    List<String>? availableEngines,
   }) {
     return TtsConfig(
       rate: rate ?? this.rate,
@@ -50,6 +54,8 @@ class TtsConfig {
       selectedVoice: selectedVoice ?? this.selectedVoice,
       selectedLanguage: selectedLanguage ?? this.selectedLanguage,
       availableVoices: availableVoices ?? this.availableVoices,
+      selectedEngine: selectedEngine ?? this.selectedEngine,
+      availableEngines: availableEngines ?? this.availableEngines,
     );
   }
 
