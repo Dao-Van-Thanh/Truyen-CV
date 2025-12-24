@@ -58,6 +58,8 @@ class ReadStoryBloc extends BlocBase {
   final timerStringSubject = BehaviorSubject<String>.seeded('');
   final isTimerRunningSubject = BehaviorSubject<bool>.seeded(false);
 
+  BuildContext? timerSettingsContext;
+
   ReadStoryBloc(this.ref, {required this.args}) {
     _init();
   }

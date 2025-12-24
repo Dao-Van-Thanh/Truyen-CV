@@ -162,12 +162,15 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
             onTap: () => bloc.toggleMenuVisibility(),
             behavior: HitTestBehavior.translucent,
             child: ListView.separated(
-              itemCount: chapterData.paragraphs.length,
+              itemCount: chapterData.paragraphs.length + 1,
               controller: _scrollController,
               padding: const EdgeInsets.only(top: 16, bottom: 16),
               physics: const NeverScrollableScrollPhysics(),
               separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
+                if (index == chapterData.paragraphs.length) {
+                  return _buildChapterEndFooter();
+                }
                 return ObsBuilder(
                   streams: [
                     bloc.ttsControllerStatusSubject,
@@ -253,6 +256,13 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildChapterEndFooter() {
+    return SizedBox(
+      width: double.infinity,
+      height: 100,
     );
   }
 

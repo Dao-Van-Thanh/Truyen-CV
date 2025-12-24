@@ -5,7 +5,6 @@ enum StoryListType {
   list,
   listCompact;
 
-
   static StoryListType fromName(String name) {
     return StoryListType.values.firstWhere(
       (e) => e.name == name,

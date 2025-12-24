@@ -90,7 +90,8 @@
             "voice": "Giọng nói",
             "rate": "Tốc độ",
             "pitch": "Giọng điệu",
-            "tryVoice": "Thử giọng nói"
+            "tryVoice": "Thử giọng nói",
+            "ttsVoiceNotLoaded": "Giọng nói TTS chưa được tải"
         }
     },
     "libraryScreen": {

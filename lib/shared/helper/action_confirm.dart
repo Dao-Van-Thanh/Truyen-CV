@@ -15,7 +15,7 @@ class ActionConfirmHelper {
   }) {
     if (_timer != null && _timer!.isActive) {
       _cancelTimer();
-      onConfirmed(); 
+      onConfirmed();
       return;
     }
 

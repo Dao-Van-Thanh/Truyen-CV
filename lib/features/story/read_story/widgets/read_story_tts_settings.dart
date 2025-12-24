@@ -16,6 +16,8 @@ class ReadStoryTtsSettings extends ConsumerWidget {
     final theme = Theme.of(context);
     final t = context.t;
 
+    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
+
     return ObsBuilder(
       streams: [
         bloc.configStorySubject,
@@ -136,8 +138,57 @@ class ReadStoryTtsSettings extends ConsumerWidget {
                     SizedBoxConstants.s16,
                   ],
                 ),
+                if (!isIos)
+                  Row(
+                    children: [
+                      SizedBoxConstants.s16,
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          'Bộ đọc',
+                          style: TextStyle(color: textColor),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 7,
+                        child: DropdownButton<String>(
+                          value: ttsConfig.selectedEngine,
+                          dropdownColor: backgroundColor,
+                          isExpanded: true,
+                          underline: Container(
+                            height: 1,
+                            color: textColor.withValues(alpha: 0.3),
+                          ),
+                          icon: Icon(
+                            Icons.settings_system_daydream,
+                            color: textColor,
+                          ),
+                          style: TextStyle(color: textColor),
+                          items: ttsConfig.availableEngines.map((engine) {
+                            return DropdownMenuItem<String>(
+                              value: engine,
+                              child: Text(
+                                _formatEngineName(engine),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (newEngine) {
+                            if (newEngine != null) {
+                              bloc.onChangeEngine(
+                                newEngine,
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                      SizedBoxConstants.s16,
+                    ],
+                  ),
 
-                if (ttsConfig.uniqueLanguages.isNotEmpty)
+                if (!isIos)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Row(
@@ -148,6 +199,7 @@ class ReadStoryTtsSettings extends ConsumerWidget {
                           child: Text(
                             t.readStory.ttsSettings.language,
                             style: TextStyle(color: textColor),
+                            textAlign: TextAlign.left,
                           ),
                         ),
                         Expanded(
@@ -176,7 +228,7 @@ class ReadStoryTtsSettings extends ConsumerWidget {
                     ),
                   ),
 
-                if (ttsConfig.voicesForSelectedLanguage.isNotEmpty)
+                if (!isIos)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Row(
@@ -187,6 +239,7 @@ class ReadStoryTtsSettings extends ConsumerWidget {
                           child: Text(
                             t.readStory.ttsSettings.voice,
                             style: TextStyle(color: textColor),
+                            textAlign: TextAlign.left,
                           ),
                         ),
                         Expanded(
@@ -233,22 +286,23 @@ class ReadStoryTtsSettings extends ConsumerWidget {
                   padding: EdgeInsetsConstants.horizontal16,
                   child: Row(
                     children: [
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: AppGestureDetector(
-                            onTap: () => bloc.onTapTryTtsVoice(),
-                            child: Text(
-                              t.readStory.ttsSettings.tryVoice,
-                              style: TextStyle(
-                                color: theme.colorScheme.primary,
-                                decoration: TextDecoration.underline,
-                                decorationColor: theme.colorScheme.primary,
+                      if (!isIos)
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: AppGestureDetector(
+                              onTap: () => bloc.onTapTryTtsVoice(),
+                              child: Text(
+                                t.readStory.ttsSettings.tryVoice,
+                                style: TextStyle(
+                                  color: theme.colorScheme.primary,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: theme.colorScheme.primary,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
                       Expanded(
                         child: Align(
                           alignment: Alignment.centerRight,
@@ -275,5 +329,14 @@ class ReadStoryTtsSettings extends ConsumerWidget {
         );
       },
     );
+  }
+
+  String _formatEngineName(String packageName) {
+    if (packageName.contains('google')) return 'Google Speech Services';
+    if (packageName.contains('samsung')) return 'Samsung TTS';
+    if (packageName.contains('xiaomi') || packageName.contains('mibrain')) {
+      return 'Mi AI Speech';
+    }
+    return packageName;
   }
 }

@@ -119,9 +119,9 @@ class DatetimeUtil {
     final difference = today.difference(targetDate).inDays;
 
     if (difference == 0) {
-      return t.common.today; 
+      return t.common.today;
     } else if (difference == 1) {
-      return t.common.yesterday; 
+      return t.common.yesterday;
     } else {
       return formatDateTime(localDate, format: 'dd/MM/yyyy');
     }

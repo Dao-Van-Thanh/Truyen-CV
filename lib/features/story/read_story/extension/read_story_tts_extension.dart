@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_template/dependency/network_api/story/chapter/chapter_response.dart';
 import 'package:flutter_template/features/story/read_story/enum/read_tts_status.dart';
@@ -9,12 +11,13 @@ import 'package:flutter_template/shared/utilities/logger.dart';
 
 extension ReadStoryTtsExtension on ReadStoryBloc {
   void initTts() {
-    tts.initTts();
+    tts.initTts().then((_) async {
+      _loadEngines();
+    });
     _initTimer();
     tts.onChapterFinished = () {
       onTapNextPageTtsChapter();
     };
-    _loadVoices();
   }
 
   void onTapPlayToIndex(int index, String chapterId) {
@@ -136,7 +139,9 @@ extension ReadStoryTtsExtension on ReadStoryBloc {
       },
     ).then((_) {
       tts.setConfig(ttsConfigSubject.value).then((_) {
-        _onResume();
+        tts.pause().then((_) {
+          _onResume();
+        });
       });
     });
   }
@@ -174,7 +179,11 @@ extension ReadStoryTtsExtension on ReadStoryBloc {
     );
   }
 
-  void _loadVoices() async {
+  Future<void> _loadVoices() async {
+    if (ttsConfigSubject.value.availableVoices.isNotEmpty) {
+      return;
+    }
+
     final voices = await tts.getVoices();
     final currentConfig = ttsConfigSubject.value;
 
@@ -237,6 +246,15 @@ extension ReadStoryTtsExtension on ReadStoryBloc {
     ttsTimerHelper.onTimerFinished = () {
       _onPause();
       toastService.showText(message: 'Đã dừng đọc do hẹn giờ kết thúc');
+      if (timerSettingsContext != null && timerSettingsContext!.mounted) {
+        Navigator.of(timerSettingsContext!).maybePop();
+        timerSettingsContext = null;
+      }
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (isDispose) return;
+        if (isMenuVisibleSubject.value) return;
+        toggleMenuVisibility();
+      });
     };
   }
 
@@ -249,6 +267,7 @@ extension ReadStoryTtsExtension on ReadStoryBloc {
       isScrollControlled: true,
       useSafeArea: true,
       builder: (context) {
+        timerSettingsContext = context;
         return ReadStoryTimerSettings();
       },
     );
@@ -260,5 +279,45 @@ extension ReadStoryTtsExtension on ReadStoryBloc {
 
   void cancelSleepTimer() {
     ttsTimerHelper.stopTimer();
+  }
+
+  Future<void> _loadEngines() async {
+    try {
+      if (Platform.isIOS) return;
+
+      final engines = await tts.getEngines();
+
+      final currentConfig = ttsConfigSubject.value;
+      ttsConfigSubject.add(
+        currentConfig.copyWith(
+          availableEngines: engines,
+        ),
+      );
+
+      if (engines.isNotEmpty) {
+        onChangeEngine(engines.first);
+        return;
+      }
+    } catch (e) {
+      logger.e('Error loading TTS engines: $e');
+    }
+  }
+
+  void onChangeEngine(String newEngine) async {
+    final currentConfig = ttsConfigSubject.value;
+
+    if (currentConfig.selectedEngine == newEngine) return;
+
+    await tts.setEngine(newEngine);
+
+    ttsConfigSubject.add(
+      currentConfig.copyWith(
+        selectedEngine: newEngine,
+        selectedVoice: null, // Voice cũ không còn hiệu lực
+        availableVoices: [], // Clear danh sách cũ
+      ),
+    );
+
+    _loadVoices();
   }
 }

@@ -48,7 +48,7 @@ class _BlinkingRedDotState extends State<BlinkingRedDot>
               color: Colors.red.withValues(alpha: 0.6),
               blurRadius: 4,
               spreadRadius: 1,
-            )
+            ),
           ],
         ),
       ),
