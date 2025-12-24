@@ -100,4 +100,21 @@ class StoryRepository {
       ),
     );
   }
+
+  Future<ApiResult<StoryFilterResponse>> searchStory({
+    required int page,
+    required String keyword,
+  }) async {
+    final res = await apiService.post(
+      '/tim-kiem',
+      queryParameters: {
+        'page_number': page,
+        'k': keyword,
+      },
+    );
+
+    return res.parseData(
+      (json) => StoryFilterResponse.fromJson(json),
+    );
+  }
 }

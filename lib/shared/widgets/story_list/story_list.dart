@@ -159,7 +159,13 @@ class _StoryListState extends State<StoryList> {
       children: [
         RefreshIndicator(
           onRefresh: widget.onRefresh,
-          child: _buildListView(),
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onVerticalDragDown: (details) {
+              FocusScope.of(context).unfocus();
+            },
+            child: _buildListView(),
+          ),
         ),
         Positioned(
           bottom: 16,

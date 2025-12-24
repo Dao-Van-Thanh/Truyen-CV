@@ -35,4 +35,6 @@ class RouteInput {
     required ReadStoryArgument args,
   })  : routeName = RouteName.readStory,
         arguments = args;
+
+  RouteInput.storySearch() : routeName = RouteName.storySearch;
 }

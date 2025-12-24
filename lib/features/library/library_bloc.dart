@@ -101,4 +101,10 @@ class LibraryBloc extends BlocBase {
       ),
     );
   }
+
+  void onTapSearch() {
+    routerService.push(
+      RouteInput.storySearch(),
+    );
+  }
 }

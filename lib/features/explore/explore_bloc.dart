@@ -56,4 +56,10 @@ class ExploreBloc extends BlocBase {
       ),
     );
   }
+
+  void onTapSearch() {
+    routerService.push(
+      RouteInput.storySearch(),
+    );
+  }
 }

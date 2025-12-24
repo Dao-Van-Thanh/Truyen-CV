@@ -17,6 +17,8 @@ class RoutePage {
         return RouteScreen.listChapterPageRoute(settings);
       case RouteName.readStory:
         return RouteScreen.readStoryPageRoute(settings);
+      case RouteName.storySearch:
+        return RouteScreen.storySearchPageRoute(settings);
     }
 
     return RouteScreen.unknownPageRoute(settings);

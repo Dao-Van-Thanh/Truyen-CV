@@ -47,7 +47,7 @@ class LibraryScreen extends ConsumerWidget {
               ),
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: bloc.onTapSearch,
                   icon: Icon(
                     CupertinoIcons.search,
                     size: 20,
