@@ -9,4 +9,5 @@ class RouteName {
   static const storyDetail = 'storyDetail';
   static const listChapter = 'listChapter';
   static const readStory = 'readStory';
+  static const storySearch = 'storySearch';
 }

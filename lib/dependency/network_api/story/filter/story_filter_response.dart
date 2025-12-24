@@ -8,7 +8,7 @@ abstract class StoryFilterResponse with _$StoryFilterResponse {
   const factory StoryFilterResponse({
     int? success,
     PagerModel? pager,
-    List<StoryModel>? data,
+    @JsonKey(fromJson: _convertListDynamic) List<StoryModel>? data,
   }) = _StoryFilterResponse;
 
   factory StoryFilterResponse.fromJson(Map<String, dynamic> json) =>
@@ -19,7 +19,7 @@ abstract class StoryFilterResponse with _$StoryFilterResponse {
 abstract class PagerModel with _$PagerModel {
   const factory PagerModel({
     int? page,
-    int? size,
+    @JsonKey(fromJson: _convertSize) int? size,
     @JsonKey(name: 'total_count') String? totalCount,
   }) = _PagerModel;
 
@@ -42,4 +42,32 @@ abstract class StoryModel with _$StoryModel {
 
   factory StoryModel.fromJson(Map<String, dynamic> json) =>
       _$StoryModelFromJson(json);
+}
+
+int? _convertSize(dynamic value) {
+  try {
+    if (value is int) {
+      return value;
+    } else if (value is String) {
+      return int.tryParse(value);
+    } else {
+      return null;
+    }
+  } catch (_) {
+    return null;
+  }
+}
+
+List<StoryModel>? _convertListDynamic(dynamic value) {
+  try {
+    if (value is List<dynamic>) {
+      return value
+          .map((e) => StoryModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } else {
+      return null;
+    }
+  } catch (_) {
+    return null;
+  }
 }

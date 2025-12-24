@@ -12,9 +12,7 @@ _StoryFilterResponse _$StoryFilterResponseFromJson(Map<String, dynamic> json) =>
       pager: json['pager'] == null
           ? null
           : PagerModel.fromJson(json['pager'] as Map<String, dynamic>),
-      data: (json['data'] as List<dynamic>?)
-          ?.map((e) => StoryModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      data: _convertListDynamic(json['data']),
     );
 
 Map<String, dynamic> _$StoryFilterResponseToJson(
@@ -27,7 +25,7 @@ Map<String, dynamic> _$StoryFilterResponseToJson(
 
 _PagerModel _$PagerModelFromJson(Map<String, dynamic> json) => _PagerModel(
       page: (json['page'] as num?)?.toInt(),
-      size: (json['size'] as num?)?.toInt(),
+      size: _convertSize(json['size']),
       totalCount: json['total_count'] as String?,
     );
 

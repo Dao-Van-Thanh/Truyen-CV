@@ -17,6 +17,7 @@ T _$identity<T>(T value) => value;
 mixin _$StoryFilterResponse {
   int? get success;
   PagerModel? get pager;
+  @JsonKey(fromJson: _convertListDynamic)
   List<StoryModel>? get data;
 
   /// Create a copy of StoryFilterResponse
@@ -57,7 +58,10 @@ abstract mixin class $StoryFilterResponseCopyWith<$Res> {
           StoryFilterResponse value, $Res Function(StoryFilterResponse) _then) =
       _$StoryFilterResponseCopyWithImpl;
   @useResult
-  $Res call({int? success, PagerModel? pager, List<StoryModel>? data});
+  $Res call(
+      {int? success,
+      PagerModel? pager,
+      @JsonKey(fromJson: _convertListDynamic) List<StoryModel>? data});
 
   $PagerModelCopyWith<$Res>? get pager;
 }
@@ -114,7 +118,9 @@ class _$StoryFilterResponseCopyWithImpl<$Res>
 @JsonSerializable()
 class _StoryFilterResponse implements StoryFilterResponse {
   const _StoryFilterResponse(
-      {this.success, this.pager, final List<StoryModel>? data})
+      {this.success,
+      this.pager,
+      @JsonKey(fromJson: _convertListDynamic) final List<StoryModel>? data})
       : _data = data;
   factory _StoryFilterResponse.fromJson(Map<String, dynamic> json) =>
       _$StoryFilterResponseFromJson(json);
@@ -125,6 +131,7 @@ class _StoryFilterResponse implements StoryFilterResponse {
   final PagerModel? pager;
   final List<StoryModel>? _data;
   @override
+  @JsonKey(fromJson: _convertListDynamic)
   List<StoryModel>? get data {
     final value = _data;
     if (value == null) return null;
@@ -178,7 +185,10 @@ abstract mixin class _$StoryFilterResponseCopyWith<$Res>
       __$StoryFilterResponseCopyWithImpl;
   @override
   @useResult
-  $Res call({int? success, PagerModel? pager, List<StoryModel>? data});
+  $Res call(
+      {int? success,
+      PagerModel? pager,
+      @JsonKey(fromJson: _convertListDynamic) List<StoryModel>? data});
 
   @override
   $PagerModelCopyWith<$Res>? get pager;
@@ -235,6 +245,7 @@ class __$StoryFilterResponseCopyWithImpl<$Res>
 /// @nodoc
 mixin _$PagerModel {
   int? get page;
+  @JsonKey(fromJson: _convertSize)
   int? get size;
   @JsonKey(name: 'total_count')
   String? get totalCount;
@@ -277,7 +288,9 @@ abstract mixin class $PagerModelCopyWith<$Res> {
       _$PagerModelCopyWithImpl;
   @useResult
   $Res call(
-      {int? page, int? size, @JsonKey(name: 'total_count') String? totalCount});
+      {int? page,
+      @JsonKey(fromJson: _convertSize) int? size,
+      @JsonKey(name: 'total_count') String? totalCount});
 }
 
 /// @nodoc
@@ -317,13 +330,16 @@ class _$PagerModelCopyWithImpl<$Res> implements $PagerModelCopyWith<$Res> {
 @JsonSerializable()
 class _PagerModel implements PagerModel {
   const _PagerModel(
-      {this.page, this.size, @JsonKey(name: 'total_count') this.totalCount});
+      {this.page,
+      @JsonKey(fromJson: _convertSize) this.size,
+      @JsonKey(name: 'total_count') this.totalCount});
   factory _PagerModel.fromJson(Map<String, dynamic> json) =>
       _$PagerModelFromJson(json);
 
   @override
   final int? page;
   @override
+  @JsonKey(fromJson: _convertSize)
   final int? size;
   @override
   @JsonKey(name: 'total_count')
@@ -374,7 +390,9 @@ abstract mixin class _$PagerModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int? page, int? size, @JsonKey(name: 'total_count') String? totalCount});
+      {int? page,
+      @JsonKey(fromJson: _convertSize) int? size,
+      @JsonKey(name: 'total_count') String? totalCount});
 }
 
 /// @nodoc

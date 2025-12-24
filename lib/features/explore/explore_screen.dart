@@ -43,7 +43,7 @@ class ExploreScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(CupertinoIcons.search),
-            onPressed: () {},
+            onPressed: bloc.onTapSearch,
           ),
           PopupMenuButton<StoryListType>(
             icon: const Icon(Icons.more_vert),

@@ -347,6 +347,9 @@ class TranslationsCommonVi {
 
   /// vi: 'Xác nhận'
   String get confirm => 'Xác nhận';
+
+  /// vi: 'Nhập nội dung tìm kiếm...'
+  String get searchTitle => 'Nhập nội dung tìm kiếm...';
 }
 
 // Path: rootScreen.bottomNavigationBar
@@ -600,6 +603,7 @@ extension on Translations {
       'common.yesterday' => 'Hôm qua',
       'common.cancel' => 'Hủy',
       'common.confirm' => 'Xác nhận',
+      'common.searchTitle' => 'Nhập nội dung tìm kiếm...',
       _ => null,
     };
   }

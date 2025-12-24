@@ -118,6 +118,7 @@
         "today": "Hôm nay",
         "yesterday": "Hôm qua",
         "cancel": "Hủy",
-        "confirm": "Xác nhận"
+        "confirm": "Xác nhận",
+        "searchTitle": "Nhập nội dung tìm kiếm..."
     }
 }
