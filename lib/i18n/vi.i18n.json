@@ -106,6 +106,7 @@
             "lastChapter": "Chương đọc gần nhất: {chapterName: String}",
             "totalChapters": "Tổng số chương: {chapterCount: int}",
             "removeBookmark": "Xóa đánh dấu",
+            "addBookmark": "Thêm đánh dấu",
             "confirmRemoveBookmark": "Xác nhận xóa đánh dấu",
             "viewInfo": "Xem thông tin"
         }

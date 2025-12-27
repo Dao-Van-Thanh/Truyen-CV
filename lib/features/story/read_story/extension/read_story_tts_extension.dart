@@ -283,7 +283,10 @@ extension ReadStoryTtsExtension on ReadStoryBloc {
 
   Future<void> _loadEngines() async {
     try {
-      if (Platform.isIOS) return;
+      if (Platform.isIOS) {
+        _loadVoices();
+        return;
+      }
 
       final engines = await tts.getEngines();
 

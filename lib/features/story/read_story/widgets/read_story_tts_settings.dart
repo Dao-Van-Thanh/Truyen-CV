@@ -188,99 +188,97 @@ class ReadStoryTtsSettings extends ConsumerWidget {
                     ],
                   ),
 
-                if (!isIos)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      children: [
-                        SizedBoxConstants.s16,
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            t.readStory.ttsSettings.language,
-                            style: TextStyle(color: textColor),
-                            textAlign: TextAlign.left,
-                          ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    children: [
+                      SizedBoxConstants.s16,
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          t.readStory.ttsSettings.language,
+                          style: TextStyle(color: textColor),
+                          textAlign: TextAlign.left,
                         ),
-                        Expanded(
-                          flex: 7,
-                          child: DropdownButton<String>(
-                            value: ttsConfig.selectedLanguage,
-                            dropdownColor: backgroundColor,
-                            isExpanded: true,
-                            underline: Container(
-                              height: 1,
-                              color: textColor.withValues(alpha: 0.3),
-                            ),
-                            icon: Icon(Icons.arrow_drop_down, color: textColor),
-                            style: TextStyle(color: textColor),
-                            items: ttsConfig.uniqueLanguages.map((lang) {
-                              return DropdownMenuItem<String>(
-                                value: lang,
-                                child: Text(lang),
-                              );
-                            }).toList(),
-                            onChanged: bloc.onChangeLanguage,
+                      ),
+                      Expanded(
+                        flex: 7,
+                        child: DropdownButton<String>(
+                          value: ttsConfig.selectedLanguage,
+                          dropdownColor: backgroundColor,
+                          isExpanded: true,
+                          underline: Container(
+                            height: 1,
+                            color: textColor.withValues(alpha: 0.3),
                           ),
+                          icon: Icon(Icons.arrow_drop_down, color: textColor),
+                          style: TextStyle(color: textColor),
+                          items: ttsConfig.uniqueLanguages.map((lang) {
+                            return DropdownMenuItem<String>(
+                              value: lang,
+                              child: Text(lang),
+                            );
+                          }).toList(),
+                          onChanged: bloc.onChangeLanguage,
                         ),
-                        SizedBoxConstants.s16,
-                      ],
-                    ),
+                      ),
+                      SizedBoxConstants.s16,
+                    ],
                   ),
+                ),
 
-                if (!isIos)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      children: [
-                        SizedBoxConstants.s16,
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            t.readStory.ttsSettings.voice,
-                            style: TextStyle(color: textColor),
-                            textAlign: TextAlign.left,
-                          ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    children: [
+                      SizedBoxConstants.s16,
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          t.readStory.ttsSettings.voice,
+                          style: TextStyle(color: textColor),
+                          textAlign: TextAlign.left,
                         ),
-                        Expanded(
-                          flex: 7,
-                          child: DropdownButton<String>(
-                            value: ttsConfig.selectedVoice?['name'],
-                            dropdownColor: backgroundColor,
-                            isExpanded: true,
-                            underline: Container(
-                              height: 1,
-                              color: textColor.withValues(alpha: 0.3),
-                            ),
-                            icon: Icon(Icons.arrow_drop_down, color: textColor),
-                            style: TextStyle(color: textColor),
-                            items: ttsConfig.voicesForSelectedLanguage
-                                .map((voice) {
-                              return DropdownMenuItem<String>(
-                                value: voice['name'],
-                                child: Text(
-                                  voice['display'] ??
-                                      '', // Hiển thị tên kèm (Online)
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                      ),
+                      Expanded(
+                        flex: 7,
+                        child: DropdownButton<String>(
+                          value: ttsConfig.selectedVoice?['name'],
+                          dropdownColor: backgroundColor,
+                          isExpanded: true,
+                          underline: Container(
+                            height: 1,
+                            color: textColor.withValues(alpha: 0.3),
+                          ),
+                          icon: Icon(Icons.arrow_drop_down, color: textColor),
+                          style: TextStyle(color: textColor),
+                          items:
+                              ttsConfig.voicesForSelectedLanguage.map((voice) {
+                            return DropdownMenuItem<String>(
+                              value: voice['name'],
+                              child: Text(
+                                voice['display'] ??
+                                    '', // Hiển thị tên kèm (Online)
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (voiceName) {
+                            if (voiceName != null) {
+                              final selected =
+                                  ttsConfig.availableVoices.firstWhere(
+                                (element) => element['name'] == voiceName,
                               );
-                            }).toList(),
-                            onChanged: (voiceName) {
-                              if (voiceName != null) {
-                                final selected =
-                                    ttsConfig.availableVoices.firstWhere(
-                                  (element) => element['name'] == voiceName,
-                                );
-                                bloc.onChangeTtsVoice(selected);
-                              }
-                            },
-                          ),
+                              bloc.onChangeTtsVoice(selected);
+                            }
+                          },
                         ),
-                        SizedBoxConstants.s16,
-                      ],
-                    ),
+                      ),
+                      SizedBoxConstants.s16,
+                    ],
                   ),
+                ),
                 SizedBoxConstants.s16,
                 Padding(
                   padding: EdgeInsetsConstants.horizontal16,

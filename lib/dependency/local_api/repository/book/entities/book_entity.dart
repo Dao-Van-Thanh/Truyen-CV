@@ -57,6 +57,23 @@ class BookEntity {
     );
   }
 
+  String get readProgressPercent {
+    final lastChapter = lastReadChapter;
+    if (lastChapter == null) return '0';
+    final index = listChapters.indexOf(lastChapter);
+    if (index == -1) return '0';
+    final percent = ((index + 1) / listChapters.length) * 100;
+    return '${percent.toStringAsFixed(0)}%';
+  }
+
+  String get readProgressFraction {
+    final lastChapter = lastReadChapter;
+    if (lastChapter == null) return '0/${listChapters.length}';
+    final index = listChapters.indexOf(lastChapter);
+    if (index == -1) return '0/${listChapters.length}';
+    return '${index + 1}/${listChapters.length}';
+  }
+
   StoryModel get storyModel {
     return StoryModel.fromJson(
       jsonDecode(storyData) as Map<String, dynamic>,

@@ -4,8 +4,6 @@ import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_tts_extension.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 
 const _curve = Curves.easeInOut;
 const _duration = Duration(milliseconds: 300);
@@ -25,7 +23,6 @@ class MainController extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final bloc = ref.watch(BlocProvider.readStory);
-    final t = context.t;
     return ObsBuilder(
       streams: [
         bloc.currentListChapterItemSubject,
@@ -78,7 +75,7 @@ class MainController extends ConsumerWidget {
                   color: backgroundColor,
                 ),
                 padding: const EdgeInsets.all(16).copyWith(
-                  bottom: 16 + MediaQuery.of(context).padding.bottom,
+                  bottom: MediaQuery.of(context).padding.bottom,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -95,16 +92,13 @@ class MainController extends ConsumerWidget {
                       children: [
                         Expanded(
                           flex: 1,
-                          child: AppGestureDetector(
-                            onTap: bloc.onTapPreviousPage,
-                            child: Padding(
+                          child: IconButton(
+                            onPressed: bloc.onTapPreviousPage,
+                            icon: Padding(
                               padding: EdgeInsetsConstants.vertical16,
-                              child: Text(
-                                t.readStory.prev,
-                                style: TextStyle(
-                                  color: textColor,
-                                ),
-                                textAlign: TextAlign.start,
+                              child: Icon(
+                                Icons.chevron_left,
+                                color: textColor,
                               ),
                             ),
                           ),
@@ -120,21 +114,18 @@ class MainController extends ConsumerWidget {
                                 1,
                             onChanged: bloc.onChangeReadProgress,
                             activeColor: textColor,
-                            inactiveColor: textColor.withValues(alpha: 0.5),
+                            inactiveColor: textColor.withAlpha(128),
                           ),
                         ),
                         Expanded(
                           flex: 1,
-                          child: AppGestureDetector(
-                            onTap: bloc.onTapNextPage,
-                            child: Padding(
+                          child: IconButton(
+                            onPressed: bloc.onTapNextPage,
+                            icon: Padding(
                               padding: EdgeInsetsConstants.vertical16,
-                              child: Text(
-                                t.readStory.next,
-                                style: TextStyle(
-                                  color: textColor,
-                                ),
-                                textAlign: TextAlign.end,
+                              child: Icon(
+                                Icons.chevron_right,
+                                color: textColor,
                               ),
                             ),
                           ),
@@ -144,17 +135,17 @@ class MainController extends ConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        InkWell(
-                          onTap: () {},
-                          child: Icon(Icons.menu, color: textColor),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.menu, color: textColor),
                         ),
-                        InkWell(
-                          onTap: bloc.onTapStartTts,
-                          child: Icon(Icons.headphones, color: textColor),
+                        IconButton(
+                          onPressed: bloc.onTapStartTts,
+                          icon: Icon(Icons.headphones, color: textColor),
                         ),
-                        InkWell(
-                          onTap: bloc.onTapSettings,
-                          child: Icon(Icons.settings, color: textColor),
+                        IconButton(
+                          onPressed: bloc.onTapSettings,
+                          icon: Icon(Icons.settings, color: textColor),
                         ),
                       ],
                     ),

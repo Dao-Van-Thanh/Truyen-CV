@@ -10,12 +10,12 @@ import 'package:flutter_template/shared/widgets/text%20copy/highlight_text.dart'
 class LibraryBookmarksOption extends ConsumerWidget {
   final BookEntity item;
   final VoidCallback onTapViewInfo;
-  final VoidCallback onTapRemoveBookmark;
+  final void Function(bool isRemove) onTapAddOrRemoveBookmark;
   const LibraryBookmarksOption(
     this.item, {
     super.key,
     required this.onTapViewInfo,
-    required this.onTapRemoveBookmark,
+    required this.onTapAddOrRemoveBookmark,
   });
 
   @override
@@ -147,7 +147,14 @@ class LibraryBookmarksOption extends ConsumerWidget {
             ),
             SizedBoxConstants.s16,
             AppGestureDetector(
-              onTap: () => _onTapConfirmUnfavorite(context),
+              onTap: () {
+                if (item.isFavorite) {
+                  _onTapConfirmUnfavorite(context);
+                } else {
+                  onTapAddOrRemoveBookmark.call(false);
+                  Navigator.of(context).pop();
+                }
+              },
               child: Container(
                 width: double.infinity,
                 padding: EdgeInsetsConstants.vertical12 +
@@ -163,12 +170,16 @@ class LibraryBookmarksOption extends ConsumerWidget {
                 child: Column(
                   children: [
                     Icon(
-                      Icons.bookmark_remove_outlined,
+                      item.isFavorite
+                          ? Icons.bookmark_remove_outlined
+                          : Icons.bookmark_add_outlined,
                       size: 24,
                       color: Theme.of(context).colorScheme.secondary,
                     ),
                     Text(
-                      t.libraryScreen.optionsBottomSheet.removeBookmark,
+                      item.isFavorite
+                          ? t.libraryScreen.optionsBottomSheet.removeBookmark
+                          : t.libraryScreen.optionsBottomSheet.addBookmark,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Theme.of(context).colorScheme.secondary,
                             fontWeight: FontWeight.bold,
@@ -272,7 +283,7 @@ class LibraryBookmarksOption extends ConsumerWidget {
                         onTap: () {
                           Navigator.of(modalContext).pop();
                           Navigator.of(context).pop();
-                          onTapRemoveBookmark();
+                          onTapAddOrRemoveBookmark.call(true);
                         },
                         child: Container(
                           padding: EdgeInsetsConstants.vertical12,

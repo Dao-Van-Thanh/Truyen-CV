@@ -67,8 +67,12 @@ class LibraryBloc extends BlocBase {
       builder: (context) {
         return LibraryBookmarksOption(
           item,
-          onTapRemoveBookmark: () {
-            _handleRemoveBookmark(item);
+          onTapAddOrRemoveBookmark: (isRemove) {
+            if (isRemove) {
+              _handleRemoveBookmark(item);
+            } else {
+              _handleAddBookmark(item);
+            }
           },
           onTapViewInfo: () {
             _handleViewInfo(item);
@@ -79,8 +83,17 @@ class LibraryBloc extends BlocBase {
   }
 
   void _handleRemoveBookmark(BookEntity item) async {
+    if (item.isFavorite == false) return;
     await localApiService.bookRepository.upsertBook(
       item.copyWith(isFavorite: false),
+    );
+    refreshData();
+  }
+
+  void _handleAddBookmark(BookEntity item) async {
+    if (item.isFavorite == true) return;
+    await localApiService.bookRepository.upsertBook(
+      item.copyWith(isFavorite: true),
     );
     refreshData();
   }
