@@ -54,6 +54,23 @@ class LibraryBookmarksItem extends ConsumerWidget {
                 imageUrl: thumbUrl,
                 fit: BoxFit.cover,
                 memCacheWidth: 250,
+                customAbove: CustomAbove(
+                  child: Container(
+                    padding: const EdgeInsets.all(1.5),
+                    decoration: BoxDecoration(
+                      color: Colors.black54,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      item.readProgressFraction,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  alignment: Alignment.topRight,
+                ),
               ),
             ),
             Expanded(

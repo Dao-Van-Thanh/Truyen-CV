@@ -5,6 +5,7 @@ import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/features/library/widgets/library_history_item.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/datetime.dart';
+import 'package:flutter_template/shared/widgets/empty/app_empty_state.dart';
 import 'package:flutter_template/shared/widgets/grouped_sliver_list/app_grouped_sliver_list.dart';
 
 class LibraryHistoryPage extends ConsumerWidget {
@@ -18,6 +19,11 @@ class LibraryHistoryPage extends ConsumerWidget {
       streams: [bloc.listHistorySubject],
       builder: (context) {
         final data = bloc.listHistorySubject.value;
+
+        if (data.isEmpty) {
+          return AppEmptyState(title: t.libraryScreen.listHistoryEmpty);
+        }
+
         return AppGroupedSliverList(
           data: data,
           groupBy: (item) {
@@ -41,6 +47,8 @@ class LibraryHistoryPage extends ConsumerWidget {
           itemBuilder: (context, item) {
             return LibraryHistoryItem(
               item: item,
+              onPress: () => bloc.onTapReadStory(item),
+              onLongPress: () => bloc.onTapLongPressStory(item),
             );
           },
         );

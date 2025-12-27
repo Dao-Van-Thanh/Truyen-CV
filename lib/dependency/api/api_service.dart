@@ -19,7 +19,7 @@ class ApiService {
   late final Dio dio;
   late final routerService = ref.read(AppService.router);
   late final DefaultCacheManager cacheManager = DefaultCacheManager();
-  CancelableOperation<Response?>? _currentOperation;
+  final Set<CancelableOperation> _operations = {};
 
   ApiService(this.ref) {
     dio = Dio(
@@ -51,8 +51,9 @@ class ApiService {
   Future<Response?> _request<T>(
     Future<Response<T>> Function(CancelToken) request, {
     String? path,
+    CancelToken? externalCancelToken,
   }) async {
-    final cancelToken = CancelToken();
+    final cancelToken = externalCancelToken ?? CancelToken();
     final operation = CancelableOperation.fromFuture(
       Future(() async {
         try {
@@ -67,7 +68,10 @@ class ApiService {
         return (null, 'Canceled');
       },
     );
-    _currentOperation = operation; // Lưu để hủy trong _handleLogout
+    _operations.add(operation);
+    operation.value.whenComplete(() {
+      _operations.remove(operation);
+    });
     return operation.value;
   }
 
@@ -94,10 +98,11 @@ class ApiService {
         path,
         queryParameters: queryParameters,
         options: options,
-        cancelToken: cancelToken ?? cancelT,
+        cancelToken: cancelT,
         onReceiveProgress: onReceiveProgress,
       ),
       path: path,
+      externalCancelToken: cancelToken,
     );
 
     final res = result;
@@ -120,6 +125,7 @@ class ApiService {
     Options? options,
     bool shouldCache = false,
     Map<String, dynamic>? queryParameters,
+    CancelToken? cancelToken,
   }) async {
     if (shouldCache) {
       final cachedResponse = await _getCachedResponse(
@@ -132,14 +138,15 @@ class ApiService {
     }
 
     final result = await _request(
-      (cancelToken) => dio.post(
+      (cancelT) => dio.post(
         path,
         data: data,
         queryParameters: queryParameters,
-        cancelToken: cancelToken,
+        cancelToken: cancelT,
         options: options,
       ),
       path: path,
+      externalCancelToken: cancelToken,
     );
 
     final res = result;
@@ -299,8 +306,13 @@ class ApiService {
     }
   }
 
-  void cancelApi() {
-    _currentOperation?.cancel();
+  // Cancel all ongoing API requests
+  void cancelAllApi() {
+    final ops = List.of(_operations);
+    for (final op in ops) {
+      op.cancel();
+    }
+    _operations.clear();
   }
 
   Future<Response?> download(

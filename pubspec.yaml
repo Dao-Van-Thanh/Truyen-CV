@@ -75,6 +75,8 @@ dev_dependencies:
   slang_build_runner: ^4.11.0
   json_serializable: ^6.9.5
   freezed: ^3.0.6
+  riverpod_lint: ^2.6.5
+  custom_lint: ^0.7.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
