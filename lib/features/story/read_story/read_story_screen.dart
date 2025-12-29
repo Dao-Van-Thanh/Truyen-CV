@@ -5,6 +5,7 @@ import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/features/story/read_story/widgets/read_story_background.dart';
 import 'package:flutter_template/features/story/read_story/widgets/read_story_content.dart';
 import 'package:flutter_template/features/story/read_story/widgets/read_story_controller.dart';
+import 'package:flutter_template/features/story/read_story/widgets/read_story_drawer_overlay.dart';
 
 class ReadStoryScreen extends ConsumerWidget {
   const ReadStoryScreen({super.key});
@@ -35,6 +36,7 @@ class ReadStoryScreen extends ConsumerWidget {
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
+              ReadStoryDrawerOverlay(),
             ],
           );
         },

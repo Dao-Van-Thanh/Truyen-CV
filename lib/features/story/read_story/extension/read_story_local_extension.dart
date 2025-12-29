@@ -71,6 +71,7 @@ extension ReadStoryLocalExtension on ReadStoryBloc {
         lastReadTime: lastReadTime,
         timeStamp: DateTime.now().toIso8601String(),
       ),
+      isHasUpdateListChapter: false,
     );
   }
 }

@@ -86,6 +86,7 @@ class LibraryBloc extends BlocBase {
     if (item.isFavorite == false) return;
     await localApiService.bookRepository.upsertBook(
       item.copyWith(isFavorite: false),
+      isHasUpdateListChapter: false,
     );
     refreshData();
   }
@@ -94,6 +95,7 @@ class LibraryBloc extends BlocBase {
     if (item.isFavorite == true) return;
     await localApiService.bookRepository.upsertBook(
       item.copyWith(isFavorite: true),
+      isHasUpdateListChapter: false,
     );
     refreshData();
   }
