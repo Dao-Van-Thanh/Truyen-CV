@@ -9,7 +9,7 @@ class AppPageView extends StatefulWidget {
   final Function(int index)? onPageChanged;
   final List<Widget>? actions;
   final Widget? leading;
-  final Color? dividerColor;
+  final Color? dividerColor, indicatorColor;
   final double? dividerHeight;
 
   const AppPageView({
@@ -23,6 +23,7 @@ class AppPageView extends StatefulWidget {
     this.leading,
     this.dividerColor,
     this.dividerHeight,
+    this.indicatorColor,
   });
 
   @override
@@ -89,6 +90,7 @@ class AppPageViewState extends State<AppPageView>
                           ),
                           dividerColor: widget.dividerColor,
                           dividerHeight: widget.dividerHeight,
+                          indicatorColor: widget.indicatorColor,
                           padding: EdgeInsets.zero,
                           indicatorPadding: EdgeInsets.zero,
                           isScrollable: widget.isScrollable,
@@ -146,10 +148,10 @@ class AppPageViewItems {
 
   const AppPageViewItems({
     this.key,
-    required this.child,
     required this.label,
     this.labelStyle,
     this.keepAlive = true,
+    required this.child,
   });
 }
 

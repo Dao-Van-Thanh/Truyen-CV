@@ -45,11 +45,27 @@ class MainController extends ConsumerWidget {
                 ),
                 child: Row(
                   children: [
-                    BackButton(color: textColor),
+                    BackButton(
+                      color: textColor,
+                      onPressed: () {
+                        Navigator.of(context).maybePop('FORCE_EXIT');
+                      },
+                    ),
                     Spacer(),
-                    IconButton(
-                      icon: Icon(Icons.bookmark_border, color: textColor),
-                      onPressed: () {},
+                    ObsBuilder(
+                      streams: [
+                        bloc.isFavoriteSubject,
+                      ],
+                      builder: (context) {
+                        final isFavorite = bloc.isFavoriteSubject.value;
+                        return IconButton(
+                          icon: Icon(
+                            isFavorite ? Icons.bookmark : Icons.bookmark_border,
+                            color: textColor,
+                          ),
+                          onPressed: bloc.onTapFavoriteStory,
+                        );
+                      },
                     ),
                     IconButton(
                       icon: Icon(Icons.more_vert, color: textColor),
@@ -136,7 +152,7 @@ class MainController extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: bloc.onTapToggleDrawer,
                           icon: Icon(Icons.menu, color: textColor),
                         ),
                         IconButton(

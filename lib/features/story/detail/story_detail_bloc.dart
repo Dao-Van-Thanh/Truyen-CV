@@ -235,7 +235,10 @@ class StoryDetailBloc extends BlocBase {
         timeStamp: DateTime.now().toIso8601String(),
       );
       _isLoadingLocal = true;
-      await localApiService.bookRepository.upsertBook(bookEntity);
+      await localApiService.bookRepository.upsertBook(
+        bookEntity,
+        isHasUpdateListChapter: true,
+      );
       _isLoadingLocal = false;
     } catch (e) {
       logger.e('Error saving book to local: $e');

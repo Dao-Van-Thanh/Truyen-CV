@@ -46,9 +46,15 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     return bloc.chaptersMapSubject.value[chapterId];
   }
 
-  Future<void> _onWillPop(BuildContext context) async {
+  Future<void> _onWillPop(BuildContext context, Object? result) async {
     final isCurrentPage = bloc.isCurrentPage(widget.listChapterItem?.id);
     if (!isCurrentPage) return;
+
+    if (result != 'FORCE_EXIT') {
+      final canExit = bloc.onAfterExitReadStory();
+      if (!canExit) return;
+    }
+
     await _handleUpsertLocal();
     if (context.mounted) {
       Navigator.of(context).pop();
@@ -134,7 +140,7 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
-        _onWillPop(context);
+        _onWillPop(context, result);
       },
       child: ObsBuilder(
         streams: [

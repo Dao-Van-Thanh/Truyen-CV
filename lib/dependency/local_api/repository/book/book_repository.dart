@@ -14,19 +14,33 @@ class BookRepository {
 
   BookRepository({required this.db, required this.chapterRepository});
 
-  Future<void> upsertBook(BookEntity book) async {
+  Future<void> upsertBook(
+    BookEntity book, {
+    required bool isHasUpdateListChapter,
+  }) async {
     final bookToSave = book.copyWith(
       timeStamp: DateTime.now().toIso8601String(),
     );
 
     await db.transaction((txn) async {
-      await txn.insert(
-        _booksTable,
-        bookToSave.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
+      await txn.rawUpdate(
+        '''
+        INSERT OR REPLACE INTO $_booksTable (
+          id, storyData, currentChapterId, scrollOffset, isFavorite, lastReadTime, timeStamp
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''',
+        [
+          bookToSave.id,
+          bookToSave.storyData,
+          bookToSave.currentChapterId,
+          bookToSave.scrollOffset,
+          bookToSave.isFavorite ? 1 : 0,
+          bookToSave.lastReadTime,
+          bookToSave.timeStamp,
+        ],
       );
 
-      if (book.listChapters.isNotEmpty) {
+      if (book.listChapters.isNotEmpty && isHasUpdateListChapter) {
         await chapterRepository.upsertChaptersBatch(
           bookId: book.id,
           chapters: book.listChapters,

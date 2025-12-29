@@ -14,7 +14,7 @@ class ReadStoryContent extends ConsumerWidget {
       child: VerticalReadingView(
         pageController: bloc.pageController,
         itemCount: bloc.args.listChapter.length,
-        onPageChanged: bloc.handlePageChanged,
+        onPageChanged: bloc.onPageChanged,
         itemBuilder: (context, index, controller) {
           final chapter = bloc.args.listChapter[index];
           return ReadStoryContentPage(

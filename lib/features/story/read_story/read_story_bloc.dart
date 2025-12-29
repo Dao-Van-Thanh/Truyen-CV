@@ -5,8 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/chapter/chapter_response.dart';
+import 'package:flutter_template/dependency/network_api/story/detail/story_detail_response.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
+import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/features/story/read_story/enum/read_theme_mode.dart';
 import 'package:flutter_template/features/story/read_story/enum/read_tts_status.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_local_extension.dart';
@@ -58,6 +60,12 @@ class ReadStoryBloc extends BlocBase {
   final timerStringSubject = BehaviorSubject<String>.seeded('');
   final isTimerRunningSubject = BehaviorSubject<bool>.seeded(false);
 
+  final storyDetailSubject = BehaviorSubject<StoryDetailResponse?>.seeded(null);
+
+  final isOpenDrawerSubject = BehaviorSubject<bool>.seeded(false);
+
+  final isFavoriteSubject = BehaviorSubject<bool>.seeded(false);
+
   BuildContext? timerSettingsContext;
 
   ReadStoryBloc(this.ref, {required this.args}) {
@@ -88,6 +96,9 @@ class ReadStoryBloc extends BlocBase {
     timerStringSubject.close();
     isTimerRunningSubject.close();
     ttsTimerHelper.dispose();
+    storyDetailSubject.close();
+    isOpenDrawerSubject.close();
+    isFavoriteSubject.close();
   }
 
   void toggleMenuVisibility() {
@@ -107,21 +118,23 @@ class ReadStoryBloc extends BlocBase {
       );
       if (selectedIndex != -1) {
         pageController.jumpToPage(selectedIndex);
-        handlePageChanged(selectedIndex);
+        onPageChanged(selectedIndex);
       } else {
         preloadChapters(0);
       }
     });
+    _loadStoryDetail();
     isLoadingSubject.value = true;
     await Future.wait([
       getConfigLocal(),
       saveRouterLocal(),
+      getFavoriteStatus(),
     ]);
     isLoadingSubject.value = false;
     initTts();
   }
 
-  void handlePageChanged(int p1) {
+  void onPageChanged(int p1) {
     if (p1 < 0 || p1 >= args.listChapter.length) return;
     currentListChapterItemSubject.value = args.listChapter[p1];
     _preloadDebounce.run(() {
@@ -135,6 +148,13 @@ class ReadStoryBloc extends BlocBase {
       pageController.jumpToPage(
         currentPage + 1,
       );
+    }
+  }
+
+  void onTaoNextPageToIndex(int index) {
+    final currentPage = pageController.page?.toInt() ?? 0;
+    if (index >= 0 && index < args.listChapter.length && index != currentPage) {
+      pageController.jumpToPage(index);
     }
   }
 
@@ -276,5 +296,81 @@ class ReadStoryBloc extends BlocBase {
       return false;
     }
     return true;
+  }
+
+  void onTapToggleDrawer() {
+    final current = isOpenDrawerSubject.value;
+    isOpenDrawerSubject.add(!current);
+    if (isMenuVisibleSubject.value) {
+      toggleMenuVisibility();
+    }
+  }
+
+  Future<void> _loadStoryDetail() async {
+    final res = await networkApiService.storyRepository.storyDetail(
+      args.storyId,
+    );
+    if (isDispose) return;
+
+    res.whenOrNull(
+      success: (data) {
+        storyDetailSubject.value = data.data;
+      },
+      error: (error) {
+        logger
+            .e('StoryDetailBloc _loadStoryDetail error: ${error.errorMessage}');
+      },
+    );
+  }
+
+  bool onAfterExitReadStory() {
+    final isMenuVisible = isMenuVisibleSubject.value;
+    if (isMenuVisible) {
+      toggleMenuVisibility();
+      return false;
+    }
+
+    final isDrawerOpen = isOpenDrawerSubject.value;
+    if (isDrawerOpen) {
+      onTapToggleDrawer();
+      return false;
+    }
+
+    return true;
+  }
+
+  void onTapNextStoryDetail() {
+    routerService.push(
+      RouteInput.storyDetail(storyId: args.storyId),
+    );
+  }
+
+  void onTapFavoriteStory() async {
+    final currentStatus = isFavoriteSubject.value;
+    final newStatus = !currentStatus;
+
+    final bookEntityLocal =
+        await localApiService.bookRepository.getBookById(args.storyId);
+
+    final newBookEntity = bookEntityLocal?.copyWith(
+      isFavorite: newStatus,
+    );
+
+    localApiService.bookRepository
+        .upsertBook(
+      newBookEntity!,
+      isHasUpdateListChapter: false,
+    )
+        .then((_) {
+      if (isDispose) return;
+      isFavoriteSubject.value = newStatus;
+    });
+  }
+
+  Future<void> getFavoriteStatus() async {
+    final bookEntityLocal =
+        await localApiService.bookRepository.getBookById(args.storyId);
+    final isFavorite = bookEntityLocal?.isFavorite ?? false;
+    isFavoriteSubject.value = isFavorite;
   }
 }
