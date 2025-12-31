@@ -72,4 +72,24 @@ class SystemConfigRepository {
       await saveConfig(newConfig);
     }
   }
+
+  // update locale
+  Future<void> updateLocale(String newLocale) async {
+    final currentConfig = await getConfig();
+    if (currentConfig != null) {
+      final newConfig = currentConfig.copyWith(
+        locale: newLocale,
+        timeStamp: DateTime.now(),
+      );
+      await saveConfig(newConfig);
+    } else {
+      final newConfig = SystemConfigEntities(
+        themeMode: 'system', // Default
+        typeListDisplay: 'list', // Default
+        locale: newLocale,
+        timeStamp: DateTime.now(),
+      );
+      await saveConfig(newConfig);
+    }
+  }
 }

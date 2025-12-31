@@ -245,7 +245,7 @@ extension ReadStoryTtsExtension on ReadStoryBloc {
 
     ttsTimerHelper.onTimerFinished = () {
       _onPause();
-      toastService.showText(message: 'Đã dừng đọc do hẹn giờ kết thúc');
+      toastService.showText(message: t.setting.ttsStoppedByTimer);
       if (timerSettingsContext != null && timerSettingsContext!.mounted) {
         Navigator.of(timerSettingsContext!).maybePop();
         timerSettingsContext = null;

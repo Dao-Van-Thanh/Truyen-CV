@@ -162,7 +162,10 @@ class _StoryListState extends State<StoryList> {
           child: GestureDetector(
             behavior: HitTestBehavior.translucent,
             onVerticalDragDown: (details) {
-              FocusScope.of(context).unfocus();
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            onTapDown: (details) {
+              FocusManager.instance.primaryFocus?.unfocus();
             },
             child: _buildListView(),
           ),

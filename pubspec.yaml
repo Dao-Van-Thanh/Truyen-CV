@@ -59,6 +59,7 @@ dependencies:
   bot_toast: ^4.1.3
   flutter_tts: ^4.2.3
   scroll_to_index: ^3.0.1
+  package_info_plus: ^9.0.0
   
 dev_dependencies:
   flutter_test:

@@ -10,4 +10,5 @@ class RouteName {
   static const listChapter = 'listChapter';
   static const readStory = 'readStory';
   static const storySearch = 'storySearch';
+  static const setting = 'setting';
 }

@@ -10,6 +10,8 @@ import 'package:flutter_template/features/explore/explore_bloc.dart';
 import 'package:flutter_template/features/explore/explore_screen.dart';
 import 'package:flutter_template/features/individual/individual_bloc.dart';
 import 'package:flutter_template/features/individual/individual_screen.dart';
+import 'package:flutter_template/features/individual/setting/setting_bloc.dart';
+import 'package:flutter_template/features/individual/setting/setting_screen.dart';
 import 'package:flutter_template/features/library/library_bloc.dart';
 import 'package:flutter_template/features/library/library_screen.dart';
 import 'package:flutter_template/features/root/root_bloc.dart';
@@ -123,6 +125,16 @@ class RouteScreen {
     return MaterialPageRoute(
       settings: settings,
       builder: (_) => const StorySearchScreen(),
+    );
+  }
+
+  static PageRoute settingPageRoute(RouteSettings settings) {
+    BlocProvider.setting = createAutoDisposeBloc(
+      (ref) => SettingBloc(ref),
+    );
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (_) => const SettingScreen(),
     );
   }
 }

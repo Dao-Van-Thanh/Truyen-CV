@@ -17,7 +17,8 @@ class StorySearchAppBar extends ConsumerWidget {
         return AppBar(
           title: TextField(
             key: key,
-            autofocus: true,
+            focusNode: bloc.searchFocusNode,
+            autofocus: false,
             controller: bloc.searchController,
             decoration: InputDecoration(
               hintText: t.common.searchTitle,

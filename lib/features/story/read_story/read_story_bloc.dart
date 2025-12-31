@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
+import 'package:flutter_template/constants/config.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/chapter/chapter_response.dart';
 import 'package:flutter_template/dependency/network_api/story/detail/story_detail_response.dart';

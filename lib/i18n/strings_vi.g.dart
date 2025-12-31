@@ -75,6 +75,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsReadStoryVi readStory = TranslationsReadStoryVi.internal(_root);
 	late final TranslationsLibraryScreenVi libraryScreen = TranslationsLibraryScreenVi.internal(_root);
 	late final TranslationsCommonVi common = TranslationsCommonVi.internal(_root);
+	late final TranslationsIndividualVi individual = TranslationsIndividualVi.internal(_root);
+	late final TranslationsSettingVi setting = TranslationsSettingVi.internal(_root);
 }
 
 // Path: login
@@ -323,6 +325,201 @@ class TranslationsCommonVi {
 
 	/// vi: 'Nhập nội dung tìm kiếm...'
 	String get searchTitle => 'Nhập nội dung tìm kiếm...';
+
+	/// vi: 'phút'
+	String get minutes => 'phút';
+
+	/// vi: 'Có lỗi xảy ra.'
+	String get unknownError => 'Có lỗi xảy ra.';
+}
+
+// Path: individual
+class TranslationsIndividualVi {
+	TranslationsIndividualVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// vi: 'Cá nhân'
+	String get individual => 'Cá nhân';
+
+	/// vi: 'Dữ liệu'
+	String get data => 'Dữ liệu';
+
+	/// vi: 'Đồng bộ/ Sao lưu'
+	String get syncBackup => 'Đồng bộ/ Sao lưu';
+
+	/// vi: 'Lưu trữ lên đám mây'
+	String get cloudStorage => 'Lưu trữ lên đám mây';
+
+	/// vi: 'Hệ thống'
+	String get system => 'Hệ thống';
+
+	/// vi: 'Cài đặt'
+	String get settings => 'Cài đặt';
+
+	/// vi: 'Đang tải...'
+	String get loading => 'Đang tải...';
+
+	/// vi: 'Lỗi tải phiên bản'
+	String get versionLoadError => 'Lỗi tải phiên bản';
+
+	/// vi: 'Phiên bản'
+	String get appVersion => 'Phiên bản';
+
+	/// vi: 'Chưa đăng nhập'
+	String get notLoggedIn => 'Chưa đăng nhập';
+
+	/// vi: 'Bấm để đăng nhập hoặc đăng ký'
+	String get tapToLoginOrRegister => 'Bấm để đăng nhập hoặc đăng ký';
+
+	/// vi: 'Kết nối mạng xã hội'
+	String get socialNetworkConnection => 'Kết nối mạng xã hội';
+
+	/// vi: 'Kết nối với Facebook'
+	String get connectWithFacebook => 'Kết nối với Facebook';
+
+	/// vi: 'Website'
+	String get personalWebsite => 'Website';
+
+	/// vi: 'Truy cập website cá nhân'
+	String get visitPersonalWebsite => 'Truy cập website cá nhân';
+
+	/// vi: 'Theo dõi trên Twitter'
+	String get followOnTwitter => 'Theo dõi trên Twitter';
+
+	/// vi: 'Đăng xuất'
+	String get logout => 'Đăng xuất';
+}
+
+// Path: setting
+class TranslationsSettingVi {
+	TranslationsSettingVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// vi: 'Cài đặt'
+	String get title => 'Cài đặt';
+
+	/// vi: 'Hệ thống & Giao diện'
+	String get systemAndUI => 'Hệ thống & Giao diện';
+
+	/// vi: 'Giao diện ứng dụng'
+	String get appTheme => 'Giao diện ứng dụng';
+
+	/// vi: 'Ngôn ngữ'
+	String get language => 'Ngôn ngữ';
+
+	/// vi: 'Hệ thống'
+	String get themeSystem => 'Hệ thống';
+
+	/// vi: 'Sáng'
+	String get themeLight => 'Sáng';
+
+	/// vi: 'Tối'
+	String get themeDark => 'Tối';
+
+	/// vi: 'Tiếng Việt'
+	String get vietnamese => 'Tiếng Việt';
+
+	/// vi: 'English'
+	String get english => 'English';
+
+	/// vi: 'Cài đặt đọc truyện'
+	String get readerSettings => 'Cài đặt đọc truyện';
+
+	/// vi: 'Cỡ chữ'
+	String get fontSize => 'Cỡ chữ';
+
+	/// vi: 'Dãn dòng'
+	String get lineHeight => 'Dãn dòng';
+
+	/// vi: 'Phông chữ'
+	String get fontFamily => 'Phông chữ';
+
+	/// vi: 'Dữ liệu & Bộ nhớ'
+	String get dataAndStorage => 'Dữ liệu & Bộ nhớ';
+
+	/// vi: 'Xóa dữ liệu'
+	String get deleteData => 'Xóa dữ liệu';
+
+	/// vi: 'Xóa lịch sử đọc, tủ sách'
+	String get deleteDataDesc => 'Xóa lịch sử đọc, tủ sách';
+
+	/// vi: 'Xác nhận xóa'
+	String get confirmDelete => 'Xác nhận xóa';
+
+	/// vi: 'Toàn bộ lịch sử đọc và sách đã lưu sẽ bị xóa vĩnh viễn.'
+	String get deleteWarning => 'Toàn bộ lịch sử đọc và sách đã lưu sẽ bị xóa vĩnh viễn.';
+
+	/// vi: 'Hủy'
+	String get cancel => 'Hủy';
+
+	/// vi: 'Xóa'
+	String get delete => 'Xóa';
+
+	/// vi: 'Version'
+	String get version => 'Version';
+
+	/// vi: 'Đã dừng đọc do hẹn giờ kết thúc'
+	String get ttsStoppedByTimer => 'Đã dừng đọc do hẹn giờ kết thúc';
+
+	/// vi: 'bóng ma'
+	String get readThemeGhost => 'bóng ma';
+
+	/// vi: 'Chương Mới'
+	String get newChapter => 'Chương Mới';
+
+	/// vi: 'Alo Alo, một hai ba bốn năm sáu bảy tám chín mười.'
+	String get ttsTestSentence => 'Alo Alo, một hai ba bốn năm sáu bảy tám chín mười.';
+
+	/// vi: 'Bộ đọc'
+	String get ttsReader => 'Bộ đọc';
+
+	/// vi: 'Hẹn giờ tắt'
+	String get timerTitle => 'Hẹn giờ tắt';
+
+	/// vi: 'Hủy hẹn giờ'
+	String get cancelTimer => 'Hủy hẹn giờ';
+
+	/// vi: 'Ứng dụng sẽ tự động dừng đọc khi hết giờ'
+	String get timerAutoStopDesc => 'Ứng dụng sẽ tự động dừng đọc khi hết giờ';
+
+	/// vi: '$minutes phút'
+	String get minutesFormat => '\$minutes phút';
+
+	/// vi: 'Tùy chỉnh...'
+	String get customize => 'Tùy chỉnh...';
+
+	/// vi: 'Nhập số phút'
+	String get enterMinutes => 'Nhập số phút';
+
+	/// vi: 'Ví dụ: 120'
+	String get minutesExample => 'Ví dụ: 120';
+
+	/// vi: 'phút'
+	String get minutes => 'phút';
+
+	/// vi: 'Đồng ý'
+	String get confirm => 'Đồng ý';
+
+	/// vi: 'Tìm kiếm chương...'
+	String get searchChapterHint => 'Tìm kiếm chương...';
+
+	/// vi: 'Nguyễn Văn A'
+	String get defaultUserName => 'Nguyễn Văn A';
+
+	/// vi: 'Có lỗi xảy ra.'
+	String get commonError => 'Có lỗi xảy ra.';
+
+	/// vi: 'Lỗi xoá dữ liệu: {error: String}'
+	String deleteDataError({required String error}) => 'Lỗi xoá dữ liệu: ${error}';
+
+	/// vi: 'Đã xóa dữ liệu'
+	String get deleteDataSuccess => 'Đã xóa dữ liệu';
 }
 
 // Path: rootScreen.bottomNavigationBar
@@ -558,6 +755,65 @@ extension on Translations {
 			'common.cancel' => 'Hủy',
 			'common.confirm' => 'Xác nhận',
 			'common.searchTitle' => 'Nhập nội dung tìm kiếm...',
+			'common.minutes' => 'phút',
+			'common.unknownError' => 'Có lỗi xảy ra.',
+			'individual.individual' => 'Cá nhân',
+			'individual.data' => 'Dữ liệu',
+			'individual.syncBackup' => 'Đồng bộ/ Sao lưu',
+			'individual.cloudStorage' => 'Lưu trữ lên đám mây',
+			'individual.system' => 'Hệ thống',
+			'individual.settings' => 'Cài đặt',
+			'individual.loading' => 'Đang tải...',
+			'individual.versionLoadError' => 'Lỗi tải phiên bản',
+			'individual.appVersion' => 'Phiên bản',
+			'individual.notLoggedIn' => 'Chưa đăng nhập',
+			'individual.tapToLoginOrRegister' => 'Bấm để đăng nhập hoặc đăng ký',
+			'individual.socialNetworkConnection' => 'Kết nối mạng xã hội',
+			'individual.connectWithFacebook' => 'Kết nối với Facebook',
+			'individual.personalWebsite' => 'Website',
+			'individual.visitPersonalWebsite' => 'Truy cập website cá nhân',
+			'individual.followOnTwitter' => 'Theo dõi trên Twitter',
+			'individual.logout' => 'Đăng xuất',
+			'setting.title' => 'Cài đặt',
+			'setting.systemAndUI' => 'Hệ thống & Giao diện',
+			'setting.appTheme' => 'Giao diện ứng dụng',
+			'setting.language' => 'Ngôn ngữ',
+			'setting.themeSystem' => 'Hệ thống',
+			'setting.themeLight' => 'Sáng',
+			'setting.themeDark' => 'Tối',
+			'setting.vietnamese' => 'Tiếng Việt',
+			'setting.english' => 'English',
+			'setting.readerSettings' => 'Cài đặt đọc truyện',
+			'setting.fontSize' => 'Cỡ chữ',
+			'setting.lineHeight' => 'Dãn dòng',
+			'setting.fontFamily' => 'Phông chữ',
+			'setting.dataAndStorage' => 'Dữ liệu & Bộ nhớ',
+			'setting.deleteData' => 'Xóa dữ liệu',
+			'setting.deleteDataDesc' => 'Xóa lịch sử đọc, tủ sách',
+			'setting.confirmDelete' => 'Xác nhận xóa',
+			'setting.deleteWarning' => 'Toàn bộ lịch sử đọc và sách đã lưu sẽ bị xóa vĩnh viễn.',
+			'setting.cancel' => 'Hủy',
+			'setting.delete' => 'Xóa',
+			'setting.version' => 'Version',
+			'setting.ttsStoppedByTimer' => 'Đã dừng đọc do hẹn giờ kết thúc',
+			'setting.readThemeGhost' => 'bóng ma',
+			'setting.newChapter' => 'Chương Mới',
+			'setting.ttsTestSentence' => 'Alo Alo, một hai ba bốn năm sáu bảy tám chín mười.',
+			'setting.ttsReader' => 'Bộ đọc',
+			'setting.timerTitle' => 'Hẹn giờ tắt',
+			'setting.cancelTimer' => 'Hủy hẹn giờ',
+			'setting.timerAutoStopDesc' => 'Ứng dụng sẽ tự động dừng đọc khi hết giờ',
+			'setting.minutesFormat' => '\$minutes phút',
+			'setting.customize' => 'Tùy chỉnh...',
+			'setting.enterMinutes' => 'Nhập số phút',
+			'setting.minutesExample' => 'Ví dụ: 120',
+			'setting.minutes' => 'phút',
+			'setting.confirm' => 'Đồng ý',
+			'setting.searchChapterHint' => 'Tìm kiếm chương...',
+			'setting.defaultUserName' => 'Nguyễn Văn A',
+			'setting.commonError' => 'Có lỗi xảy ra.',
+			'setting.deleteDataError' => ({required String error}) => 'Lỗi xoá dữ liệu: ${error}',
+			'setting.deleteDataSuccess' => 'Đã xóa dữ liệu',
 			_ => null,
 		};
 	}

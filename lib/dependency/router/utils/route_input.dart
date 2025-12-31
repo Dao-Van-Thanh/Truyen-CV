@@ -37,4 +37,6 @@ class RouteInput {
         arguments = args;
 
   RouteInput.storySearch() : routeName = RouteName.storySearch;
+
+  RouteInput.setting() : routeName = RouteName.setting;
 }

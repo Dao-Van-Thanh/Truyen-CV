@@ -7,6 +7,7 @@ import 'package:flutter_template/dependency/local_api/repository/config/config_r
 import 'package:flutter_template/dependency/local_api/repository/router/router_repository.dart';
 import 'package:flutter_template/dependency/local_api/repository/system_config/system_config_repository.dart';
 import 'package:flutter_template/dependency/sqflite/sqflite_service.dart';
+import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:sqflite/sqflite.dart';
 
 class LocalApiService {
@@ -41,4 +42,20 @@ class LocalApiService {
 
   ChapterRepository get chapterRepository =>
       ChapterRepository(db: _sqfliteService.database);
+
+  Future<void> clearUserData() async {
+    try {
+      final database = await db;
+
+      await database.transaction((txn) async {
+        await txn.delete('chapters');
+        await txn.delete('routes');
+        await txn.delete('books');
+      });
+      await database.execute('VACUUM');
+    } catch (e) {
+      logger.e('Error clearing user data: $e');
+      rethrow;
+    }
+  }
 }

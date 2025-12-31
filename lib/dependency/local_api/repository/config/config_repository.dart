@@ -1,5 +1,5 @@
+import 'package:flutter_template/constants/config.dart';
 import 'package:flutter_template/dependency/local_api/repository/config/entities/config_entity.dart';
-import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ConfigRepository {
@@ -50,5 +50,38 @@ class ConfigRepository {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  Future<void> updateFontSize(double newFontSize) async {
+    final currentConfig = await getConfig();
+    if (currentConfig != null) {
+      final updatedConfig = currentConfig.copyWith(
+        fontSize: newFontSize,
+        timeStamp: DateTime.now().toIso8601String(),
+      );
+      await saveConfig(updatedConfig);
+    }
+  }
+
+  Future<void> updateLineHeight(double newLineHeight) async {
+    final currentConfig = await getConfig();
+    if (currentConfig != null) {
+      final updatedConfig = currentConfig.copyWith(
+        lineHeight: newLineHeight,
+        timeStamp: DateTime.now().toIso8601String(),
+      );
+      await saveConfig(updatedConfig);
+    }
+  }
+
+  Future<void> updateFontFamily(String newFontFamily) async {
+    final currentConfig = await getConfig();
+    if (currentConfig != null) {
+      final updatedConfig = currentConfig.copyWith(
+        fontFamily: newFontFamily,
+        timeStamp: DateTime.now().toIso8601String(),
+      );
+      await saveConfig(updatedConfig);
+    }
   }
 }

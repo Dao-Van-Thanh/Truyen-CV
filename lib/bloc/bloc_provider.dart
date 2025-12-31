@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/features/counter/counter_bloc.dart';
 import 'package:flutter_template/features/explore/explore_bloc.dart';
 import 'package:flutter_template/features/individual/individual_bloc.dart';
+import 'package:flutter_template/features/individual/setting/setting_bloc.dart';
 import 'package:flutter_template/features/library/library_bloc.dart';
 import 'package:flutter_template/features/root/root_bloc.dart';
 import 'package:flutter_template/features/story/detail/story_detail_bloc.dart';
@@ -23,6 +24,7 @@ class BlocProvider {
   static late AutoDisposeProvider<ListChapterBloc> listChapter;
   static late AutoDisposeProvider<ReadStoryBloc> readStory;
   static late AutoDisposeProvider<StorySearchBloc> storySearch;
+  static late AutoDisposeProvider<SettingBloc> setting;
 
   const BlocProvider._();
 }

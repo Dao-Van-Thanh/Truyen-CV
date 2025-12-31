@@ -28,9 +28,4 @@ class ConfigStoryModel {
   }
 }
 
-final defaultConfigStory = ConfigStoryModel(
-  fontSize: 16.0,
-  lineHeight: 1.5,
-  themeMode: ReadThemeMode.light,
-  fontFamily: 'AvertaStdCY',
-);
+

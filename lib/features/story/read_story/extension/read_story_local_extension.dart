@@ -1,3 +1,4 @@
+import 'package:flutter_template/constants/config.dart';
 import 'package:flutter_template/dependency/local_api/repository/config/entities/config_entity.dart';
 import 'package:flutter_template/dependency/router/utils/route_name.dart';
 import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
