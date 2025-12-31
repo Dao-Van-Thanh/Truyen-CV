@@ -145,7 +145,7 @@ class ReadStoryTtsSettings extends ConsumerWidget {
                       Expanded(
                         flex: 3,
                         child: Text(
-                          'Bộ đọc',
+                          t.setting.ttsReader,
                           style: TextStyle(color: textColor),
                           textAlign: TextAlign.left,
                         ),

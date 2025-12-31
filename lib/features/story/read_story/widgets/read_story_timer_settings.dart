@@ -4,6 +4,7 @@ import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_tts_extension.dart';
+import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 
 class ReadStoryTimerSettings extends ConsumerWidget {
@@ -51,7 +52,7 @@ class ReadStoryTimerSettings extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Hẹn giờ tắt',
+                        t.setting.timerTitle,
                         style: TextStyle(
                           color: textColor,
                           fontSize: 18,
@@ -62,7 +63,7 @@ class ReadStoryTimerSettings extends ConsumerWidget {
                         AppGestureDetector(
                           onTap: () => bloc.cancelSleepTimer(),
                           child: Text(
-                            'Hủy hẹn giờ',
+                            t.setting.cancelTimer,
                             style: TextStyle(
                               color: theme.colorScheme.error,
                               fontWeight: FontWeight.bold,
@@ -92,7 +93,7 @@ class ReadStoryTimerSettings extends ConsumerWidget {
                   ),
                   Center(
                     child: Text(
-                      'Ứng dụng sẽ tự động dừng đọc khi hết giờ',
+                      t.setting.timerAutoStopDesc,
                       style: TextStyle(color: textColor.withValues(alpha: 0.7)),
                     ),
                   ),
@@ -109,7 +110,7 @@ class ReadStoryTimerSettings extends ConsumerWidget {
                         ...presets.map(
                           (minutes) => _buildOptionChip(
                             context,
-                            label: '$minutes phút',
+                            label: '$minutes ${t.common.minutes}',
                             textColor: textColor,
                             borderColor: textColor.withValues(alpha: 0.3),
                             onTap: () => bloc.setSleepTimer(
@@ -120,7 +121,7 @@ class ReadStoryTimerSettings extends ConsumerWidget {
 
                         _buildOptionChip(
                           context,
-                          label: 'Tùy chỉnh...',
+                          label: t.setting.customize,
                           icon: Icons.edit_outlined,
                           textColor: textColor,
                           borderColor: textColor.withValues(alpha: 0.3),
@@ -183,14 +184,14 @@ class ReadStoryTimerSettings extends ConsumerWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Nhập số phút'),
+          title: Text(t.setting.enterMinutes),
           content: TextField(
             controller: controller,
             keyboardType: TextInputType.number,
             autofocus: true,
-            decoration: const InputDecoration(
-              hintText: 'Ví dụ: 120',
-              suffixText: 'phút',
+            decoration: InputDecoration(
+              hintText: t.setting.minutesExample,
+              suffixText: t.common.minutes,
             ),
             onSubmitted: (_) {
               final val = int.tryParse(controller.text);
@@ -203,7 +204,7 @@ class ReadStoryTimerSettings extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Hủy'),
+              child: Text(t.common.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -213,7 +214,7 @@ class ReadStoryTimerSettings extends ConsumerWidget {
                   Navigator.pop(context);
                 }
               },
-              child: const Text('Đồng ý'),
+              child: Text(t.common.confirm),
             ),
           ],
         );

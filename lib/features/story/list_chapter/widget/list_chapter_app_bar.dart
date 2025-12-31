@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/features/story/list_chapter/list_chapter_bloc.dart';
+import 'package:flutter_template/i18n/strings.g.dart';
 
 class ListChapterAppBar extends ConsumerWidget {
   const ListChapterAppBar({super.key});
@@ -81,8 +82,8 @@ class ListChapterAppBar extends ConsumerWidget {
       key: key,
       autofocus: true,
       controller: bloc.searchController,
-      decoration: const InputDecoration(
-        hintText: 'Tìm kiếm chương...',
+      decoration:  InputDecoration(
+        hintText: t.setting.searchChapterHint,
         border: InputBorder.none,
         contentPadding: EdgeInsets.zero,
       ),

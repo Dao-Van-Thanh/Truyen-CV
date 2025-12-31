@@ -21,6 +21,8 @@ class StorySearchBloc extends BlocBase {
   final isFirstLoadSubject = BehaviorSubject<bool>.seeded(true);
   final hasMoreSubject = BehaviorSubject<bool>.seeded(true);
 
+  final searchFocusNode = FocusNode();
+
   int _currentPage = 1;
 
   StorySearchBloc(this.ref) {
@@ -35,6 +37,7 @@ class StorySearchBloc extends BlocBase {
     isLoadingSubject.close();
     isFirstLoadSubject.close();
     hasMoreSubject.close();
+    searchFocusNode.dispose();
   }
 
   void onTapClearSearch() {
@@ -44,6 +47,9 @@ class StorySearchBloc extends BlocBase {
   void _init() {
     loadData();
     _listenSearchInput();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      searchFocusNode.requestFocus();
+    });
   }
 
   void _listenSearchInput() {

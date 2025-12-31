@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/constants/constants.dart';
+import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
 import 'package:flutter_template/shared/widgets/cache_network_image/app_cache_network_image.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
@@ -164,7 +165,7 @@ class _ReadStoryDrawerState extends ConsumerState<ReadStoryDrawer> {
                         indicatorColor: textColor,
                         items: [
                           AppPageViewItems(
-                            label: 'Mục lục',
+                            label: context.t.storyDetail.tableOfContents,
                             labelStyle: Theme.of(context)
                                 .textTheme
                                 .titleMedium

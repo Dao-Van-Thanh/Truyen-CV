@@ -36,7 +36,7 @@ class CounterScreen extends ConsumerWidget {
         leading: IconButton(
           icon: const Icon(Icons.brightness_6),
           onPressed: () {
-            ref.read(BlocProvider.config).onToggleThemeMode();
+            // ref.read(BlocProvider.config).onToggleThemeMode();
           },
         ),
       ),
