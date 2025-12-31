@@ -82,7 +82,7 @@ class ListChapterAppBar extends ConsumerWidget {
       key: key,
       autofocus: true,
       controller: bloc.searchController,
-      decoration:  InputDecoration(
+      decoration: InputDecoration(
         hintText: t.setting.searchChapterHint,
         border: InputBorder.none,
         contentPadding: EdgeInsets.zero,

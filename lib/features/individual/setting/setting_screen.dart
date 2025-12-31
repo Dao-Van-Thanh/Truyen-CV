@@ -35,7 +35,9 @@ class SettingScreen extends ConsumerWidget {
                   icon: Icons.brightness_6_outlined,
                   title: t.setting.appTheme,
                   subtitle: _getThemeName(
-                      context, appConfigBloc.themeModeSubject.value),
+                    context,
+                    appConfigBloc.themeModeSubject.value,
+                  ),
                   onTap: () => _showThemePicker(context, appConfigBloc),
                 );
               },
@@ -170,8 +172,10 @@ class SettingScreen extends ConsumerWidget {
   }) {
     return ListTile(
       leading: Icon(icon, color: iconColor),
-      title: Text(title,
-          style: TextStyle(color: textColor, fontWeight: FontWeight.w500)),
+      title: Text(
+        title,
+        style: TextStyle(color: textColor, fontWeight: FontWeight.w500),
+      ),
       subtitle: subtitle != null ? Text(subtitle) : null,
       trailing: const Icon(Icons.chevron_right, size: 20, color: Colors.grey),
       onTap: onTap,
