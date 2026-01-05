@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/constants/config.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_template/features/story/read_story/model/tts_config_mode
 import 'package:flutter_template/features/story/read_story/tts/read_story_tts.dart';
 import 'package:flutter_template/features/story/read_story/widgets/read_story_settings.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
+import 'package:flutter_template/shared/extensions/stream.dart';
 import 'package:flutter_template/shared/helper/action_confirm.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
@@ -122,6 +124,7 @@ class ReadStoryBloc extends BlocBase {
   void _init() async {
     listChapterSubject.value = _args.listChapter;
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _listen();
       final selectedIndex = listChapterSubject.value.indexWhere(
         (chapter) => chapter.id == selectedChapterId,
       );
@@ -440,5 +443,21 @@ class ReadStoryBloc extends BlocBase {
         return null;
       },
     );
+  }
+
+  void _listen() {
+    configStorySubject.bind(ref, (event) {
+      final theme = event.themeMode;
+
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: theme.statusBarBrightness,
+          statusBarBrightness: theme.iosStatusBrightness,
+          systemNavigationBarColor: theme.backgroundColor,
+          systemNavigationBarIconBrightness: theme.statusBarBrightness,
+        ),
+      );
+    });
   }
 }
