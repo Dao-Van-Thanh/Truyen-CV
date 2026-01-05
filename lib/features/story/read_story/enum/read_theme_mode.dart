@@ -101,6 +101,18 @@ enum ReadThemeMode {
   Color get backgroundControllerColor =>
       backgroundColor.withValues(alpha: _alpha).darkenColor();
 
+  Brightness get statusBarBrightness {
+    if (backgroundColor.computeLuminance() < 0.5) {
+      return Brightness.light;
+    } else {
+      return Brightness.dark;
+    }
+  }
+
+  Brightness get iosStatusBrightness => statusBarBrightness == Brightness.light
+      ? Brightness.dark
+      : Brightness.light;
+
   static ReadThemeMode fromName(String name) {
     return ReadThemeMode.values.firstWhere(
       (mode) => mode.name == name,
