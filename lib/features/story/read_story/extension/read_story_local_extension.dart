@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_template/constants/config.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/config/entities/config_entity.dart';
+import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/utils/route_name.dart';
 import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
 import 'package:flutter_template/features/story/read_story/read_story_bloc.dart';
@@ -36,7 +39,7 @@ extension ReadStoryLocalExtension on ReadStoryBloc {
     try {
       await localApiService.routerRepository.saveCurrentRoute(
         RouteName.readStory,
-        args.storyId,
+        storyId,
       );
     } catch (e) {
       logger.e('Error saving router to local: $e');
@@ -55,24 +58,38 @@ extension ReadStoryLocalExtension on ReadStoryBloc {
     required String chapterId,
     required double scrollOffset,
     required String lastReadTime,
+    required List<ListChapterRes> listChapters,
   }) async {
     final currentBook = await localApiService.bookRepository.getBookById(
-      args.storyId,
+      storyId,
     );
     if (currentBook == null) {
       logger.e(
-        'Failed to upsert book to local, book not found for storyId: ${args.storyId}',
+        'Failed to upsert book to local, book not found for storyId: ${storyId}',
       );
       return;
     }
+    BookEntity newBook = currentBook.copyWith(
+      currentChapterId: chapterId,
+      scrollOffset: scrollOffset,
+      lastReadTime: lastReadTime,
+      timeStamp: DateTime.now().toIso8601String(),
+    );
+
+    final isSameListChapters = listEquals(
+      listChapters,
+      currentBook.listChapters,
+    );
+
+    if (!isSameListChapters) {
+      newBook = newBook.copyWith(
+        listChapters: listChapters,
+      );
+    }
+
     await localApiService.bookRepository.upsertBook(
-      currentBook.copyWith(
-        currentChapterId: chapterId,
-        scrollOffset: scrollOffset,
-        lastReadTime: lastReadTime,
-        timeStamp: DateTime.now().toIso8601String(),
-      ),
-      isHasUpdateListChapter: false,
+      newBook,
+      isHasUpdateListChapter: !isSameListChapters,
     );
   }
 }

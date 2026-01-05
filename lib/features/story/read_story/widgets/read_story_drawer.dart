@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/constants/constants.dart';
+import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
 import 'package:flutter_template/shared/widgets/cache_network_image/app_cache_network_image.dart';
@@ -15,7 +16,8 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 
 class ReadStoryDrawer extends ConsumerStatefulWidget {
-  const ReadStoryDrawer({super.key});
+  final List<ListChapterRes> listChapter;
+  const ReadStoryDrawer({super.key, required this.listChapter});
 
   @override
   ConsumerState<ReadStoryDrawer> createState() => _ReadStoryDrawerState();
@@ -23,7 +25,7 @@ class ReadStoryDrawer extends ConsumerStatefulWidget {
 
 class _ReadStoryDrawerState extends ConsumerState<ReadStoryDrawer> {
   late final bloc = ref.watch(BlocProvider.readStory);
-  late final _listChapter = bloc.args.listChapter;
+  late final _listChapter = widget.listChapter;
 
   late final _scrollController = AutoScrollController();
   late final _listController = ListController();
@@ -51,6 +53,17 @@ class _ReadStoryDrawerState extends ConsumerState<ReadStoryDrawer> {
         });
       });
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant ReadStoryDrawer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.listChapter != widget.listChapter) {
+      setState(() {
+        _listChapter.clear();
+        _listChapter.addAll(widget.listChapter);
+      });
+    }
   }
 
   @override
@@ -262,6 +275,7 @@ class _ReadStoryDrawerState extends ConsumerState<ReadStoryDrawer> {
         final detail = bloc.storyDetailSubject.value!;
         return IntrinsicHeight(
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(6),
@@ -296,6 +310,10 @@ class _ReadStoryDrawerState extends ConsumerState<ReadStoryDrawer> {
                     ),
                   ],
                 ),
+              ),
+              IconButton(
+                onPressed: () => bloc.onTapRefreshChapter(),
+                icon: Icon(Icons.refresh_rounded, color: textColor),
               ),
             ],
           ),

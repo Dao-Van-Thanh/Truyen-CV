@@ -26,10 +26,11 @@ class MainController extends ConsumerWidget {
     return ObsBuilder(
       streams: [
         bloc.currentListChapterItemSubject,
+        bloc.listChapterSubject,
       ],
       builder: (context) {
         final currentListChapterItem = bloc.currentListChapterItemSubject.value;
-        final listChapters = bloc.args.listChapter;
+        final listChapters = bloc.listChapterSubject.value;
         return Column(
           children: [
             AnimatedSlide(
