@@ -180,7 +180,7 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
               separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 if (index == chapterData.paragraphs.length) {
-                  return _buildChapterEndFooter();
+                  return _buildChapterEndFooter(config);
                 }
                 return ObsBuilder(
                   streams: [
@@ -270,7 +270,8 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     );
   }
 
-  Widget _buildChapterEndFooter() {
+  Widget _buildChapterEndFooter(ConfigStoryModel config) {
+    final textContentColor = config.themeMode.textColor;
     if (widget.isLastPage) {
       return Center(
         child: Column(
@@ -280,7 +281,7 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
               '--- ${context.t.readStory.endChapter.toUpperCase()} ---',
               style: TextStyle(
                 fontSize: 16,
-                color: Theme.of(context).textTheme.bodyMedium?.color,
+                color: textContentColor,
               ),
             ),
             SizedBoxConstants.s12,
@@ -291,7 +292,7 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: Theme.of(context).dividerColor,
+                    color: textContentColor,
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -301,7 +302,7 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
                   context.t.readStory.checkNewChapters,
                   style: TextStyle(
                     fontSize: 16,
-                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                    color: textContentColor,
                   ),
                 ),
               ),
