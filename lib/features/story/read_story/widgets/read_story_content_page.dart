@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
+import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/story/chapter/chapter_response.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_local_extension.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_tts_extension.dart';
 import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
+import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
@@ -17,11 +19,13 @@ class ReadStoryContentPage extends ConsumerStatefulWidget {
   final int index;
   final ListChapterRes? listChapterItem;
   final AutoScrollController controller;
+  final bool isLastPage;
   const ReadStoryContentPage({
     super.key,
     required this.index,
     required this.listChapterItem,
     required this.controller,
+    required this.isLastPage,
   });
 
   @override
@@ -128,6 +132,7 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
     await bloc.upsertBookLocal(
       chapterId: widget.listChapterItem?.id ?? '',
       scrollOffset: _offSet,
+      listChapters: bloc.listChapterSubject.value,
       lastReadTime: DateTime.now().toIso8601String(),
     );
     _removeScrollListener();
@@ -156,11 +161,11 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
           }
 
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (widget.listChapterItem?.id != bloc.args.selectedChapterId ||
+            if (widget.listChapterItem?.id != bloc.selectedChapterId ||
                 _isInitScrollDone) {
               return;
             }
-            _scrollController.jumpTo(bloc.args.scrollOffset);
+            _scrollController.jumpTo(bloc.scrollOffset);
             _isInitScrollDone = true;
           });
 
@@ -266,6 +271,46 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
   }
 
   Widget _buildChapterEndFooter() {
+    if (widget.isLastPage) {
+      return Center(
+        child: Column(
+          children: [
+            SizedBoxConstants.s12,
+            Text(
+              '--- ${context.t.readStory.endChapter.toUpperCase()} ---',
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+              ),
+            ),
+            SizedBoxConstants.s12,
+            AppGestureDetector(
+              onTap: () {
+                bloc.onTapLoadNewChapter();
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).dividerColor,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: EdgeInsetsConstants.vertical8 +
+                    EdgeInsetsConstants.horizontal12,
+                child: Text(
+                  context.t.readStory.checkNewChapters,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return SizedBox(
       width: double.infinity,
       height: 100,

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
+import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/features/story/read_story/widgets/read_story_drawer.dart';
 
 class ReadStoryDrawerOverlay extends ConsumerStatefulWidget {
@@ -87,7 +88,14 @@ class _ReadStoryDrawerOverlayState extends ConsumerState<ReadStoryDrawerOverlay>
               top: 0,
               bottom: 0,
               width: width,
-              child: ReadStoryDrawer(),
+              child: ObsBuilder(
+                streams: [bloc.listChapterSubject],
+                builder: (context) {
+                  return ReadStoryDrawer(
+                    listChapter: bloc.listChapterSubject.value,
+                  );
+                },
+              ),
             );
           },
         ),

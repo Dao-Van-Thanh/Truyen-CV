@@ -54,7 +54,7 @@ make sha256_cert url=https://openbanking-sandbox.mbbank.com.vn:9004
 flutter build apk --release \
   --target-platform android-arm,android-arm64,android-x64 \
   --obfuscate \
-  --split-debug-info=/MERCHANT-APP/lib
+  --split-debug-info=build/app/outputs/symbols
 ```
 
 ## Build iOS

@@ -92,7 +92,14 @@
             "pitch": "Giọng điệu",
             "tryVoice": "Thử giọng nói",
             "ttsVoiceNotLoaded": "Giọng nói TTS chưa được tải"
-        }
+        },
+        "loadingNewChapters": "Đang tải chương mới...",
+        "noNewChapters": "Không có chương mới nào",
+        "haveNewChapters": "Có {count: int} chương mới",
+        "checkNewChapters": "Kiểm tra chương mới",
+        "endChapter": "Hết chương",
+        "refreshingChapters": "Đang làm mới chương...",
+        "refreshChaptersSuccess": "Làm mới chương thành công"
     },
     "libraryScreen": {
         "bookmarks": "Đánh dấu",

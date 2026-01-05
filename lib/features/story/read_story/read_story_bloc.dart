@@ -27,7 +27,11 @@ import 'package:rxdart/rxdart.dart';
 
 class ReadStoryBloc extends BlocBase {
   Ref ref;
-  ReadStoryArgument args;
+  final ReadStoryArgument _args;
+
+  String get storyId => _args.storyId;
+  String get selectedChapterId => _args.selectedChapterId;
+  double get scrollOffset => _args.scrollOffset;
 
   late final networkApiService = ref.read(AppService.networkApi);
   late final routerService = ref.read(AppService.router);
@@ -67,9 +71,11 @@ class ReadStoryBloc extends BlocBase {
 
   final isFavoriteSubject = BehaviorSubject<bool>.seeded(false);
 
+  final listChapterSubject = BehaviorSubject<List<ListChapterRes>>.seeded([]);
+
   BuildContext? timerSettingsContext;
 
-  ReadStoryBloc(this.ref, {required this.args}) {
+  ReadStoryBloc(this.ref, {required ReadStoryArgument args}) : _args = args {
     _init();
   }
 
@@ -100,6 +106,7 @@ class ReadStoryBloc extends BlocBase {
     storyDetailSubject.close();
     isOpenDrawerSubject.close();
     isFavoriteSubject.close();
+    listChapterSubject.close();
   }
 
   void toggleMenuVisibility() {
@@ -113,9 +120,10 @@ class ReadStoryBloc extends BlocBase {
   }
 
   void _init() async {
+    listChapterSubject.value = _args.listChapter;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final selectedIndex = args.listChapter.indexWhere(
-        (chapter) => chapter.id == args.selectedChapterId,
+      final selectedIndex = listChapterSubject.value.indexWhere(
+        (chapter) => chapter.id == selectedChapterId,
       );
       if (selectedIndex != -1) {
         pageController.jumpToPage(selectedIndex);
@@ -136,8 +144,8 @@ class ReadStoryBloc extends BlocBase {
   }
 
   void onPageChanged(int p1) {
-    if (p1 < 0 || p1 >= args.listChapter.length) return;
-    currentListChapterItemSubject.value = args.listChapter[p1];
+    if (p1 < 0 || p1 >= listChapterSubject.value.length) return;
+    currentListChapterItemSubject.value = listChapterSubject.value[p1];
     _preloadDebounce.run(() {
       preloadChapters(p1);
     });
@@ -145,7 +153,7 @@ class ReadStoryBloc extends BlocBase {
 
   void onTapNextPage() {
     final currentPage = pageController.page?.toInt() ?? 0;
-    if (currentPage < args.listChapter.length - 1) {
+    if (currentPage < listChapterSubject.value.length - 1) {
       pageController.jumpToPage(
         currentPage + 1,
       );
@@ -154,7 +162,9 @@ class ReadStoryBloc extends BlocBase {
 
   void onTaoNextPageToIndex(int index) {
     final currentPage = pageController.page?.toInt() ?? 0;
-    if (index >= 0 && index < args.listChapter.length && index != currentPage) {
+    if (index >= 0 &&
+        index < listChapterSubject.value.length &&
+        index != currentPage) {
       pageController.jumpToPage(index);
     }
   }
@@ -207,7 +217,7 @@ class ReadStoryBloc extends BlocBase {
     if (chapterId == null) return false;
     final currentPageIndex = pageController.page?.toInt();
     if (currentPageIndex == null) return false;
-    final currentChapterId = args.listChapter[currentPageIndex].id;
+    final currentChapterId = listChapterSubject.value[currentPageIndex].id;
     return chapterId == currentChapterId;
   }
 
@@ -228,7 +238,6 @@ class ReadStoryBloc extends BlocBase {
   }
 
   Future<void> preloadChapters(int currentIndex) async {
-    final listChapter = args.listChapter;
     final List<Future<void>> tasks = [];
 
     // 1. Xác định Start: (Hiện tại - 2), nhưng không được nhỏ hơn 0
@@ -237,11 +246,13 @@ class ReadStoryBloc extends BlocBase {
 
     // 2. Xác định End: (Hiện tại + 2), nhưng không được vượt quá phần tử cuối
     int end = currentIndex + 2;
-    if (end >= listChapter.length) end = listChapter.length - 1;
+    if (end >= listChapterSubject.value.length) {
+      end = listChapterSubject.value.length - 1;
+    }
 
     // 3. Loop trong khoảng [start -> end] (Bao gồm cả previous, current, next)
     for (int i = start; i <= end; i++) {
-      final chapterItem = listChapter[i];
+      final chapterItem = listChapterSubject.value[i];
 
       // Chỉ tải nếu trong Cache CHƯA CÓ
       if (!chaptersMapSubject.value.containsKey(chapterItem.id)) {
@@ -309,7 +320,7 @@ class ReadStoryBloc extends BlocBase {
 
   Future<void> _loadStoryDetail() async {
     final res = await networkApiService.storyRepository.storyDetail(
-      args.storyId,
+      storyId,
     );
     if (isDispose) return;
 
@@ -342,7 +353,7 @@ class ReadStoryBloc extends BlocBase {
 
   void onTapNextStoryDetail() {
     routerService.push(
-      RouteInput.storyDetail(storyId: args.storyId),
+      RouteInput.storyDetail(storyId: storyId),
     );
   }
 
@@ -351,7 +362,7 @@ class ReadStoryBloc extends BlocBase {
     final newStatus = !currentStatus;
 
     final bookEntityLocal =
-        await localApiService.bookRepository.getBookById(args.storyId);
+        await localApiService.bookRepository.getBookById(storyId);
 
     final newBookEntity = bookEntityLocal?.copyWith(
       isFavorite: newStatus,
@@ -370,8 +381,64 @@ class ReadStoryBloc extends BlocBase {
 
   Future<void> getFavoriteStatus() async {
     final bookEntityLocal =
-        await localApiService.bookRepository.getBookById(args.storyId);
+        await localApiService.bookRepository.getBookById(storyId);
     final isFavorite = bookEntityLocal?.isFavorite ?? false;
     isFavoriteSubject.value = isFavorite;
+  }
+
+  void onTapRefreshChapter() {
+    toastService.showText(message: t.readStory.refreshingChapters);
+    _loadListChapter().then((newCount) {
+      if (isDispose) return;
+      toastService.showText(message: t.readStory.refreshChaptersSuccess);
+      if (newCount == null || newCount == 0) return;
+      final currentIndex = pageController.page?.toInt() ?? 0;
+      preloadChapters(currentIndex);
+    });
+  }
+
+  void onTapLoadNewChapter() {
+    toastService.showText(
+      message: t.readStory.loadingNewChapters,
+    );
+    _loadListChapter().then((newCount) {
+      if (isDispose) return;
+      if (newCount == null || newCount == 0) {
+        toastService.showText(
+          message: t.readStory.noNewChapters,
+        );
+      } else {
+        toastService.showText(
+          message: t.readStory.haveNewChapters(
+            count: newCount,
+          ),
+        );
+        final currentIndex = pageController.page?.toInt() ?? 0;
+        preloadChapters(currentIndex);
+      }
+    });
+  }
+
+  Future<int?> _loadListChapter() async {
+    final res = await networkApiService.storyRepository.getListChapter(storyId);
+    if (isDispose) return null;
+    return res.whenOrNull<int?>(
+      success: (data) {
+        final oldList = listChapterSubject.value;
+        final newList = data.data!;
+        final countNewChapters = newList.length - oldList.length;
+        if (countNewChapters > 0) {
+          listChapterSubject.value = newList;
+        }
+        logger.i(
+          'oldList length: ${oldList.length}, newList length: ${newList.length}, countNewChapters: $countNewChapters',
+        );
+        return countNewChapters;
+      },
+      error: (error) {
+        logger.e('ReadStoryBloc _loadListChapter error: ${error.errorMessage}');
+        return null;
+      },
+    );
   }
 }
