@@ -4,7 +4,7 @@ class EnvModelRelease extends EnvModelImplementation {
   EnvModelRelease()
       : super(
           baseUrl: 'https://example-production.com',
-          // noAuthUrl: 'https://openbanking-sandbox.mbbank.com.vn:9012/',
+          // noAuthUrl: '',
           certificateSHA256s: [],
         );
 }
