@@ -81,13 +81,11 @@ class StorySearchBloc extends BlocBase {
       res.whenOrNull(
         success: (data) {
           final newStories = data.data ?? [];
-          if (newStories.isEmpty ||
-              newStories.length < CommonConstants.pageSize) {
+          if (newStories.length < CommonConstants.pageSize) {
             hasMoreSubject.value = false;
-          } else {
-            storiesSubject.value.addAll(newStories);
-            _currentPage++;
           }
+          storiesSubject.value.addAll(newStories);
+          _currentPage++;
           isLoadingSubject.value = false;
           isFirstLoadSubject.value = false;
         },

@@ -105,7 +105,7 @@ class StoryRepository {
     required int page,
     required String keyword,
   }) async {
-    final res = await apiService.post(
+    final res = await apiService.get(
       '/tim-kiem',
       queryParameters: {
         'page_number': page,
