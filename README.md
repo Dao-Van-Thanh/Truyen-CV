@@ -91,6 +91,8 @@ cd ..
 
 ## 🚀 Chạy ứng dụng
 
+Hãy thêm 1 file **env_model.release.dart** (như file **env_model.example.dart**) vào thư mục /lib/shared/env/
+
 ```bash
 flutter run
 ```
