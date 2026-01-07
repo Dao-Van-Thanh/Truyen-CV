@@ -199,6 +199,9 @@ Chi tiết: [SSL_PINNING_GUIDE.md](SSL_PINNING_GUIDE.md).
 
 ---
 
-## 🙌 Góp ý
+## 🎨 Credits & Góp ý
 
+Giao diện (UI) của ứng dụng này được lấy cảm hứng từ App **[vBook]**.
 Đây là mã nguồn mở phục vụ mục đích học tập và sử dụng nội bộ. Mọi góp ý/đề xuất tính năng đều được hoan nghênh qua Issues/PR.
+
+---
