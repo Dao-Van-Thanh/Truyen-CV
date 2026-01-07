@@ -1,6 +1,4 @@
-# 🚀 Flutter Template Project
-
-> A clean, scalable Flutter project template with BLoC pattern, Riverpod state management, and a custom routing system.
+# 📖 Truyện CV — Ứng dụng đọc truyện Flutter
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.6.0+-02569B?logo=flutter)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.6.0+-0175C2?logo=dart)](https://dart.dev)
@@ -8,156 +6,80 @@
 
 ---
 
-## 📋 Table of Contents
+## 🧠 Giới thiệu
 
-- [Introduction](#-introduction)
-- [Key Features](#-key-features)
-- [Project Structure](#-project-structure)
-- [Architecture](#-architecture)
-- [Installation](#-installation)
-- [Running the App](#-running-the-app)
-- [Build](#-build)
-- [Useful Commands](#-useful-commands)
+Truyện CV là một ứng dụng Flutter để đọc truyện chữ với trải nghiệm mượt mà, quản lý dữ liệu cục bộ và hỗ trợ đa ngôn ngữ. Dự án được tổ chức theo mô-đun tính năng, quản lý trạng thái bằng Riverpod + Rx (BLoC), kèm hệ thống điều hướng tùy biến.
 
 ---
 
-## 🎯 Introduction
+## ✨ Tính năng chính
 
-**Flutter Template** is a base project designed to help you quickly start Flutter projects with a clean, maintainable, and scalable architecture.
-
-### Highlights:
-
-- ✅ **Clean Architecture** - Clear separation between UI, Business Logic, and Data
-- ✅ **BLoC Pattern** - State management with RxDart + Riverpod
-- ✅ **Custom Router** - Robust routing system with auto-dispose and params handling
-- ✅ **Dependency Injection** - Centralized service management via AppService
-- ✅ **SSL Pinning** - Secure API connections with certificate pinning
-- ✅ **Type-safe Navigation** - Navigate with type-safe arguments
-- ✅ **Auto Dispose BLoC** - Automatic resource disposal
+- **Thư viện**: lưu dấu trang và lịch sử đọc.
+- **Khám phá**: duyệt và tìm kiếm truyện.
+- **Chi tiết truyện**: xem thông tin truyện, chương.
+- **Đọc truyện**: trình đọc tối ưu, có điều khiển, lớp nền và ngăn kéo tùy chỉnh.
+- **Text-to-Speech (TTS)**: đọc truyện bằng giọng nói (dựa trên `flutter_tts`).
+- **Đa ngôn ngữ**: tích hợp i18n bằng `slang` + `slang_flutter`.
+- **Chủ đề sáng/tối**: chuyển đổi `Theme` theo cấu hình.
 
 ---
 
-## ✨ Key Features
+## 🏗 Kiến trúc
 
-### 🧩 State Management
+- **UI (Screen)** tách biệt logic, tương tác qua BLoC (`Subject/Stream`).
+- **Dịch vụ** tập trung trong `AppService` (router, toast, local API...).
+- **Điều hướng**: tập trung ở `RoutePage`/`RouteScreen` với tham số type-safe.
+- **Lưu trữ cục bộ**: cơ sở dữ liệu SQLite (`sqflite`).
 
-- **Riverpod 2.6.1** - Dependency injection and state management
-- **RxDart 0.28.0** - Reactive programming with streams
-- **Custom BLoC Base** - Auto-dispose and lifecycle management
-
-### 🧭 Routing System
-
-- **Global Navigator Key** - Navigate from anywhere (BLoC, services...)
-- **Type-safe Arguments** - Params are automatically validated
-- **Auto Pass to BLoC** - Route params are automatically passed to BLoC
-
-### 🔐 Security
-
-- **SSL Certificate Pinning** - Prevent Man-in-the-Middle attacks
-- **SHA-256 Fingerprint** - Validate server certificates
-
-### 🎨 UI/UX
-
-- **Design System** - Constants for colors, spacing, typography
-- **Responsive** - Supports multiple screen sizes
-- **Material 3** - Latest Material Design guidelines
-
-### 🔧 Developer Experience
-
-- **Hot Reload** - Fast development with instant refresh
-- **Lint Rules** - Code quality with flutter_lints
-- **Extensions** - Helper methods for Ref, BuildContext
+Sơ đồ luồng tổng quát: UI → BLoC → Service → API/Storage (quan sát bằng `ObsBuilder`).
 
 ---
 
-## 📁 Project Structure
+## 🧩 Công nghệ & thư viện
+
+- **Flutter** 3.6+, **Dart** 3.6+
+- **Riverpod** (DI & state), **RxDart** (Streams), BLoC tự quản lý vòng đời.
+- **Dio** cho kết nối API.
+- **slang** cho i18n, **freezed/json_serializable** cho model.
+- **sqflite** (DB), **cached_network_image** (cache ảnh), **bot_toast**.
+
+---
+
+## 📁 Cấu trúc thư mục (rút gọn)
 
 ```
 lib/
-├── main.dart                          # Entry point of the app
-│
-├── bloc/                              # BLoC Pattern Implementation
-│   ├── bloc_base.dart                 # Base class for all BLoCs
-│   ├── bloc_provider.dart             # Auto-dispose provider manager
-│   └── rx/                            # RxDart utilities
-│       ├── obs_builder.dart           # Observable builder widget
-│       └── bloc_builder.dart          # BLoC builder widget
-│
-├── constants/                         # Design system constants
-│   ├── app.dart                       # App-level constants
-│   ├── colors.dart                    # Color palette
-│   ├── font_sizes.dart                # Typography scale
-│   ├── edge_insets.dart               # Spacing system
-│   ├── corner_radius.dart             # Border radius values
-│   ├── box_shadow.dart                # Shadow definitions
-│   ├── gradients.dart                 # Gradient definitions
-│   ├── regexs.dart                    # Validation patterns
-│   └── ...
-│
-├── dependency/                        # Dependency Injection
-│   ├── app_service.dart               # Services registry
-│   ├── router/                        # Routing system
-│   │   ├── router_service.dart        # Navigation service
-│   │   ├── router_provider.dart       # Router implementation
-│   │   ├── router_provider_interface.dart
-│   │   ├── arguments/                 # Route arguments
-│   │   └── utils/                     # Route utilities
-│       ├── route_name.dart            # Route name constants
-│       ├── route_page.dart            # Route generator
-│       └── route_screen.dart          # Route builders
-│   ├── api/                           # API layer
-│   └── network_api/                   # Network implementation
-│       └── network_api_service.dart   # HTTP client with SSL pinning
-│
-├── features/                          # Feature modules
-│   ├── counter/                       # Counter feature example
-│   │   ├── counter_screen.dart        # UI (clean, no logic)
-│   │   └── counter_bloc.dart          # Business logic
-│   └── unknown/                       # 404 screen
-│       └── unknown_screen.dart
-│
-└── shared/                            # Shared utilities
-    ├── extensions/                    # Dart extensions
-    │   └── ref.dart                   # Ref extensions (ref.router...)
-    └── env/                           # Environment config
+├── main.dart                      # Khởi động app, theme, router, i18n
+├── bloc/                          # BLoC base, provider, ObsBuilder
+├── constants/                     # Màu sắc, spacing, typography, regex...
+├── dependency/                    # AppService, Router, API
+│   └── router/utils/              # RouteName, RoutePage, RouteScreen
+├── features/                      # Từng tính năng (library, explore, story...)
+│   └── story/read_story/          # UI đọc truyện & controller
+└── shared/                        # Widgets, logger, theme...
 ```
+
+Tham khảo thêm trong các tệp: [lib/dependency/router/utils/route_page.dart](lib/dependency/router/utils/route_page.dart), [lib/dependency/router/utils/route_screen.dart](lib/dependency/router/utils/route_screen.dart), [lib/dependency/router/utils/route_name.dart](lib/dependency/router/utils/route_name.dart).
 
 ---
 
-## 🏗 Architecture
+## 🛠 Cài đặt
 
-### Overall Flow:
+- **Yêu cầu**: Flutter 3.6+, Dart 3.6+, macOS/iOS cần CocoaPods.
 
-```
-UI (Screen) → BLoC (Business Logic) → Service → API/Storage
-     ↑              ↓
-  ObsBuilder   Subject (Stream)
-```
-
-## 🛠 Installation
-
-### Requirements:
-
-- Flutter SDK: **>= 3.6.0**
-- Dart SDK: **>= 3.6.0**
-- iOS: Xcode 15+, CocoaPods
-- Android: Android Studio, JDK 11+
-
-### Step 1: Clone the project
-
-### Step 2: Install dependencies
+1) Cài dependencies:
 
 ```bash
 flutter pub get
 ```
 
-### Step 3: Generate code (if any)
+2) Sinh mã (codegen) nếu có thay đổi model/i18n:
 
 ```bash
 dart run build_runner build --delete-conflicting-outputs
 ```
 
-### Step 4: Setup iOS (macOS only)
+3) iOS (macOS):
 
 ```bash
 cd ios
@@ -167,134 +89,116 @@ cd ..
 
 ---
 
-## 🚀 Running the App
-
-### Development mode:
+## 🚀 Chạy ứng dụng
 
 ```bash
 flutter run
 ```
 
-### Choose device:
+Chọn thiết bị:
 
 ```bash
-flutter devices                    # List devices
-flutter run -d <device_id>         # Run on specific device
+flutter devices
+flutter run -d <device_id>
 ```
-
-### Hot reload:
-
-- Press `r` in the terminal for hot reload
-- Press `R` for hot restart
-- Press `q` to quit
 
 ---
 
 ## 📦 Build
 
-### Android APK (Release):
+- Android APK (release):
 
 ```bash
-# Build APK for all architectures
 flutter build apk --release \
   --target-platform android-arm,android-arm64,android-x64
+```
 
-# Build with obfuscation (code protection)
+- Build tối ưu (obfuscate + split debug info):
+
+```bash
 flutter build apk --release \
   --target-platform android-arm,android-arm64,android-x64 \
   --obfuscate \
   --split-debug-info=build/app/outputs/symbols
 ```
 
-### Android App Bundle (Google Play):
+- iOS (macOS):
 
 ```bash
-flutter build appbundle --release
-```
-
-### iOS (macOS only):
-
-```bash
-# Clean and rebuild
-flutter clean && \
-flutter pub get && \
-cd ios && \
-pod install && \
-cd .. && \
+flutter clean &&
+flutter pub get &&
+cd ios && pod install && cd ..
 flutter build ios --release
 ```
 
-### Install APK to device:
+<!-- ---
+
+## 🚢 Triển khai nhanh (deploy)
+
+Script tự động cập nhật `build-number`, build APK và tạo GitHub Release bằng **GitHub CLI**:
+
+```bash
+./deploy.sh
+```
+
+Yêu cầu đã đăng nhập `gh` và có quyền tạo release.
+
+--- -->
+
+## 🧰 Lệnh hữu ích
+
+- Watch codegen:
+
+```bash
+dart run build_runner watch --delete-conflicting-outputs
+```
+
+- Sửa lint & format:
+
+```bash
+dart fix --apply && dart format .
+```
+
+- Clean build_runner:
+
+```bash
+dart run build_runner clean
+```
+
+- Cài đặt APK vào thiết bị:
 
 ```bash
 flutter install
 ```
 
+Xem thêm: [COMMAND.md](COMMAND.md).
+<!-- 
 ---
 
-## 🔧 Useful Commands
+## 🔐 SSL Pinning
 
-### Format & Lint:
-
-```bash
-# Auto-fix lint issues
-dart fix --apply
-
-# Format code
-dart format .
-
-# Combine both
-dart fix --apply && dart format .
-```
-
-### Clean build:
+- Tạo fingerprint SHA-256 từ chứng chỉ máy chủ:
 
 ```bash
-# Clean Flutter
-flutter clean
-
-# Clean build_runner
-dart run build_runner clean
-
-# Full clean (Flutter + pods)
-flutter clean && cd ios && rm -rf Pods Podfile.lock && cd ..
+make sha256_cert url=https://api.example.com:443
 ```
 
-### Code generation:
+- Thêm chuỗi SHA-256 vào biến môi trường `certificateSHA256s` rồi rebuild.
 
-```bash
-# Watch mode (auto rebuild on changes)
-dart run build_runner watch --delete-conflicting-outputs
+Chi tiết: [SSL_PINNING_GUIDE.md](SSL_PINNING_GUIDE.md).
 
-# One-time build
-dart run build_runner build --delete-conflicting-outputs
-```
+--- -->
 
-### SSL Certificate Pinning:
+## 📚 Tham khảo
 
-```bash
-# Generate SHA-256 fingerprint for a domain
-make sha256_cert url=https://api.example.com
-```
+- Flutter: https://docs.flutter.dev/
+- Riverpod: https://riverpod.dev/
+- RxDart: https://pub.dev/packages/rxdart
+- Dio: https://pub.dev/packages/dio
+- sqflite: https://pub.dev/packages/sqflite
 
-> See also: [SSL_PINNING_GUIDE.md](SSL_PINNING_GUIDE.md)
+---
 
-### Analyze code:
+## 🙌 Góp ý
 
-```bash
-flutter analyze
-```
-
-## 📚 References
-
-- [Flutter Documentation](https://docs.flutter.dev/)
-- [Riverpod Documentation](https://riverpod.dev/)
-- [RxDart Documentation](https://pub.dev/packages/rxdart)
-- [SSL Pinning Guide](SSL_PINNING_GUIDE.md)
-- [Commands Reference](COMMAND.md)
-
-## 🎉 Acknowledgments
-
-- Flutter team for the amazing framework
-- Riverpod team for powerful state management
-- All contributors who helped shape this template
+Đây là mã nguồn mở phục vụ mục đích học tập và sử dụng nội bộ. Mọi góp ý/đề xuất tính năng đều được hoan nghênh qua Issues/PR.
