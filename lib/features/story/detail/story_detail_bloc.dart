@@ -233,6 +233,7 @@ class StoryDetailBloc extends BlocBase {
         isFavorite: isFavorite,
         lastReadTime: DateTime.now().toIso8601String(),
         timeStamp: DateTime.now().toIso8601String(),
+        isLocal: false,
       );
       _isLoadingLocal = true;
       await localApiService.bookRepository.upsertBook(

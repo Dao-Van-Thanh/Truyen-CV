@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_template/dependency/local_api/repository/book/entities/b
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/features/library/widgets/library_bookmarks_option.dart';
+import 'package:flutter_template/shared/widgets/dialog/file_import_dialog.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LibraryBloc extends BlocBase {
@@ -77,6 +79,9 @@ class LibraryBloc extends BlocBase {
           onTapViewInfo: () {
             _handleViewInfo(item);
           },
+          onTapDeleteLocalStory: () {
+            _handleRemoveStory(item);
+          },
         );
       },
     );
@@ -112,6 +117,7 @@ class LibraryBloc extends BlocBase {
           selectedChapterId: item.currentChapterId ?? '',
           listChapter: item.listChapters,
           scrollOffset: item.scrollOffset,
+          isOfflineImport: item.isLocal,
         ),
       ),
     );
@@ -121,5 +127,31 @@ class LibraryBloc extends BlocBase {
     routerService.push(
       RouteInput.storySearch(),
     );
+  }
+
+  void onTapAddStory() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['epub', 'txt'],
+    );
+
+    if (result?.files.isEmpty ?? true) return;
+
+    final filePath = result!.files.first.path;
+    if (filePath == null || filePath.isEmpty) return;
+
+    if (!routerService.rootContext.mounted) return;
+
+    showDialog(
+      context: routerService.rootContext,
+      builder: (context) {
+        return FileImportDialog(filePath: filePath);
+      },
+    );
+  }
+
+  void _handleRemoveStory(BookEntity item) {
+    localApiService.bookRepository.deleteBook(item.id);
+    refreshData();
   }
 }

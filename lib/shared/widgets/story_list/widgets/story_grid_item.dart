@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
-import 'package:flutter_template/shared/widgets/cache_network_image/app_cache_network_image.dart';
+import 'package:flutter_template/shared/widgets/story/story_image.dart';
 import 'package:flutter_template/shared/widgets/story_list/entities/story_list_item_entity.dart';
 
 class StoryGridItem extends ConsumerWidget {
@@ -43,7 +43,7 @@ class StoryGridItem extends ConsumerWidget {
           children: [
             AspectRatio(
               aspectRatio: 3 / 4,
-              child: AppCacheNetworkImage(
+              child: StoryImage(
                 imageUrl: story.thumbUrl,
                 fit: BoxFit.cover,
                 memCacheWidth: 250,

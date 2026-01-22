@@ -61,6 +61,7 @@ class RootBloc extends BlocBase {
           selectedChapterId: bookLocal.currentChapterId ?? '',
           listChapter: bookLocal.listChapters,
           scrollOffset: bookLocal.scrollOffset,
+          isOfflineImport: bookLocal.isLocal,
         ),
       ),
     );

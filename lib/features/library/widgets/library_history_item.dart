@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
-import 'package:flutter_template/shared/widgets/cache_network_image/app_cache_network_image.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
+import 'package:flutter_template/shared/widgets/story/story_image.dart';
 
 class LibraryHistoryItem extends StatelessWidget {
   final BookEntity item;
@@ -31,7 +31,7 @@ class LibraryHistoryItem extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(6),
-                child: AppCacheNetworkImage(
+                child: StoryImage(
                   imageUrl: thumbUrl,
                   width: 70,
                   height: 95,

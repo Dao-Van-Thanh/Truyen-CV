@@ -4,8 +4,8 @@ import 'dart:ui' as ui;
 import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/shared/utilities/datetime.dart';
-import 'package:flutter_template/shared/widgets/cache_network_image/app_cache_network_image.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
+import 'package:flutter_template/shared/widgets/story/story_image.dart';
 import 'package:flutter_template/shared/widgets/text/realtime_time_ago.dart';
 
 class BookBannerCard extends StatelessWidget {
@@ -40,7 +40,7 @@ class BookBannerCard extends StatelessWidget {
                 scale: 1.1,
                 child: ImageFiltered(
                   imageFilter: ui.ImageFilter.blur(sigmaX: 40, sigmaY: 40),
-                  child: AppCacheNetworkImage(
+                  child: StoryImage(
                     imageUrl: book.storyModel.thumb ?? '',
                     fit: BoxFit.cover,
                     width: double.infinity,
@@ -74,7 +74,7 @@ class BookBannerCard extends StatelessWidget {
                       clipBehavior: Clip.antiAlias,
                       child: AspectRatio(
                         aspectRatio: 2 / 3,
-                        child: AppCacheNetworkImage(
+                        child: StoryImage(
                           imageUrl: book.storyModel.thumb ?? '',
                           fit: BoxFit.cover,
                         ),

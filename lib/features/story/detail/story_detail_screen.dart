@@ -7,11 +7,11 @@ import 'package:flutter_template/constants/size_box.dart';
 import 'package:flutter_template/features/story/detail/story_detail_bloc.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/string.dart';
-import 'package:flutter_template/shared/widgets/cache_network_image/app_cache_network_image.dart';
 import 'dart:ui' as ui;
 
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 import 'package:flutter_template/shared/widgets/refresh_indicator/app_refresh_indicator.dart';
+import 'package:flutter_template/shared/widgets/story/story_image.dart';
 
 class StoryDetailScreen extends ConsumerWidget {
   const StoryDetailScreen({super.key});
@@ -319,7 +319,7 @@ class StoryDetailScreen extends ConsumerWidget {
                 scale: 1.1,
                 child: ImageFiltered(
                   imageFilter: ui.ImageFilter.blur(sigmaX: 40, sigmaY: 40),
-                  child: AppCacheNetworkImage(
+                  child: StoryImage(
                     imageUrl: imageUrl,
                     fit: BoxFit.cover,
                     width: double.infinity,
@@ -352,7 +352,7 @@ class StoryDetailScreen extends ConsumerWidget {
                       clipBehavior: Clip.antiAlias,
                       child: AspectRatio(
                         aspectRatio: 2 / 3,
-                        child: AppCacheNetworkImage(
+                        child: StoryImage(
                           imageUrl: imageUrl,
                           fit: BoxFit.cover,
                         ),

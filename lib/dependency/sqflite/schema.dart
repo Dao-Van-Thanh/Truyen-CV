@@ -47,6 +47,7 @@ class SqfliteSchema {
         scrollOffset $_realType,
         isFavorite $_boolType,
         lastReadTime $_textType,
+        isLocal $_boolType DEFAULT 0,
         timeStamp $_textType
       )
     ''';
@@ -60,6 +61,19 @@ class SqfliteSchema {
         FOREIGN KEY (bookId) REFERENCES books (id) ON DELETE CASCADE
       )
     ''';
+
+  static const addIsLocalToBooks = '''
+    ALTER TABLE books ADD COLUMN isLocal $_boolType DEFAULT 0
+  ''';
+
+  static const createChapterContentsTable = '''
+    CREATE TABLE chapter_contents (
+      id $_idType,
+      chapterId $_textType,
+      content $_textType, 
+      FOREIGN KEY (chapterId) REFERENCES chapters (id) ON DELETE CASCADE
+    )
+  ''';
 
   SqfliteSchema._();
 }

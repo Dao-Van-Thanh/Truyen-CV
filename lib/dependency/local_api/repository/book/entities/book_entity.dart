@@ -13,6 +13,7 @@ class BookEntity {
   final bool isFavorite;
   final String? lastReadTime;
   final String timeStamp;
+  final bool isLocal;
 
   const BookEntity({
     required this.id,
@@ -23,6 +24,7 @@ class BookEntity {
     this.isFavorite = false,
     this.lastReadTime,
     required this.timeStamp,
+    required this.isLocal,
   });
 
   factory BookEntity.fromMap(Map<String, dynamic> map) {
@@ -34,6 +36,7 @@ class BookEntity {
       isFavorite: (map['isFavorite'] as int? ?? 0) == 1,
       lastReadTime: map['lastReadTime'] as String?,
       timeStamp: map['timeStamp'] as String,
+      isLocal: (map['isLocal'] as int? ?? 0) == 1,
     );
   }
 
@@ -46,6 +49,7 @@ class BookEntity {
       'isFavorite': isFavorite ? 1 : 0,
       'lastReadTime': lastReadTime,
       'timeStamp': timeStamp,
+      'isLocal': isLocal ? 1 : 0,
     };
   }
 
@@ -89,6 +93,7 @@ class BookEntity {
     bool? isFavorite,
     String? lastReadTime,
     String? timeStamp,
+    bool? isLocal,
   }) {
     return BookEntity(
       id: id ?? this.id,
@@ -99,6 +104,7 @@ class BookEntity {
       isFavorite: isFavorite ?? this.isFavorite,
       lastReadTime: lastReadTime ?? this.lastReadTime,
       timeStamp: timeStamp ?? this.timeStamp,
+      isLocal: isLocal ?? this.isLocal,
     );
   }
 }

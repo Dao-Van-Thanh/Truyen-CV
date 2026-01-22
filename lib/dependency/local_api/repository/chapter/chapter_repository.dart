@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_template/dependency/local_api/repository/chapter/entities/chapter_contents_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/chapter/entities/chapter_entity.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:sqflite/sqflite.dart';
@@ -8,6 +9,7 @@ class ChapterRepository {
   final Database db;
 
   static const String _chaptersTable = 'chapters';
+  static const String _chapterContentsTable = 'chapter_contents';
 
   ChapterRepository({required this.db});
 
@@ -39,8 +41,9 @@ class ChapterRepository {
 
     for (var i = 0; i < chapters.length; i += batchSize) {
       final batch = executor.batch();
-
-      final slice = chapters.skip(i).take(batchSize);
+      final end =
+          (i + batchSize < chapters.length) ? i + batchSize : chapters.length;
+      final slice = chapters.sublist(i, end);
       for (final chapter in slice) {
         batch.insert(
           _chaptersTable,
@@ -104,5 +107,52 @@ class ChapterRepository {
       where: 'bookId = ?',
       whereArgs: [bookId],
     );
+  }
+
+  Future<void> upsertChapterContentsBatch({
+    required List<ChapterContentsEntity>
+        contents, // List [{'chapterId': '...', 'content': '...'}]
+    int batchSize = 100, // Batch nhỏ hơn vì text nặng
+    DatabaseExecutor? dbOverride,
+  }) async {
+    final executor = dbOverride ?? db;
+
+    for (var i = 0; i < contents.length; i += batchSize) {
+      final batch = executor.batch();
+      final end =
+          (i + batchSize < contents.length) ? i + batchSize : contents.length;
+      final slice = contents.sublist(i, end);
+
+      for (final item in slice) {
+        // Tạo ID mới cho row content nếu chưa có, hoặc để DB tự sinh nếu ID là AutoInc
+        // Nhưng ở đây ta manual ID để kiểm soát
+        final contentId = item.id;
+
+        batch.insert(
+          _chapterContentsTable,
+          {
+            'id': contentId, // ID của row content
+            'chapterId': item.chapterId,
+            'content': item.content,
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+      await batch.commit(noResult: true);
+    }
+  }
+
+  Future<ChapterContentsEntity?> getChapterContent(String chapterId) async {
+    final maps = await db.query(
+      _chapterContentsTable,
+      where: 'chapterId = ?',
+      whereArgs: [chapterId],
+      limit: 1,
+    );
+
+    if (maps.isNotEmpty) {
+      return ChapterContentsEntity.fromMap(maps.first);
+    }
+    return null;
   }
 }

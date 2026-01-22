@@ -168,6 +168,7 @@ class ListChapterBloc extends BlocBase {
         scrollOffset: scrollOffset,
         lastReadTime: DateTime.now().toIso8601String(),
         timeStamp: DateTime.now().toIso8601String(),
+        isLocal: false,
       );
       _isLoadingLocal = true;
       await localApiService.bookRepository.upsertBook(

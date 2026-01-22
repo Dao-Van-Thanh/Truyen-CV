@@ -19,8 +19,12 @@ class SqfliteService {
 
     _database = await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _createDB,
+      onUpgrade: _upgradeDB,
+      onConfigure: (db) {
+        db.execute('PRAGMA foreign_keys = ON');
+      },
     );
 
     return _database;
@@ -36,6 +40,16 @@ class SqfliteService {
       db.execute(SqfliteSchema.createRouterTable),
       db.execute(SqfliteSchema.createChaptersTable),
     ]);
+    await Future.wait([
+      db.execute(SqfliteSchema.createChapterContentsTable),
+    ]);
+  }
+
+  Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute(SqfliteSchema.addIsLocalToBooks);
+      await db.execute(SqfliteSchema.createChapterContentsTable);
+    }
   }
 
   Future<void> close() async {
