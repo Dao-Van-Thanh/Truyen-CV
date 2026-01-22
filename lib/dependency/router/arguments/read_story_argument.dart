@@ -6,10 +6,13 @@ class ReadStoryArgument {
   final double scrollOffset;
   final List<ListChapterRes> listChapter;
 
+  final bool isOfflineImport;
+
   ReadStoryArgument({
     required this.storyId,
     required this.selectedChapterId,
     required this.listChapter,
     required this.scrollOffset,
+    this.isOfflineImport = false,
   });
 }

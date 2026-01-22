@@ -44,6 +44,7 @@ class MyApp extends ConsumerWidget {
     final routerService = ref.watch(AppService.router);
     final configBloc = ref.watch(BlocProvider.config);
     final toastService = ref.watch(AppService.toast);
+    final _ = ref.watch(BlocProvider.app); // Initialize AppBloc
     return ObsBuilder(
       streams: [configBloc.themeModeSubject],
       builder: (context) {

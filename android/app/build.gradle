@@ -57,3 +57,7 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    implementation 'javax.xml.stream:stax-api:1.0-2'
+}

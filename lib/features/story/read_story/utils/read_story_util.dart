@@ -1,6 +1,6 @@
 class ReadStoryUtil {
   static String _cleanChapterName(String? name) {
-    if (name == null) return 'Chương Mới';
+    if (name == null) return 'Chương';
     return name.replaceAll(RegExp(r'\s*\(#\d+\)$'), '');
   }
 

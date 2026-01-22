@@ -115,7 +115,9 @@
             "removeBookmark": "Xóa đánh dấu",
             "addBookmark": "Thêm đánh dấu",
             "confirmRemoveBookmark": "Xác nhận xóa đánh dấu",
-            "viewInfo": "Xem thông tin"
+            "viewInfo": "Xem thông tin",
+            "removeStory": "Xoá truyện",
+            "confirmRemoveStory": "Xác nhận xóa truyện"
         }
     },
     "common": {
@@ -180,7 +182,7 @@
         "timerTitle": "Hẹn giờ tắt",
         "cancelTimer": "Hủy hẹn giờ",
         "timerAutoStopDesc": "Ứng dụng sẽ tự động dừng đọc khi hết giờ",
-        "minutesFormat": "$minutes phút",
+        "minutesFormat": "{minutes} phút",
         "customize": "Tùy chỉnh...",
         "enterMinutes": "Nhập số phút",
         "minutesExample": "Ví dụ: 120",
@@ -191,5 +193,11 @@
         "commonError": "Có lỗi xảy ra.",
         "deleteDataError": "Lỗi xoá dữ liệu: {error: String}",
         "deleteDataSuccess": "Đã xóa dữ liệu"
+    },
+    "fileImport": {
+        "importing": "Đang nhập truyện...",
+        "addToLibrary": "Thêm truyện vào thư viện",
+        "cancel": "Hủy",
+        "add": "Thêm"
     }
 }

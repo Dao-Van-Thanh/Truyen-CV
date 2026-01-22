@@ -3,20 +3,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/cache_network_image/app_cache_network_image.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
+import 'package:flutter_template/shared/widgets/story/story_image.dart';
 import 'package:flutter_template/shared/widgets/text%20copy/highlight_text.dart';
 
 class LibraryBookmarksOption extends ConsumerWidget {
   final BookEntity item;
   final VoidCallback onTapViewInfo;
   final void Function(bool isRemove) onTapAddOrRemoveBookmark;
+  final VoidCallback onTapDeleteLocalStory;
   const LibraryBookmarksOption(
     this.item, {
     super.key,
     required this.onTapViewInfo,
     required this.onTapAddOrRemoveBookmark,
+    required this.onTapDeleteLocalStory,
   });
+
+  bool get isLocal => item.isLocal;
 
   @override
   Widget build(BuildContext context, ref) {
@@ -47,7 +51,7 @@ class LibraryBookmarksOption extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(6),
                     ),
                     clipBehavior: Clip.antiAlias,
-                    child: AppCacheNetworkImage(
+                    child: StoryImage(
                       imageUrl: item.storyModel.thumb ?? '',
                     ),
                   ),
@@ -149,7 +153,7 @@ class LibraryBookmarksOption extends ConsumerWidget {
             AppGestureDetector(
               onTap: () {
                 if (item.isFavorite) {
-                  _onTapConfirmUnfavorite(context);
+                  _onTapConfirmUnfavoriteOrRemove(context);
                 } else {
                   onTapAddOrRemoveBookmark.call(false);
                   Navigator.of(context).pop();
@@ -170,16 +174,21 @@ class LibraryBookmarksOption extends ConsumerWidget {
                 child: Column(
                   children: [
                     Icon(
-                      item.isFavorite
-                          ? Icons.bookmark_remove_outlined
-                          : Icons.bookmark_add_outlined,
+                      isLocal
+                          ? Icons.delete_outline
+                          : item.isFavorite
+                              ? Icons.bookmark_remove_outlined
+                              : Icons.bookmark_add_outlined,
                       size: 24,
                       color: Theme.of(context).colorScheme.secondary,
                     ),
                     Text(
-                      item.isFavorite
-                          ? t.libraryScreen.optionsBottomSheet.removeBookmark
-                          : t.libraryScreen.optionsBottomSheet.addBookmark,
+                      isLocal
+                          ? t.libraryScreen.optionsBottomSheet.removeStory
+                          : item.isFavorite
+                              ? t.libraryScreen.optionsBottomSheet
+                                  .removeBookmark
+                              : t.libraryScreen.optionsBottomSheet.addBookmark,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Theme.of(context).colorScheme.secondary,
                             fontWeight: FontWeight.bold,
@@ -190,39 +199,41 @@ class LibraryBookmarksOption extends ConsumerWidget {
                 ),
               ),
             ),
-            SizedBoxConstants.s8,
-            AppGestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-                onTapViewInfo();
-              },
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsetsConstants.vertical12 +
-                    EdgeInsetsConstants.horizontal16,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Theme.of(context).colorScheme.primary.withValues(
-                        alpha: 0.1,
-                      ),
-                ),
-                child: Text(
-                  t.libraryScreen.optionsBottomSheet.viewInfo,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                  textAlign: TextAlign.center,
+            if (!isLocal) ...[
+              SizedBoxConstants.s8,
+              AppGestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                  onTapViewInfo();
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsetsConstants.vertical12 +
+                      EdgeInsetsConstants.horizontal16,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Theme.of(context).colorScheme.primary.withValues(
+                          alpha: 0.1,
+                        ),
+                  ),
+                  child: Text(
+                    t.libraryScreen.optionsBottomSheet.viewInfo,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
-            ),
+            ],
           ],
         ),
       ),
     );
   }
 
-  void _onTapConfirmUnfavorite(BuildContext context) {
+  void _onTapConfirmUnfavoriteOrRemove(BuildContext context) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -243,8 +254,11 @@ class LibraryBookmarksOption extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  context
-                      .t.libraryScreen.optionsBottomSheet.confirmRemoveBookmark,
+                  isLocal
+                      ? context
+                          .t.libraryScreen.optionsBottomSheet.confirmRemoveStory
+                      : context.t.libraryScreen.optionsBottomSheet
+                          .confirmRemoveBookmark,
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -283,7 +297,11 @@ class LibraryBookmarksOption extends ConsumerWidget {
                         onTap: () {
                           Navigator.of(modalContext).pop();
                           Navigator.of(context).pop();
-                          onTapAddOrRemoveBookmark.call(true);
+                          if (isLocal) {
+                            onTapDeleteLocalStory.call();
+                          } else {
+                            onTapAddOrRemoveBookmark.call(true);
+                          }
                         },
                         child: Container(
                           padding: EdgeInsetsConstants.vertical12,

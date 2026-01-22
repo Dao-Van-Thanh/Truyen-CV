@@ -8,10 +8,10 @@ import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
-import 'package:flutter_template/shared/widgets/cache_network_image/app_cache_network_image.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 import 'package:flutter_template/shared/widgets/page_view/app_page_view.dart';
 import 'package:flutter_template/shared/widgets/scroll_bar/app_raw_scrollbar.dart';
+import 'package:flutter_template/shared/widgets/story/story_image.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 
@@ -279,7 +279,7 @@ class _ReadStoryDrawerState extends ConsumerState<ReadStoryDrawer> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(6),
-                child: AppCacheNetworkImage(
+                child: StoryImage(
                   imageUrl: detail.thumb ?? '',
                   width: 50,
                   height: 70,

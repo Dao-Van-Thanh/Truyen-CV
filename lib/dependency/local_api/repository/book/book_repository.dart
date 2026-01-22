@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/chapter/chapter_repository.dart';
+import 'package:flutter_template/dependency/local_api/repository/chapter/entities/chapter_contents_entity.dart';
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
+import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
 class BookRepository {
   final Database db;
@@ -23,18 +27,28 @@ class BookRepository {
     );
 
     await db.transaction((txn) async {
-      await txn.rawUpdate(
+      // ✅ INSERT hoặc UPDATE trong 1 câu lệnh
+      await txn.rawInsert(
         '''
-        INSERT OR REPLACE INTO $_booksTable (
-          id, storyData, currentChapterId, scrollOffset, isFavorite, lastReadTime, timeStamp
-        ) VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''',
+      INSERT INTO $_booksTable (
+        id, storyData, currentChapterId, scrollOffset, isFavorite, isLocal, lastReadTime, timeStamp
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(id) DO UPDATE SET
+        storyData = excluded.storyData,
+        currentChapterId = excluded.currentChapterId,
+        scrollOffset = excluded.scrollOffset,
+        isFavorite = excluded.isFavorite,
+        isLocal = excluded.isLocal,
+        lastReadTime = excluded.lastReadTime,
+        timeStamp = excluded.timeStamp
+      ''',
         [
           bookToSave.id,
           bookToSave.storyData,
           bookToSave.currentChapterId,
           bookToSave.scrollOffset,
           bookToSave.isFavorite ? 1 : 0,
+          bookToSave.isLocal ? 1 : 0,
           bookToSave.lastReadTime,
           bookToSave.timeStamp,
         ],
@@ -113,12 +127,47 @@ class BookRepository {
     return maps.isNotEmpty && (maps.first['isFavorite'] as int) == 1;
   }
 
-  Future<void> deleteBook(String id) async {
-    await db.delete(
-      _booksTable,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+  Future<bool> deleteBook(String id) async {
+    try {
+      final bookList = await db.query(
+        _booksTable,
+        columns: ['storyData'],
+        where: 'id = ?',
+        whereArgs: [id],
+        limit: 1,
+      );
+
+      if (bookList.isNotEmpty) {
+        try {
+          final storyDataStr = bookList.first['storyData'] as String;
+          final storyMap = jsonDecode(storyDataStr);
+          final String? thumbPath = storyMap['thumb'];
+
+          if (thumbPath != null &&
+              thumbPath.isNotEmpty &&
+              !thumbPath.startsWith('http')) {
+            final file = File(thumbPath);
+            if (await file.exists()) {
+              await file.delete();
+              logger.i('🗑️ Đã xóa file ảnh bìa: $thumbPath');
+            }
+          }
+        } catch (e) {
+          logger.w('⚠️ Lỗi khi xóa file ảnh bìa: $e');
+        }
+      }
+
+      await db.delete(
+        _booksTable,
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+
+      return true;
+    } catch (e) {
+      logger.e('Lỗi xóa book: $e');
+      return false;
+    }
   }
 
   Future<List<BookEntity>> _attachChaptersToBooks(
@@ -165,5 +214,63 @@ class BookRepository {
       final json = jsonDecode(e['listChapterItemData'] as String);
       return ListChapterRes.fromJson(json);
     }).toList();
+  }
+
+  Future<void> saveImportedBook({
+    required BookEntity book,
+    required List<ChapterContentsEntity> chapterContents,
+  }) async {
+    // Đảm bảo timestamp luôn mới
+    final now = DateTime.now().toIso8601String();
+    final bookToSave = book.copyWith(
+      timeStamp: now,
+      lastReadTime: now,
+      isFavorite: true,
+    );
+
+    await db.transaction((txn) async {
+      // A. Lưu Book (Dùng lại logic insert cũ nhưng viết lại cho transaction này)
+      await txn.rawInsert(
+        '''
+        INSERT OR REPLACE INTO $_booksTable (
+          id, storyData, currentChapterId, scrollOffset, isFavorite, isLocal, lastReadTime, timeStamp
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ''',
+        [
+          bookToSave.id,
+          bookToSave.storyData,
+          bookToSave.currentChapterId,
+          bookToSave.scrollOffset,
+          1, // isFavorite = true (Hardcode số 1)
+          1, // isLocal = true (Đánh dấu truyện offline)
+          bookToSave.lastReadTime,
+          bookToSave.timeStamp,
+        ],
+      );
+      if (bookToSave.listChapters.isNotEmpty) {
+        await chapterRepository.upsertChaptersBatch(
+          bookId: bookToSave.id,
+          chapters: bookToSave.listChapters,
+          dbOverride: txn, // QUAN TRỌNG: Truyền txn vào để chung transaction
+        );
+      }
+
+      if (chapterContents.isNotEmpty) {
+        final contents = List.generate(chapterContents.length, (index) {
+          final chapterId = bookToSave.listChapters[index].id;
+
+          return ChapterContentsEntity(
+            id: const Uuid().v4(), // ID của dòng content
+            chapterId: chapterId ?? '-1',
+            content: chapterContents[index].content,
+          );
+        });
+
+        await chapterRepository.upsertChapterContentsBatch(
+          contents: contents,
+          dbOverride: txn, // QUAN TRỌNG: Truyền txn vào để chung transaction
+        );
+      }
+    });
   }
 }

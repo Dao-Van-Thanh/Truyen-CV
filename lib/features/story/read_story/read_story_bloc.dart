@@ -11,6 +11,9 @@ import 'package:flutter_template/dependency/network_api/story/detail/story_detai
 import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
+import 'package:flutter_template/features/story/read_story/data/source/local_read_story_source.dart';
+import 'package:flutter_template/features/story/read_story/data/source/online_read_story_source.dart';
+import 'package:flutter_template/features/story/read_story/data/source/read_story_source.dart';
 import 'package:flutter_template/features/story/read_story/enum/read_theme_mode.dart';
 import 'package:flutter_template/features/story/read_story/enum/read_tts_status.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_local_extension.dart';
@@ -34,8 +37,9 @@ class ReadStoryBloc extends BlocBase {
   String get storyId => _args.storyId;
   String get selectedChapterId => _args.selectedChapterId;
   double get scrollOffset => _args.scrollOffset;
+  bool get isOfflineImport => _args.isOfflineImport;
 
-  late final networkApiService = ref.read(AppService.networkApi);
+  late final IReadStorySource _dataSource;
   late final routerService = ref.read(AppService.router);
   late final localApiService = ref.read(AppService.localApi);
   late final toastService = ref.read(AppService.toast);
@@ -78,6 +82,11 @@ class ReadStoryBloc extends BlocBase {
   BuildContext? timerSettingsContext;
 
   ReadStoryBloc(this.ref, {required ReadStoryArgument args}) : _args = args {
+    if (_args.isOfflineImport) {
+      _dataSource = LocalReadStorySource(ref.read(AppService.localApi));
+    } else {
+      _dataSource = OnlineReadStorySource(ref.read(AppService.networkApi));
+    }
     _init();
   }
 
@@ -289,20 +298,11 @@ class ReadStoryBloc extends BlocBase {
   Future<ChapterResponse?> _fetchChapter({
     required String chapterId,
   }) async {
-    final res = await networkApiService.storyRepository.getChapter(
+    final res = await _dataSource.getChapter(
       chapterId,
     );
     if (isDispose) return null;
-    return res.whenOrNull<ChapterResponse?>(
-      success: (data) {
-        final chapter = data.data;
-        return chapter;
-      },
-      error: (error) {
-        logger.e('Failed to load chapter: $error');
-        return null;
-      },
-    );
+    return res;
   }
 
   bool onHandleWillPop() {
@@ -322,20 +322,12 @@ class ReadStoryBloc extends BlocBase {
   }
 
   Future<void> _loadStoryDetail() async {
-    final res = await networkApiService.storyRepository.storyDetail(
+    final res = await _dataSource.getStoryDetail(
       storyId,
     );
     if (isDispose) return;
 
-    res.whenOrNull(
-      success: (data) {
-        storyDetailSubject.value = data.data;
-      },
-      error: (error) {
-        logger
-            .e('StoryDetailBloc _loadStoryDetail error: ${error.errorMessage}');
-      },
-    );
+    storyDetailSubject.value = res;
   }
 
   bool onAfterExitReadStory() {
@@ -423,26 +415,21 @@ class ReadStoryBloc extends BlocBase {
   }
 
   Future<int?> _loadListChapter() async {
-    final res = await networkApiService.storyRepository.getListChapter(storyId);
+    final res = await _dataSource.getListChapter(storyId);
     if (isDispose) return null;
-    return res.whenOrNull<int?>(
-      success: (data) {
-        final oldList = listChapterSubject.value;
-        final newList = data.data!;
-        final countNewChapters = newList.length - oldList.length;
-        if (countNewChapters > 0) {
-          listChapterSubject.value = newList;
-        }
-        logger.i(
-          'oldList length: ${oldList.length}, newList length: ${newList.length}, countNewChapters: $countNewChapters',
-        );
-        return countNewChapters;
-      },
-      error: (error) {
-        logger.e('ReadStoryBloc _loadListChapter error: ${error.errorMessage}');
-        return null;
-      },
+
+    if (res == null) return null;
+
+    final oldList = listChapterSubject.value;
+    final newList = res;
+    final countNewChapters = newList.length - oldList.length;
+    if (countNewChapters > 0) {
+      listChapterSubject.value = newList;
+    }
+    logger.i(
+      'oldList length: ${oldList.length}, newList length: ${newList.length}, countNewChapters: $countNewChapters',
     );
+    return countNewChapters;
   }
 
   void _listen() {

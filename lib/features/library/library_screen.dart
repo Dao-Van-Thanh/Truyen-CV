@@ -54,13 +54,32 @@ class LibraryScreen extends ConsumerWidget {
                     color: Theme.of(context).iconTheme.color,
                   ),
                 ),
-                IconButton(
-                  onPressed: () {},
+                PopupMenuButton<String>(
+                  onSelected: (value) {
+                    if (value == 'add_story') {
+                      bloc.onTapAddStory();
+                    }
+                  },
                   icon: Icon(
                     Icons.more_vert,
                     size: 20,
                     color: Theme.of(context).iconTheme.color,
                   ),
+                  itemBuilder: (BuildContext context) => [
+                    PopupMenuItem<String>(
+                      value: 'add_story',
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.folder_open,
+                            color: Theme.of(context).iconTheme.color,
+                          ),
+                          SizedBox(width: 8),
+                          Text('Thêm truyện'),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
               items: [

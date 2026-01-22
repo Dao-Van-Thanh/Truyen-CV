@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_template/dependency/import_story/import_story_service.dart';
 import 'package:flutter_template/dependency/local_api/local_api_service.dart';
 
 import 'package:flutter_template/dependency/network_api/network_api_service.dart';
@@ -38,6 +39,14 @@ class AppService {
       return LocalApiService(
         ref,
         sqfliteService: sqfliteService,
+      );
+    },
+  );
+
+  static final importFile = Provider(
+    (ref) {
+      return ImportStoryService(
+        ref.watch(AppService.localApi).bookRepository,
       );
     },
   );

@@ -16,7 +16,7 @@
         "male": "Hello <br>Mr</br> Hoa",
         "female": "Hello Ms {name}"
     },
-    "buttonPressCount": "You have pushed the button many times",
+    "buttonPressCount": "You have pressed the button many times",
     "rootScreen": {
         "bottomNavigationBar": {
             "library": "Library",
@@ -55,7 +55,7 @@
         "info": "Information",
         "introduce": "Introduction",
         "chapters": "Chapters",
-        "copyStoryNameSuccess": "Copied story name: {name: String}",
+        "copyStoryNameSuccess": "Story name copied: {name: String}",
         "readNow": "Read now",
         "continueReading": "Continue reading",
         "tableOfContents": "Table of contents"
@@ -82,24 +82,31 @@
         "close": "Close",
         "fontFamily": "Font family",
         "resetToDefault": "Reset to default",
-        "resetSettingsToDefaultConfirm": "Tap once more to reset settings",
+        "resetSettingsToDefaultConfirm": "Press once more to reset settings",
         "resetSettingsToDefaultSuccess": "Settings have been reset to default",
         "ttsSettings": {
-            "title": "TTS Settings",
+            "title": "TTS settings",
             "language": "Language",
             "voice": "Voice",
-            "rate": "Rate",
+            "rate": "Speed",
             "pitch": "Pitch",
             "tryVoice": "Try voice",
-            "ttsVoiceNotLoaded": "TTS voice is not loaded"
-        }
+            "ttsVoiceNotLoaded": "TTS voice not loaded"
+        },
+        "loadingNewChapters": "Loading new chapters...",
+        "noNewChapters": "No new chapters",
+        "haveNewChapters": "{count: int} new chapters available",
+        "checkNewChapters": "Check for new chapters",
+        "endChapter": "End of chapter",
+        "refreshingChapters": "Refreshing chapters...",
+        "refreshChaptersSuccess": "Chapters refreshed successfully"
     },
     "libraryScreen": {
         "bookmarks": "Bookmarks",
         "listBookmarksEmpty": "No bookmarks yet",
         "downloads": "Downloads",
         "history": "History",
-        "listHistoryEmpty": "No history yet",
+        "listHistoryEmpty": "No reading history",
         "unfavoriteConfirmationTitle": "Confirm remove favorite",
         "unfavoriteConfirmationMessage": "Are you sure you want to remove this story from favorites?",
         "optionsBottomSheet": {
@@ -108,7 +115,9 @@
             "removeBookmark": "Remove bookmark",
             "addBookmark": "Add bookmark",
             "confirmRemoveBookmark": "Confirm remove bookmark",
-            "viewInfo": "View information"
+            "viewInfo": "View information",
+            "removeStory": "Remove story",
+            "confirmRemoveStory": "Confirm remove story"
         }
     },
     "common": {
@@ -133,10 +142,10 @@
         "settings": "Settings",
         "loading": "Loading...",
         "versionLoadError": "Failed to load version",
-        "appVersion": "Version",
+        "appVersion": "App version",
         "notLoggedIn": "Not logged in",
         "tapToLoginOrRegister": "Tap to log in or register",
-        "socialNetworkConnection": "Social network connections",
+        "socialNetworkConnection": "Social network connection",
         "connectWithFacebook": "Connect with Facebook",
         "personalWebsite": "Website",
         "visitPersonalWebsite": "Visit personal website",
@@ -160,29 +169,35 @@
         "dataAndStorage": "Data & Storage",
         "deleteData": "Delete data",
         "deleteDataDesc": "Delete reading history and library",
-        "confirmDelete": "Confirm deletion",
+        "confirmDelete": "Confirm delete",
         "deleteWarning": "All reading history and saved books will be permanently deleted.",
         "cancel": "Cancel",
         "delete": "Delete",
         "version": "Version",
-        "ttsStoppedByTimer": "Reading stopped due to timer expiration",
-        "readThemeGhost": "Ghost",
+        "ttsStoppedByTimer": "Reading stopped due to timer",
+        "readThemeGhost": "ghost",
         "newChapter": "New chapter",
         "ttsTestSentence": "Hello hello, one two three four five six seven eight nine ten.",
         "ttsReader": "Reader",
         "timerTitle": "Sleep timer",
         "cancelTimer": "Cancel timer",
         "timerAutoStopDesc": "The app will automatically stop reading when the timer ends",
-        "minutesFormat": "$minutes minutes",
+        "minutesFormat": "{minutes} minutes",
         "customize": "Customize...",
         "enterMinutes": "Enter minutes",
         "minutesExample": "Example: 120",
         "minutes": "minutes",
         "confirm": "Confirm",
-        "searchChapterHint": "Search chapter...",
+        "searchChapterHint": "Search chapters...",
         "defaultUserName": "John Doe",
         "commonError": "An error occurred.",
         "deleteDataError": "Failed to delete data: {error: String}",
         "deleteDataSuccess": "Data deleted successfully"
+    },
+    "fileImport": {
+        "importing": "Importing story...",
+        "addToLibrary": "Add story to library",
+        "cancel": "Cancel",
+        "add": "Add"
     }
 }

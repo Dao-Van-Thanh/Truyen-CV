@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
-import 'package:flutter_template/shared/widgets/cache_network_image/app_cache_network_image.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
+import 'package:flutter_template/shared/widgets/story/story_image.dart';
 import 'package:flutter_template/shared/widgets/story_list/entities/story_list_item_entity.dart';
 
 class StoryListItem extends ConsumerWidget {
@@ -27,7 +27,7 @@ class StoryListItem extends ConsumerWidget {
             if (!isCompact) ...[
               ClipRRect(
                 borderRadius: BorderRadius.circular(6),
-                child: AppCacheNetworkImage(
+                child: StoryImage(
                   imageUrl: story.thumbUrl,
                   width: 70,
                   height: 95,
