@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
+import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 import 'package:flutter_template/shared/widgets/story/story_image.dart';
 import 'package:flutter_template/shared/widgets/story_list/entities/story_list_item_entity.dart';
 
@@ -33,8 +34,7 @@ class StoryGridItem extends ConsumerWidget {
       ),
       clipBehavior: Clip.antiAlias,
       margin: EdgeInsets.zero,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(6),
+      child: AppGestureDetector(
         onTap: () {
           routerService.push(RouteInput.storyDetail(storyId: story.storyId));
         },
