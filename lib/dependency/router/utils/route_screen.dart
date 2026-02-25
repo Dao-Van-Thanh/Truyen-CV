@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/dependency/router/arguments/explore_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/explore_category_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/features/counter/counter_bloc.dart';
 import 'package:flutter_template/features/counter/counter_screen.dart';
+import 'package:flutter_template/features/explore/category/explore_category_bloc.dart';
+import 'package:flutter_template/features/explore/category/explore_category_screen.dart';
 import 'package:flutter_template/features/explore/comic/explore_comic_bloc.dart';
 import 'package:flutter_template/features/explore/comic/explore_comic_screen.dart';
 import 'package:flutter_template/features/explore/explore_bloc.dart';
@@ -69,9 +71,8 @@ class RouteScreen {
   }
 
   static PageRoute explorePageRoute(RouteSettings settings) {
-    final args = settings.arguments as ExploreArgument?;
     BlocProvider.explore = createAutoDisposeBloc(
-      (ref) => ExploreBloc(ref, args: args),
+      (ref) => ExploreBloc(ref),
     );
     return MaterialPageRoute(
       settings: settings,
@@ -159,6 +160,17 @@ class RouteScreen {
     return MaterialPageRoute(
       settings: settings,
       builder: (_) => const ExploreComicScreen(),
+    );
+  }
+
+  static PageRoute exploreCategoryPageRoute(RouteSettings settings) {
+    final args = settings.arguments as ExploreCategoryArgument;
+    BlocProvider.exploreCategory = createAutoDisposeBloc(
+      (ref) => ExploreCategoryBloc(ref, args: args),
+    );
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (_) => const ExploreCategoryScreen(),
     );
   }
 }

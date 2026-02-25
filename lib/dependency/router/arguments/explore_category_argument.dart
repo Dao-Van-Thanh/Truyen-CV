@@ -1,10 +1,10 @@
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_request.dart';
 
-class ExploreArgument {
+class ExploreCategoryArgument {
   final StoryFilterRequest request;
   final String? title;
 
-  const ExploreArgument({
+  const ExploreCategoryArgument({
     required this.request,
     this.title,
   });

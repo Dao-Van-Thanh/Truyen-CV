@@ -1,4 +1,4 @@
-import 'package:flutter_template/dependency/router/arguments/explore_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/explore_category_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_name.dart';
@@ -16,9 +16,7 @@ class RouteInput {
   RouteInput.root() : routeName = RouteName.root;
   RouteInput.unknown() : routeName = RouteName.unknown;
   RouteInput.library() : routeName = RouteName.library;
-  RouteInput.explore({
-    ExploreArgument? this.arguments,
-  }) : routeName = RouteName.explore;
+  RouteInput.explore() : routeName = RouteName.explore;
   RouteInput.individual() : routeName = RouteName.individual;
   RouteInput.storyDetail({
     required String storyId,
@@ -41,4 +39,9 @@ class RouteInput {
 
   RouteInput.exploreNovel() : routeName = RouteName.exploreNovel;
   RouteInput.exploreComic() : routeName = RouteName.exploreComic;
+
+  RouteInput.exploreCategory({
+    required ExploreCategoryArgument args,
+  })  : routeName = RouteName.exploreCategory,
+        arguments = args;
 }

@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/router/arguments/explore_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/features/explore/enum/explore_navigation_enum.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ExploreBloc extends BlocBase {
   Ref ref;
-  ExploreArgument? args;
 
   late final routerService = ref.read(AppService.router);
 
@@ -18,7 +16,7 @@ class ExploreBloc extends BlocBase {
     ExploreNavigationEnum.novel,
   );
 
-  ExploreBloc(this.ref, {this.args});
+  ExploreBloc(this.ref);
 
   @override
   void dispose() {

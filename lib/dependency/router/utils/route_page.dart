@@ -21,6 +21,8 @@ class RoutePage {
       RouteName.readStory => RouteScreen.readStoryPageRoute(settings),
       RouteName.storySearch => RouteScreen.storySearchPageRoute(settings),
       RouteName.setting => RouteScreen.settingPageRoute(settings),
+      RouteName.exploreCategory =>
+        RouteScreen.exploreCategoryPageRoute(settings),
       _ => RouteScreen.unknownPageRoute(settings),
     };
   }
