@@ -1,9 +1,9 @@
 // data/source/online_read_story_source.dart
 
 import 'package:flutter_template/dependency/network_api/network_api_service.dart';
-import 'package:flutter_template/dependency/network_api/story/chapter/chapter_response.dart';
-import 'package:flutter_template/dependency/network_api/story/detail/story_detail_response.dart';
-import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
+import 'package:flutter_template/dependency/network_api/novel/chapter/chapter_response.dart';
+import 'package:flutter_template/dependency/network_api/novel/detail/story_detail_response.dart';
+import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/features/story/read_story/data/source/read_story_source.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 
@@ -14,7 +14,7 @@ class OnlineReadStorySource implements IReadStorySource {
 
   @override
   Future<ChapterResponse?> getChapter(String chapterId) async {
-    final res = await _networkApi.storyRepository.getChapter(chapterId);
+    final res = await _networkApi.novelRepository.getChapter(chapterId);
     return res.whenOrNull<ChapterResponse?>(
       success: (data) => data.data,
       error: (error) {
@@ -26,7 +26,7 @@ class OnlineReadStorySource implements IReadStorySource {
 
   @override
   Future<List<ListChapterRes>?> getListChapter(String storyId) async {
-    final res = await _networkApi.storyRepository.getListChapter(storyId);
+    final res = await _networkApi.novelRepository.getListChapter(storyId);
     return res.whenOrNull<List<ListChapterRes>?>(
       success: (data) => data.data,
       error: (error) {
@@ -38,7 +38,7 @@ class OnlineReadStorySource implements IReadStorySource {
 
   @override
   Future<StoryDetailResponse?> getStoryDetail(String storyId) async {
-    final res = await _networkApi.storyRepository.storyDetail(storyId);
+    final res = await _networkApi.novelRepository.storyDetail(storyId);
     return res.whenOrNull<StoryDetailResponse?>(
       success: (data) => data.data,
       error: (error) {

@@ -1,4 +1,4 @@
-import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
+import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
 
 class StoryListItemEntity {
   final String storyId, name, thumbUrl, viewed, process;

@@ -1,5 +1,5 @@
-import 'package:flutter_template/dependency/network_api/story/detail/story_detail_response.dart';
-import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
+import 'package:flutter_template/dependency/network_api/novel/detail/story_detail_response.dart';
+import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 
 class ListChapterArgument {
   final StoryDetailResponse? storyData;

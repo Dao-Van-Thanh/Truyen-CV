@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_template/dependency/network_api/story/chapter/chapter_response.dart';
+import 'package:flutter_template/dependency/network_api/novel/chapter/chapter_response.dart';
 import 'package:flutter_template/features/story/read_story/enum/read_tts_status.dart';
 import 'package:flutter_template/features/story/read_story/read_story_bloc.dart';
 import 'package:flutter_template/features/story/read_story/widgets/read_story_timer_settings.dart';

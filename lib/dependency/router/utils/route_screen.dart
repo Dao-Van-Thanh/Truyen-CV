@@ -6,8 +6,12 @@ import 'package:flutter_template/dependency/router/arguments/list_chapter_argume
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/features/counter/counter_bloc.dart';
 import 'package:flutter_template/features/counter/counter_screen.dart';
+import 'package:flutter_template/features/explore/comic/explore_comic_bloc.dart';
+import 'package:flutter_template/features/explore/comic/explore_comic_screen.dart';
 import 'package:flutter_template/features/explore/explore_bloc.dart';
 import 'package:flutter_template/features/explore/explore_screen.dart';
+import 'package:flutter_template/features/explore/novel/explore_novel_bloc.dart';
+import 'package:flutter_template/features/explore/novel/explore_novel_screen.dart';
 import 'package:flutter_template/features/individual/individual_bloc.dart';
 import 'package:flutter_template/features/individual/individual_screen.dart';
 import 'package:flutter_template/features/individual/setting/setting_bloc.dart';
@@ -135,6 +139,26 @@ class RouteScreen {
     return MaterialPageRoute(
       settings: settings,
       builder: (_) => const SettingScreen(),
+    );
+  }
+
+  static PageRoute exploreNovelPageRoute(RouteSettings settings) {
+    BlocProvider.exploreNovel = createAutoDisposeBloc(
+      (ref) => ExploreNovelBloc(ref),
+    );
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (_) => const ExploreNovelScreen(),
+    );
+  }
+
+  static PageRoute exploreComicPageRoute(RouteSettings settings) {
+    BlocProvider.exploreComic = createAutoDisposeBloc(
+      (ref) => ExploreComicBloc(ref),
+    );
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (_) => const ExploreComicScreen(),
     );
   }
 }

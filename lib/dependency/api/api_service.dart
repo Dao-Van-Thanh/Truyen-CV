@@ -9,7 +9,6 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/constants/common.dart';
 import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/shared/env/env_model.dart';
 
 typedef CacheKey = Object;
 
@@ -21,10 +20,10 @@ class ApiService {
   late final DefaultCacheManager cacheManager = DefaultCacheManager();
   final Set<CancelableOperation> _operations = {};
 
-  ApiService(this.ref) {
+  ApiService(this.ref, {required String baseUrl}) {
     dio = Dio(
       BaseOptions(
-        baseUrl: envVars.baseUrl,
+        baseUrl: baseUrl,
         connectTimeout: _timeout,
         receiveTimeout: _timeout,
         sendTimeout: _timeout,

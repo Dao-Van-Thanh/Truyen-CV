@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/dependency/network_api/story/filter/story_filter_request.dart';
-import 'package:flutter_template/features/explore/enum/explore_enum.dart';
-import 'package:flutter_template/features/explore/widgets/category_page_widget.dart';
-import 'package:flutter_template/features/explore/widgets/explore_page_widget.dart';
+import 'package:flutter_template/constants/constants.dart';
+import 'package:flutter_template/dependency/router/utils/route_page.dart';
+import 'package:flutter_template/features/explore/enum/explore_navigation_enum.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/page_view/app_page_view.dart';
+import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 
 class ExploreScreen extends ConsumerWidget {
@@ -29,15 +28,39 @@ class ExploreScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final bloc = ref.watch(BlocProvider.explore);
-    final t = context.t;
-    final initialRequest = bloc.args?.request;
-    final title = bloc.args?.title ?? t.exploreScreen.title;
+    // final initialRequest = bloc.args?.request;
+    final title = bloc.args?.title;
     final appConfigBloc = ref.read(BlocProvider.config);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          title,
+        title: ObsBuilder(
+          streams: [bloc.exploreNavigationEnumSubject],
+          builder: (context) {
+            final tab = bloc.exploreNavigationEnumSubject.value;
+
+            if (title != null) {
+              return Text(title);
+            }
+
+            return AppGestureDetector(
+              onTap: bloc.onTapExploreType,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  tab.icon,
+                  SizedBoxConstants.s8,
+                  Flexible(
+                    child: Text(
+                      tab.displayName,
+                    ),
+                  ),
+                  SizedBoxConstants.s4,
+                  Icon(Icons.keyboard_arrow_down),
+                ],
+              ),
+            );
+          },
         ),
         centerTitle: false,
         actions: [
@@ -87,48 +110,26 @@ class ExploreScreen extends ConsumerWidget {
         ],
       ),
       body: ObsBuilder(
-        streams: [appConfigBloc.typeListDisplaySubject],
+        streams: [bloc.exploreNavigationEnumSubject],
         builder: (context) {
-          if (initialRequest != null) {
-            return ExplorePageWidget(
-              request: initialRequest,
-              listType: appConfigBloc.typeListDisplaySubject.value,
-            );
-          }
-          return AppPageView(
-            isScrollTabView: true,
-            isScrollable: true,
-            onPageChanged: (index) {},
-            items: ExploreEnum.values.map(
-              (e) {
-                if (e == ExploreEnum.genres) {
-                  return AppPageViewItems(
-                    key: ValueKey('categoryPage_${e.label(context)}'),
-                    label: e.label(context),
-                    child: const CategoryPageWidget(),
-                    labelStyle: TextStyle(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  );
-                }
-                return AppPageViewItems(
-                  label: e.label(context),
-                  child: ExplorePageWidget(
-                    key: ValueKey('explorePage_${e.label(context)}'),
-                    request: StoryFilterRequest(
-                      sort: e.page,
-                    ),
-                    listType: appConfigBloc.typeListDisplaySubject.value,
-                  ),
-                  labelStyle: TextStyle(
-                    fontWeight: FontWeight.w700,
-                  ),
-                );
-              },
-            ).toList(),
+          final tab = bloc.exploreNavigationEnumSubject.value;
+
+          return Navigator(
+            key: ValueKey(tab),
+            onGenerateRoute: buildRouteFactory(tab),
+            initialRoute: tab.initialRoute,
           );
         },
       ),
     );
+  }
+
+  RouteFactory buildRouteFactory(ExploreNavigationEnum tab) {
+    switch (tab) {
+      case ExploreNavigationEnum.novel:
+        return RoutePage.onGenerateExploreNovelRoute;
+      case ExploreNavigationEnum.comic:
+        return RoutePage.onGenerateExploreComicRoute;
+    }
   }
 }

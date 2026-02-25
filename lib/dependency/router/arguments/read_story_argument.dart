@@ -1,4 +1,4 @@
-import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
+import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 
 class ReadStoryArgument {
   final String storyId;

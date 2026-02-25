@@ -11,4 +11,6 @@ class RouteName {
   static const readStory = 'readStory';
   static const storySearch = 'storySearch';
   static const setting = 'setting';
+  static const exploreNovel = 'exploreNovel';
+  static const exploreComic = 'exploreComic';
 }

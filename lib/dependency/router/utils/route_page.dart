@@ -7,7 +7,6 @@ import 'package:flutter_template/shared/widgets/dialog/file_import_dialog.dart';
 class RoutePage {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     final name = settings.name;
-    print('onGenerateRoute: $name');
 
     if (name != null && _isFileIntent(name)) {
       return _buildImportDialogRoute(settings, name);
@@ -26,14 +25,27 @@ class RoutePage {
     };
   }
 
+  ///onGenerateLibraryRoute
   static Route<dynamic>? onGenerateLibraryRoute(RouteSettings settings) =>
       settings.name == RouteName.library
           ? RouteScreen.libraryPageRoute(settings)
           : RouteScreen.unknownPageRoute(settings);
 
+  ///onGenerateExploreRoute
   static Route<dynamic>? onGenerateExploreRoute(RouteSettings settings) =>
       RouteScreen.unknownPageRoute(settings);
 
+  static Route<dynamic>? onGenerateExploreNovelRoute(RouteSettings settings) =>
+      settings.name == RouteName.exploreNovel
+          ? RouteScreen.exploreNovelPageRoute(settings)
+          : RouteScreen.unknownPageRoute(settings);
+
+  static Route<dynamic>? onGenerateExploreComicRoute(RouteSettings settings) =>
+      settings.name == RouteName.exploreComic
+          ? RouteScreen.exploreComicPageRoute(settings)
+          : RouteScreen.unknownPageRoute(settings);
+
+  ///onGenerateIndividualRoute
   static Route<dynamic>? onGenerateIndividualRoute(RouteSettings settings) =>
       settings.name == RouteName.individual
           ? RouteScreen.individualPageRoute(settings)

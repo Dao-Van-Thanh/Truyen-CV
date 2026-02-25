@@ -7,12 +7,13 @@ EnvModelImplementation generateEnvModel() {
 }
 
 abstract class EnvModelImplementation {
-  final String baseUrl;
-  final List<String> certificateSHA256s;
-
+  final String novelUrl;
+  final String comicUrl;
+  final Map<String, List<String>> certificatePins;
   EnvModelImplementation({
-    required this.baseUrl,
+    required this.novelUrl,
+    required this.comicUrl,
     // required this.noAuthUrl,
-    this.certificateSHA256s = const [],
+    this.certificatePins = const {},
   });
 }

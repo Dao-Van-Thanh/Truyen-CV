@@ -43,6 +43,10 @@
             "list": "Danh sách",
             "listCompact": "Danh sách (gọn)",
             "grid": "Lưới"
+        },
+        "type": {
+            "novel": "Truyện chữ",
+            "comic": "Truyện tranh"
         }
     },
     "story": {
@@ -199,5 +203,13 @@
         "addToLibrary": "Thêm truyện vào thư viện",
         "cancel": "Hủy",
         "add": "Thêm"
+    },
+    "comic": {
+        "type": {
+            "newRelease": "Truyện mới",
+            "upcoming": "Sắp ra mắt",
+            "ongoing": "Đang phát hành",
+            "completed": "Hoàn thành"
+        }
     }
 }
