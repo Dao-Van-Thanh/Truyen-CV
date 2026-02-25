@@ -4,7 +4,7 @@ import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/novel/category/category_model.dart';
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_request.dart';
-import 'package:flutter_template/dependency/router/arguments/explore_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/explore_category_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -42,8 +42,8 @@ class ExploreNovelBloc extends BlocBase {
 
   void onSelectCategory(CategoryModel category) {
     routerService.push(
-      RouteInput.explore(
-        arguments: ExploreArgument(
+      RouteInput.exploreCategory(
+        args: ExploreCategoryArgument(
           request: StoryFilterRequest(
             cat: int.parse('${category.id ?? 0}'),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/features/counter/counter_bloc.dart';
+import 'package:flutter_template/features/explore/category/explore_category_bloc.dart';
 import 'package:flutter_template/features/explore/comic/explore_comic_bloc.dart';
 import 'package:flutter_template/features/explore/explore_bloc.dart';
 import 'package:flutter_template/features/explore/novel/explore_novel_bloc.dart';
@@ -30,6 +31,6 @@ class BlocProvider {
 
   static late AutoDisposeProvider<ExploreNovelBloc> exploreNovel;
   static late AutoDisposeProvider<ExploreComicBloc> exploreComic;
-
+  static late AutoDisposeProvider<ExploreCategoryBloc> exploreCategory;
   const BlocProvider._();
 }
