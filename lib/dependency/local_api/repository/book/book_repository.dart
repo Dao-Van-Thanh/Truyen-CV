@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/chapter/chapter_repository.dart';
 import 'package:flutter_template/dependency/local_api/repository/chapter/entities/chapter_contents_entity.dart';
-import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
+import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';

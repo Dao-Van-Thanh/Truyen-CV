@@ -8,7 +8,7 @@ class CategoryPageWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final bloc = ref.watch(BlocProvider.explore);
+    final bloc = ref.watch(BlocProvider.exploreNovel);
     return ObsBuilder(
       streams: [bloc.categoriesSubject, bloc.isLoadingSubject],
       builder: (context) {

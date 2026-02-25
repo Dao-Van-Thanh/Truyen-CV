@@ -1,7 +1,6 @@
 import 'package:flutter_template/dependency/router/arguments/explore_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
-
 import 'package:flutter_template/dependency/router/utils/route_name.dart';
 
 class RouteInput {
@@ -39,4 +38,7 @@ class RouteInput {
   RouteInput.storySearch() : routeName = RouteName.storySearch;
 
   RouteInput.setting() : routeName = RouteName.setting;
+
+  RouteInput.exploreNovel() : routeName = RouteName.exploreNovel;
+  RouteInput.exploreComic() : routeName = RouteName.exploreComic;
 }

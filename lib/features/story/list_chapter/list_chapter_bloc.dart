@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
-import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
+import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
@@ -63,7 +63,7 @@ class ListChapterBloc extends BlocBase {
 
   Future<void> init() async {
     isLoadingSubject.value = true;
-    final res = await networkApiService.storyRepository.getListChapter(
+    final res = await networkApiService.novelRepository.getListChapter(
       args.storyData?.id ?? '',
     );
     if (isDispose) return;

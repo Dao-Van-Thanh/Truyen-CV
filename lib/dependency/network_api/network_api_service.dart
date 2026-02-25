@@ -2,23 +2,42 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/api/api_service.dart';
 import 'package:flutter_template/dependency/api/interceptors/certificate_pinning_interceptor.dart';
-import 'package:flutter_template/dependency/network_api/story/story_repository.dart';
+import 'package:flutter_template/dependency/network_api/comic/comic_repository.dart';
+import 'package:flutter_template/dependency/network_api/novel/novel_repository.dart';
 import 'package:flutter_template/shared/env/env_model.dart';
+import 'package:flutter_template/shared/utilities/logger.dart';
 
-void _addSSLPinningInterceptor(ApiService apiService) {
+void _addSSLPinningInterceptor(
+  ApiService apiService, {
+  required List<String> allowedSHAFingerprints,
+}) {
   if (kDebugMode) return;
 
   apiService.addInterceptors([
     CustomCertificatePinningInterceptor(
-      allowedSHAFingerprints: envVars.certificateSHA256s,
+      allowedSHAFingerprints: allowedSHAFingerprints,
     ),
   ]);
 }
 
-final _apiProvider = Provider((ref) {
-  final apiService = ApiService(ref);
-  // _addSSLPinningInterceptor(apiService); // http no SSL pinning
+final _apiNovelProvider = Provider((ref) {
+  final baseUrl = envVars.novelUrl;
+  final apiService = ApiService(ref, baseUrl: baseUrl);
+  // _addSSLPinningInterceptor(apiService, allowedSHAFingerprints: []); // http no SSL pinning
   return apiService;
+});
+
+final _apiComicProvider = Provider((ref) {
+  final baseUrl = envVars.comicUrl;
+  final certificateSHA256s = envVars.certificatePins['comicUrl'] ?? [];
+  if (certificateSHA256s.isEmpty) {
+    logger.e('certificateSHA256s is empty');
+  }
+  final apiService = ApiService(ref, baseUrl: baseUrl);
+  _addSSLPinningInterceptor(
+    apiService,
+    allowedSHAFingerprints: certificateSHA256s,
+  ); // http no SSL pinning
 });
 
 class NetworkApiService {
@@ -27,10 +46,12 @@ class NetworkApiService {
   NetworkApiService(this.ref);
 
   void get clearCache {
-    _apiService.invalidateCache();
+    _apiNovelService.invalidateCache();
   }
 
-  late final _apiService = ref.watch(_apiProvider);
+  late final _apiNovelService = ref.watch(_apiNovelProvider);
+  late final _apiComicService = ref.watch(_apiComicProvider);
 
-  late final storyRepository = StoryRepository(_apiService);
+  late final novelRepository = NovelRepository(_apiNovelService);
+  late final comicRepository = ComicRepository(_apiComicService);
 }

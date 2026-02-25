@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/constants/common.dart';
 import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
+import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
 import 'package:flutter_template/shared/extensions/text_editing_controller_extension.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
@@ -71,7 +71,7 @@ class StorySearchBloc extends BlocBase {
     isLoadingSubject.value = true;
 
     try {
-      final res = await networkApiService.storyRepository.searchStory(
+      final res = await networkApiService.novelRepository.searchStory(
         page: _currentPage,
         keyword: searchController.text,
       );

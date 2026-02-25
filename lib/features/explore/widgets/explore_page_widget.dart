@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/network_api/story/filter/story_filter_request.dart';
-import 'package:flutter_template/dependency/network_api/story/filter/story_filter_response.dart';
+import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_request.dart';
+import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
 import 'package:flutter_template/shared/widgets/story_list/entities/story_list_item_entity.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 import 'package:flutter_template/shared/widgets/story_list/story_list.dart';
@@ -41,7 +41,7 @@ class _ExplorePageWidgetState extends ConsumerState<ExplorePageWidget> {
     setState(() => _isLoading = true);
 
     try {
-      final res = await networkApiService.storyRepository.getStoryFilter(
+      final res = await networkApiService.novelRepository.getStoryFilter(
         req: StoryFilterRequest(
           cat: widget.request.cat,
           sort: widget.request.sort,

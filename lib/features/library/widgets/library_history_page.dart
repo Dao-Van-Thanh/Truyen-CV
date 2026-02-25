@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/features/library/widgets/library_history_item.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/datetime.dart';
@@ -24,7 +25,7 @@ class LibraryHistoryPage extends ConsumerWidget {
           return AppEmptyState(title: t.libraryScreen.listHistoryEmpty);
         }
 
-        return AppGroupedSliverList(
+        return AppGroupedSliverList<BookEntity>(
           data: data,
           groupBy: (item) {
             final lastReadDate = DatetimeUtil.parseIsoToDateTime(

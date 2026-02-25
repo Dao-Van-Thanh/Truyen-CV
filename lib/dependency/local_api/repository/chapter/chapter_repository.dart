@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_template/dependency/local_api/repository/chapter/entities/chapter_contents_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/chapter/entities/chapter_entity.dart';
-import 'package:flutter_template/dependency/network_api/story/list_chapter/list_chapter_res.dart';
+import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ChapterRepository {
