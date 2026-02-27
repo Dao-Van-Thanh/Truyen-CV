@@ -37,7 +37,9 @@ final _apiComicProvider = Provider((ref) {
   _addSSLPinningInterceptor(
     apiService,
     allowedSHAFingerprints: certificateSHA256s,
-  ); // http no SSL pinning
+  );
+
+  return apiService;
 });
 
 class NetworkApiService {

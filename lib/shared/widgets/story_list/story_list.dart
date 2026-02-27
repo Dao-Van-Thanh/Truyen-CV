@@ -14,6 +14,7 @@ class StoryList extends StatefulWidget {
   final Future<void> Function() onRefresh;
   final VoidCallback onLoadMore;
   final StoryListType listType;
+  final void Function(StoryListItemEntity item) onTapItem;
 
   const StoryList({
     super.key,
@@ -24,6 +25,7 @@ class StoryList extends StatefulWidget {
     required this.onRefresh,
     required this.onLoadMore,
     required this.listType,
+    required this.onTapItem,
   });
 
   @override
@@ -96,7 +98,10 @@ class _StoryListState extends State<StoryList> {
       itemCount: itemCount,
       itemBuilder: (context, index) {
         if (index >= widget.stories.length) return _loader();
-        return StoryGridItem(story: widget.stories[index]);
+        return StoryGridItem(
+          story: widget.stories[index],
+          onTap: () => widget.onTapItem(widget.stories[index]),
+        );
       },
     );
   }
@@ -115,6 +120,7 @@ class _StoryListState extends State<StoryList> {
         return StoryListItem(
           story: widget.stories[index],
           isCompact: widget.listType == StoryListType.listCompact,
+          onTap: () => widget.onTapItem(widget.stories[index]),
         );
       },
     );

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
@@ -40,16 +41,24 @@ class ExploreNovelBloc extends BlocBase {
     );
   }
 
-  void onSelectCategory(CategoryModel category) {
+  void onSelectCategory(String id) {
+    final category =
+        categoriesSubject.value.firstWhereOrNull((element) => element.id == id);
     routerService.push(
       RouteInput.exploreCategory(
-        args: ExploreCategoryArgument(
+        args: ExploreNovelCategoryArgument(
           request: StoryFilterRequest(
-            cat: int.parse('${category.id ?? 0}'),
+            cat: int.parse('${category?.id ?? 0}'),
           ),
-          title: category.name,
+          title: category?.name ?? '',
         ),
       ),
+    );
+  }
+
+  void onTapStory(String storyId) {
+    routerService.push(
+      RouteInput.storyDetail(storyId: storyId),
     );
   }
 }
