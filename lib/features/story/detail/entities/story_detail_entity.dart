@@ -90,5 +90,6 @@ class StoryDetailEntity {
   int get hashCode => id.hashCode ^ name.hashCode ^ listChapter.length.hashCode;
 
   @override
-  String toString() => 'StoryDetailEntity(id: $id, name: $name)';
+  String toString() =>
+      'StoryDetailEntity(id: $id, name: $name, totalChapter: $totalChapter, cat: $cat, author: $author, trans: $trans, thumb: $thumb, listChapter: ${listChapter.length} chapters)';
 }

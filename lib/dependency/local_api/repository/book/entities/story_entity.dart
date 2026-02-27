@@ -1,7 +1,7 @@
 import 'package:flutter_template/shared/utilities/map.dart';
 
 class StoryEntity {
-  final String id;
+  final String id; 
   final String name;
   final String thumb;
   final String process; // last chapter update

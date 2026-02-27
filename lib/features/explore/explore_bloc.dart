@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
+import 'package:flutter_template/dependency/router/arguments/story_search_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/features/explore/enum/explore_navigation_enum.dart';
+import 'package:flutter_template/shared/helper/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ExploreBloc extends BlocBase {
@@ -25,8 +27,50 @@ class ExploreBloc extends BlocBase {
   }
 
   void onTapSearch() {
+    final currentType = exploreNavigationEnumSubject.value;
+
+    late StorySearchArgument args;
+
+    switch (currentType) {
+      case ExploreNavigationEnum.novel:
+        args = StorySearchArgument(
+          fetchSearchStory: (ref, keyword, page) {
+            return RepositoryHelper.fetchStoryNovelSearch(
+              ref,
+              keyword: keyword,
+              page: page,
+            );
+          },
+          fetchStoryDetail: (ref, storyId) {
+            return RepositoryHelper.fetchStoryNovelDetail(
+              ref,
+              storyId: storyId,
+            );
+          },
+        );
+        break;
+      case ExploreNavigationEnum.comic:
+        args = StorySearchArgument(
+          fetchSearchStory: (ref, keyword, page) {
+            return RepositoryHelper.fetchStoryComicSearch(
+              ref,
+              keyword: keyword,
+              page: page,
+            );
+          },
+          fetchStoryDetail: (ref, storyId) {
+            final slug = storyId.split('||').lastOrNull ?? '';
+            return RepositoryHelper.fetchStoryComicDetail(
+              ref,
+              storySlug: slug,
+            );
+          },
+        );
+        break;
+    }
+
     routerService.push(
-      RouteInput.storySearch(),
+      RouteInput.storySearch(args: args),
     );
   }
 

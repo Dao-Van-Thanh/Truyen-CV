@@ -25,5 +25,9 @@ class StringUtilities {
     }
   }
 
+  static String removeHtmlTags(String html) {
+    return html.replaceAll(RegExp(r'<[^>]*>'), '');
+  }
+
   const StringUtilities._();
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
 import 'package:flutter_template/features/story/search/widgets/story_search_app_bar.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 import 'package:flutter_template/shared/widgets/story_list/story_list.dart';
@@ -28,8 +27,7 @@ class StorySearchScreen extends ConsumerWidget {
         ],
         builder: (context) {
           return StoryList(
-            stories:
-                bloc.storiesSubject.value.map((e) => e.toEntity()).toList(),
+            stories: bloc.storiesSubject.value,
             isLoading: bloc.isLoadingSubject.value,
             isFirstLoad: bloc.isFirstLoadSubject.value,
             hasMore: bloc.hasMoreSubject.value,

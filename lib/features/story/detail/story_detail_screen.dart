@@ -167,9 +167,14 @@ class StoryDetailScreen extends ConsumerWidget {
                             children: [
                               _getContent(
                                 title: t.storyDetail.info,
-                                content: '${storyDetail.author ?? ''}'
-                                    '\n${storyDetail.trans ?? ''}'
-                                    '\n${storyDetail.cat}',
+                                content: [
+                                  storyDetail.author,
+                                  storyDetail.trans,
+                                  storyDetail.cat,
+                                ]
+                                    .where(
+                                        (e) => e != null && e.trim().isNotEmpty)
+                                    .join('\n'),
                               ),
                               SafeArea(
                                 top: false,

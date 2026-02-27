@@ -5,6 +5,7 @@ import 'package:flutter_template/dependency/router/arguments/explore_category_ar
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/story_search_argument.dart';
 import 'package:flutter_template/features/counter/counter_bloc.dart';
 import 'package:flutter_template/features/counter/counter_screen.dart';
 import 'package:flutter_template/features/explore/category/explore_category_bloc.dart';
@@ -125,8 +126,9 @@ class RouteScreen {
   }
 
   static PageRoute storySearchPageRoute(RouteSettings settings) {
+    final args = settings.arguments as StorySearchArgument;
     BlocProvider.storySearch = createAutoDisposeBloc(
-      (ref) => StorySearchBloc(ref),
+      (ref) => StorySearchBloc(ref, args: args),
     );
     return MaterialPageRoute(
       settings: settings,

@@ -872,6 +872,8 @@ class __$BreadCrumbModelCopyWithImpl<$Res>
 
 /// @nodoc
 mixin _$StoryItemModel {
+  @JsonKey(name: '_id')
+  String? get id;
   @JsonKey(name: 'name')
   String? get name;
   @JsonKey(name: 'slug')
@@ -907,6 +909,7 @@ mixin _$StoryItemModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is StoryItemModel &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.slug, slug) || other.slug == slug) &&
             const DeepCollectionEquality()
@@ -927,6 +930,7 @@ mixin _$StoryItemModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       name,
       slug,
       const DeepCollectionEquality().hash(originName),
@@ -939,7 +943,7 @@ mixin _$StoryItemModel {
 
   @override
   String toString() {
-    return 'StoryItemModel(name: $name, slug: $slug, originName: $originName, status: $status, thumbUrl: $thumbUrl, subDocquyen: $subDocquyen, category: $category, updatedAt: $updatedAt, chaptersLatest: $chaptersLatest)';
+    return 'StoryItemModel(id: $id, name: $name, slug: $slug, originName: $originName, status: $status, thumbUrl: $thumbUrl, subDocquyen: $subDocquyen, category: $category, updatedAt: $updatedAt, chaptersLatest: $chaptersLatest)';
   }
 }
 
@@ -950,7 +954,8 @@ abstract mixin class $StoryItemModelCopyWith<$Res> {
       _$StoryItemModelCopyWithImpl;
   @useResult
   $Res call(
-      {@JsonKey(name: 'name') String? name,
+      {@JsonKey(name: '_id') String? id,
+      @JsonKey(name: 'name') String? name,
       @JsonKey(name: 'slug') String? slug,
       @JsonKey(name: 'origin_name') List<String>? originName,
       @JsonKey(name: 'status') String? status,
@@ -975,6 +980,7 @@ class _$StoryItemModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? name = freezed,
     Object? slug = freezed,
     Object? originName = freezed,
@@ -986,6 +992,10 @@ class _$StoryItemModelCopyWithImpl<$Res>
     Object? chaptersLatest = freezed,
   }) {
     return _then(_self.copyWith(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -1030,7 +1040,8 @@ class _$StoryItemModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _StoryItemModel implements StoryItemModel {
   const _StoryItemModel(
-      {@JsonKey(name: 'name') this.name,
+      {@JsonKey(name: '_id') this.id,
+      @JsonKey(name: 'name') this.name,
       @JsonKey(name: 'slug') this.slug,
       @JsonKey(name: 'origin_name') final List<String>? originName,
       @JsonKey(name: 'status') this.status,
@@ -1046,6 +1057,9 @@ class _StoryItemModel implements StoryItemModel {
   factory _StoryItemModel.fromJson(Map<String, dynamic> json) =>
       _$StoryItemModelFromJson(json);
 
+  @override
+  @JsonKey(name: '_id')
+  final String? id;
   @override
   @JsonKey(name: 'name')
   final String? name;
@@ -1117,6 +1131,7 @@ class _StoryItemModel implements StoryItemModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _StoryItemModel &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.slug, slug) || other.slug == slug) &&
             const DeepCollectionEquality()
@@ -1137,6 +1152,7 @@ class _StoryItemModel implements StoryItemModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       name,
       slug,
       const DeepCollectionEquality().hash(_originName),
@@ -1149,7 +1165,7 @@ class _StoryItemModel implements StoryItemModel {
 
   @override
   String toString() {
-    return 'StoryItemModel(name: $name, slug: $slug, originName: $originName, status: $status, thumbUrl: $thumbUrl, subDocquyen: $subDocquyen, category: $category, updatedAt: $updatedAt, chaptersLatest: $chaptersLatest)';
+    return 'StoryItemModel(id: $id, name: $name, slug: $slug, originName: $originName, status: $status, thumbUrl: $thumbUrl, subDocquyen: $subDocquyen, category: $category, updatedAt: $updatedAt, chaptersLatest: $chaptersLatest)';
   }
 }
 
@@ -1162,7 +1178,8 @@ abstract mixin class _$StoryItemModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'name') String? name,
+      {@JsonKey(name: '_id') String? id,
+      @JsonKey(name: 'name') String? name,
       @JsonKey(name: 'slug') String? slug,
       @JsonKey(name: 'origin_name') List<String>? originName,
       @JsonKey(name: 'status') String? status,
@@ -1187,6 +1204,7 @@ class __$StoryItemModelCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
+    Object? id = freezed,
     Object? name = freezed,
     Object? slug = freezed,
     Object? originName = freezed,
@@ -1198,6 +1216,10 @@ class __$StoryItemModelCopyWithImpl<$Res>
     Object? chaptersLatest = freezed,
   }) {
     return _then(_StoryItemModel(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
