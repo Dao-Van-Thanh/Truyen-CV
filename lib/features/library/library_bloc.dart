@@ -5,8 +5,10 @@ import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/features/library/widgets/library_bookmarks_option.dart';
+import 'package:flutter_template/shared/helper/repository.dart';
 import 'package:flutter_template/shared/widgets/dialog/file_import_dialog.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -106,7 +108,19 @@ class LibraryBloc extends BlocBase {
   }
 
   void _handleViewInfo(BookEntity item) {
-    routerService.push(RouteInput.storyDetail(storyId: item.id));
+    routerService.push(
+      RouteInput.storyDetail(
+        args: StoryDetailArgument(
+          storyId: item.id,
+          fetchStoryDetail: (ref) {
+            return RepositoryHelper.fetchStoryNovelDetail(
+              ref,
+              storyId: item.id,
+            );
+          },
+        ),
+      ),
+    );
   }
 
   void onTapReadStory(BookEntity item) {

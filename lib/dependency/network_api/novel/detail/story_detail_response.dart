@@ -1,3 +1,4 @@
+import 'package:flutter_template/features/story/detail/entities/story_detail_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'story_detail_response.freezed.dart';
@@ -31,4 +32,20 @@ abstract class ChapterModel with _$ChapterModel {
 
   factory ChapterModel.fromJson(Map<String, dynamic> json) =>
       _$ChapterModelFromJson(json);
+}
+
+extension StoryDetailResponseExtension on StoryDetailResponse {
+  StoryDetailEntity toEntity() {
+    return StoryDetailEntity(
+      id: id ?? '',
+      name: name ?? '',
+      totalChapter: totalChapter ?? '',
+      cat: category,
+      author: author,
+      trans: translator,
+      desc: description ?? '',
+      thumb: thumb ?? '',
+      listChapter: [],
+    );
+  }
 }

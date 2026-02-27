@@ -11,6 +11,7 @@ import 'package:flutter_template/dependency/network_api/novel/chapter/chapter_re
 import 'package:flutter_template/dependency/network_api/novel/detail/story_detail_response.dart';
 import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/features/story/read_story/data/source/local_read_story_source.dart';
 import 'package:flutter_template/features/story/read_story/data/source/online_read_story_source.dart';
@@ -27,6 +28,7 @@ import 'package:flutter_template/features/story/read_story/widgets/read_story_se
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/extensions/stream.dart';
 import 'package:flutter_template/shared/helper/action_confirm.dart';
+import 'package:flutter_template/shared/helper/repository.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:rxdart/rxdart.dart';
@@ -350,7 +352,17 @@ class ReadStoryBloc extends BlocBase {
 
   void onTapNextStoryDetail() {
     routerService.push(
-      RouteInput.storyDetail(storyId: storyId),
+      RouteInput.storyDetail(
+        args: StoryDetailArgument(
+          storyId: storyId,
+          fetchStoryDetail: (ref) {
+            return RepositoryHelper.fetchStoryNovelDetail(
+              ref,
+              storyId: storyId,
+            );
+          },
+        ),
+      ),
     );
   }
 

@@ -6,7 +6,6 @@ import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
-import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
@@ -20,11 +19,9 @@ class ListChapterBloc extends BlocBase {
   Ref ref;
   ListChapterArgument args;
 
-  late final networkApiService = ref.read(AppService.networkApi);
   late final routerService = ref.read(AppService.router);
   late final localApiService = ref.read(AppService.localApi);
 
-  final isLoadingSubject = BehaviorSubject<bool>.seeded(false);
   final listChapterSubject =
       BehaviorSubject<List<ListChapterEntity>>.seeded([]);
   List<ListChapterEntity> listChapterTemp = [];
@@ -40,12 +37,9 @@ class ListChapterBloc extends BlocBase {
   bool _isLoadingLocal = false;
 
   ListChapterBloc(this.ref, {required this.args}) {
-    if (args.listChapter.isNotEmpty) {
-      listChapterSubject.value = args.listChapter;
-      listChapterTemp = args.listChapter;
-    } else {
-      init();
-    }
+    final listChapter = args.storyData?.listChapter ?? [];
+    listChapterSubject.value = listChapter;
+    listChapterTemp = listChapter;
     _getBookLocal();
     _listens();
   }
@@ -53,7 +47,6 @@ class ListChapterBloc extends BlocBase {
   @override
   void dispose() {
     super.dispose();
-    isLoadingSubject.close();
     listChapterSubject.close();
     listSortSubject.close();
     scrollController.dispose();
@@ -61,28 +54,6 @@ class ListChapterBloc extends BlocBase {
     searchController.dispose();
     isContinueReadingSubject.close();
     _removeListens();
-  }
-
-  Future<void> init() async {
-    isLoadingSubject.value = true;
-    final res = await networkApiService.novelRepository.getListChapter(
-      args.storyData?.id ?? '',
-    );
-    if (isDispose) return;
-    isLoadingSubject.value = false;
-
-    res.whenOrNull(
-      success: (data) {
-        final listChapter = data.data ?? [];
-        listChapterSubject.value = listChapter.map((e) {
-          return e.toEntity();
-        }).toList();
-        listChapterTemp = listChapterSubject.value;
-      },
-      error: (error) {
-        logger.e('ListChapterBloc init error: $error');
-      },
-    );
   }
 
   void onSelectedSort(ListSortEnum p1) {

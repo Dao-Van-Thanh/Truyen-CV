@@ -4,9 +4,13 @@ import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/novel/category/category_model.dart';
+import 'package:flutter_template/dependency/network_api/novel/detail/story_detail_response.dart';
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_request.dart';
 import 'package:flutter_template/dependency/router/arguments/explore_category_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
+import 'package:flutter_template/features/story/detail/entities/story_detail_entity.dart';
+import 'package:flutter_template/shared/helper/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ExploreNovelBloc extends BlocBase {
@@ -58,7 +62,25 @@ class ExploreNovelBloc extends BlocBase {
 
   void onTapStory(String storyId) {
     routerService.push(
-      RouteInput.storyDetail(storyId: storyId),
+      RouteInput.storyDetail(
+        args: StoryDetailArgument(
+          storyId: storyId,
+          fetchStoryDetail: (ref) {
+            return RepositoryHelper.fetchStoryNovelDetail(
+              ref,
+              storyId: storyId,
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<StoryDetailEntity?> _fetchStoryDetail(String storyId) async {
+    final res = await networkApiService.novelRepository.storyDetail(storyId);
+    return res.whenOrNull<StoryDetailEntity?>(
+      success: (data) => data.data?.toEntity(),
+      error: (error) => null,
     );
   }
 }
