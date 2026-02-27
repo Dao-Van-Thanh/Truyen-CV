@@ -7,46 +7,43 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
-import 'package:flutter_template/dependency/network_api/novel/detail/story_detail_response.dart';
-import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
+import 'package:flutter_template/features/story/detail/entities/story_detail_entity.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:rxdart/rxdart.dart';
 
 class StoryDetailBloc extends BlocBase {
   Ref ref;
-  String storyId;
 
-  late final networkApiService = ref.read(AppService.networkApi);
+  late StoryDetailArgument _args;
+
   late final routerService = ref.read(AppService.router);
   late final localApiService = ref.read(AppService.localApi);
 
   final isLoadingSubject = BehaviorSubject<bool>.seeded(false);
-  final isLoadingListChapterSubject = BehaviorSubject<bool>.seeded(false);
 
-  final storyDetailSubject = BehaviorSubject<StoryDetailResponse?>.seeded(null);
-  final listChapterSubject =
-      BehaviorSubject<List<ListChapterEntity>>.seeded([]);
+  final storyDetailSubject = BehaviorSubject<StoryDetailEntity?>.seeded(null);
   final isContinueReadingSubject = BehaviorSubject<bool>.seeded(false);
   final isFavoriteSubject = BehaviorSubject<bool>.seeded(false);
 
   final scrollController = ScrollController();
-
-  Completer<void>? _loadListChapterCompleter;
 
   bool _isLoadingLocal = false;
 
   final scrollBehaviorSubject =
       BehaviorSubject<double>.seeded(0.0); // 0.0 - 1.0
 
-  StoryDetailBloc(this.ref, {required this.storyId}) {
+  StoryDetailBloc(
+    this.ref, {
+    required StoryDetailArgument args,
+  }) {
+    _args = args;
     _getBookLocal();
     loadStoryDetail();
-    loadListChapter();
     _listeners();
   }
 
@@ -57,8 +54,6 @@ class StoryDetailBloc extends BlocBase {
     storyDetailSubject.close();
     scrollController.dispose();
     scrollBehaviorSubject.close();
-    listChapterSubject.close();
-    isLoadingListChapterSubject.close();
     isContinueReadingSubject.close();
     isFavoriteSubject.close();
     _removeListeners();
@@ -80,44 +75,11 @@ class StoryDetailBloc extends BlocBase {
   Future<void> loadStoryDetail() async {
     if (isLoadingSubject.value) return;
     isLoadingSubject.value = true;
-    final res = await networkApiService.novelRepository.storyDetail(storyId);
+    final res = await _args.fetchStoryDetail(ref);
     if (isDispose) return;
     isLoadingSubject.value = false;
 
-    res.whenOrNull(
-      success: (data) {
-        storyDetailSubject.value = data.data;
-      },
-      error: (error) {
-        logger
-            .e('StoryDetailBloc _loadStoryDetail error: ${error.errorMessage}');
-      },
-    );
-  }
-
-  Future<void> loadListChapter() async {
-    if (isLoadingListChapterSubject.value) return;
-    isLoadingListChapterSubject.value = true;
-    _loadListChapterCompleter = Completer<void>();
-    final res = await networkApiService.novelRepository.getListChapter(
-      storyId,
-    );
-    if (isDispose) return;
-    isLoadingListChapterSubject.value = false;
-    _loadListChapterCompleter?.complete();
-
-    res.whenOrNull(
-      success: (data) {
-        final listChapter = data.data ?? [];
-        listChapterSubject.value = listChapter.map((e) {
-          return e.toEntity();
-        }).toList();
-      },
-      error: (error) {
-        logger
-            .e('StoryDetailBloc loadListChapter error: ${error.errorMessage}');
-      },
-    );
+    storyDetailSubject.value = res;
   }
 
   void onTapCopyStoryName() {
@@ -135,21 +97,12 @@ class StoryDetailBloc extends BlocBase {
     final args = ListChapterArgument(
       storyData: storyDetailSubject.value,
       storyName: storyDetailSubject.value?.name ?? '',
-      listChapter: listChapterSubject.value,
     );
     routerService.push(RouteInput.listChapter(args: args));
   }
 
   void onTapReadNow() {
-    if (_loadListChapterCompleter == null) {
-      onTapReadNow();
-      return;
-    }
-    _loadListChapterCompleter!.future.then(
-      (value) {
-        _handleReadChapter();
-      },
-    );
+    _handleReadChapter();
   }
 
   Future<void> _handleReadChapter() async {
@@ -159,7 +112,7 @@ class StoryDetailBloc extends BlocBase {
     }
 
     final bookEntityLocal =
-        await localApiService.bookRepository.getBookById(storyId);
+        await localApiService.bookRepository.getBookById(_args.storyId);
 
     String selectedChapterId = '';
 
@@ -168,15 +121,14 @@ class StoryDetailBloc extends BlocBase {
     }
 
     if (selectedChapterId.isEmpty) {
-      final firstChapter = listChapterSubject.value.isNotEmpty
-          ? listChapterSubject.value.first
-          : null;
+      final listChapter = storyDetailSubject.value?.listChapter ?? [];
+      final firstChapter = listChapter.isNotEmpty ? listChapter.first : null;
       if (firstChapter != null) {
         selectedChapterId = firstChapter.id;
       }
     }
     if (selectedChapterId.isEmpty) {
-      logger.e('No chapter available to read for storyId: $storyId');
+      logger.e('No chapter available to read for storyId: ${_args.storyId}');
       return;
     }
 
@@ -192,9 +144,9 @@ class StoryDetailBloc extends BlocBase {
         .push(
       RouteInput.readStory(
         args: ReadStoryArgument(
-          storyId: storyId,
+          storyId: _args.storyId,
           selectedChapterId: selectedChapterId,
-          listChapter: listChapterSubject.value,
+          listChapter: storyDetailSubject.value?.listChapter ?? [],
           scrollOffset: scrollOffset,
         ),
       ),
@@ -207,7 +159,7 @@ class StoryDetailBloc extends BlocBase {
   Future<void> _getBookLocal() async {
     if (_isLoadingLocal) return;
     _isLoadingLocal = true;
-    final res = await localApiService.bookRepository.getBookById(storyId);
+    final res = await localApiService.bookRepository.getBookById(_args.storyId);
     _isLoadingLocal = false;
     if (isDispose) return;
     if (res != null) {
@@ -227,9 +179,9 @@ class StoryDetailBloc extends BlocBase {
     if (_isLoadingLocal) return;
 
     try {
-      final listChapter = listChapterSubject.value;
+      final listChapter = storyDetailSubject.value?.listChapter ?? [];
       final bookEntity = BookEntity(
-        id: storyId,
+        id: _args.storyId,
         listChapters: listChapter,
         storyData: jsonEncode(storyDetailSubject.value?.toJson()),
         currentChapterId: selectedChapterId,
@@ -255,7 +207,7 @@ class StoryDetailBloc extends BlocBase {
     final newStatus = !currentStatus;
 
     final bookEntityLocal =
-        await localApiService.bookRepository.getBookById(storyId);
+        await localApiService.bookRepository.getBookById(_args.storyId);
 
     _upsertBookToLocal(
       selectedChapterId: bookEntityLocal?.currentChapterId,

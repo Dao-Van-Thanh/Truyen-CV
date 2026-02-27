@@ -101,7 +101,7 @@ class StoryDetailScreen extends ConsumerWidget {
                       duration: const Duration(milliseconds: 200),
                       opacity: scrollPercent,
                       child: Text(
-                        storyDetail.name ?? '',
+                        storyDetail.name,
                         style: theme.textTheme.titleMedium?.copyWith(
                           color: titleColor,
                         ),
@@ -154,8 +154,8 @@ class StoryDetailScreen extends ConsumerWidget {
                         _getBackground(
                           context,
                           bloc,
-                          imageUrl: storyDetail.thumb ?? '',
-                          storyName: storyDetail.name ?? '',
+                          imageUrl: storyDetail.thumb,
+                          storyName: storyDetail.name,
                           author: storyDetail.author ?? '',
                           chapter:
                               '${t.storyDetail.chapters} ${storyDetail.totalChapter}',
@@ -168,15 +168,15 @@ class StoryDetailScreen extends ConsumerWidget {
                               _getContent(
                                 title: t.storyDetail.info,
                                 content: '${storyDetail.author ?? ''}'
-                                    '\n${storyDetail.translator ?? ''}'
-                                    '\n${storyDetail.category}',
+                                    '\n${storyDetail.trans ?? ''}'
+                                    '\n${storyDetail.cat}',
                               ),
                               SafeArea(
                                 top: false,
                                 child: _getContent(
                                   title: t.storyDetail.introduce,
                                   content: StringUtilities.clearHtml(
-                                    storyDetail.description ?? '',
+                                    storyDetail.desc,
                                   ),
                                 ),
                               ),

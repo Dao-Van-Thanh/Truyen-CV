@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/app_service.dart';
+import 'package:flutter_template/dependency/network_api/novel/detail/story_detail_response.dart';
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_request.dart';
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
+import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
+import 'package:flutter_template/features/story/detail/entities/story_detail_entity.dart';
+import 'package:flutter_template/shared/helper/repository.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 import 'package:flutter_template/shared/widgets/story_list/story_list.dart';
 
@@ -99,8 +103,26 @@ class _ExploreNovelPageWidgetState
 
   void _onTapStory(String storyId) {
     ref.read(AppService.router).push(
-          RouteInput.storyDetail(storyId: storyId),
+          RouteInput.storyDetail(
+            args: StoryDetailArgument(
+              storyId: storyId,
+              fetchStoryDetail: (ref) {
+                return RepositoryHelper.fetchStoryNovelDetail(
+                  ref,
+                  storyId: storyId,
+                );
+              },
+            ),
+          ),
         );
+  }
+
+  Future<StoryDetailEntity?> _fetchStoryDetail(String storyId) async {
+    final res = await networkApiService.novelRepository.storyDetail(storyId);
+    return res.whenOrNull<StoryDetailEntity?>(
+      success: (data) => data.data?.toEntity(),
+      error: (error) => null,
+    );
   }
 
   @override

@@ -4,8 +4,10 @@ import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/constants/common.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
+import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/shared/extensions/text_editing_controller_extension.dart';
+import 'package:flutter_template/shared/helper/repository.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:rxdart/rxdart.dart';
@@ -114,7 +116,17 @@ class StorySearchBloc extends BlocBase {
 
   void onTapStory(String storyId) {
     routerService.push(
-      RouteInput.storyDetail(storyId: storyId),
+      RouteInput.storyDetail(
+        args: StoryDetailArgument(
+          storyId: storyId,
+          fetchStoryDetail: (ref) {
+            return RepositoryHelper.fetchStoryNovelDetail(
+              ref,
+              storyId: storyId,
+            );
+          },
+        ),
+      ),
     );
   }
 }
