@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
 import 'package:flutter_template/dependency/network_api/comic/list_comic/list_comic_res.dart';
+import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
+import 'package:flutter_template/dependency/router/utils/route_input.dart';
+import 'package:flutter_template/shared/helper/repository.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 import 'package:flutter_template/shared/widgets/story_list/story_list.dart';
@@ -95,6 +98,23 @@ class _ExploreComicPageWidgetState
     await _loadData();
   }
 
+  void _onTapItem(StoryEntity item) {
+    final slug = item.id.split('||').lastOrNull ?? '';
+    ref.read(AppService.router).push(
+          RouteInput.storyDetail(
+            args: StoryDetailArgument(
+              storyId: item.id,
+              fetchStoryDetail: (ref) {
+                return RepositoryHelper.fetchStoryComicDetail(
+                  ref,
+                  storySlug: slug,
+                );
+              },
+            ),
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoryList(
@@ -108,7 +128,7 @@ class _ExploreComicPageWidgetState
       onRefresh: _onRefresh,
       onLoadMore: _loadData,
       listType: widget.listType,
-      onTapItem: (item) {},
+      onTapItem: _onTapItem,
     );
   }
 }

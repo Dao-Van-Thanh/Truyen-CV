@@ -2,6 +2,7 @@ import 'package:flutter_template/dependency/router/arguments/explore_category_ar
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/story_search_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_name.dart';
 
 class RouteInput {
@@ -34,7 +35,9 @@ class RouteInput {
   })  : routeName = RouteName.readStory,
         arguments = args;
 
-  RouteInput.storySearch() : routeName = RouteName.storySearch;
+  RouteInput.storySearch({required StorySearchArgument args})
+      : routeName = RouteName.storySearch,
+        arguments = args;
 
   RouteInput.setting() : routeName = RouteName.setting;
 

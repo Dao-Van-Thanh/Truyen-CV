@@ -11,4 +11,3 @@ targets:
           key_map_case: pascal
           param_case: camel
           string_interpolation: braces
-          

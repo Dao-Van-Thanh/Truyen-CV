@@ -76,6 +76,7 @@ Map<String, dynamic> _$BreadCrumbModelToJson(_BreadCrumbModel instance) =>
 
 _StoryItemModel _$StoryItemModelFromJson(Map<String, dynamic> json) =>
     _StoryItemModel(
+      id: json['_id'] as String?,
       name: json['name'] as String?,
       slug: json['slug'] as String?,
       originName: (json['origin_name'] as List<dynamic>?)
@@ -95,6 +96,7 @@ _StoryItemModel _$StoryItemModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$StoryItemModelToJson(_StoryItemModel instance) =>
     <String, dynamic>{
+      '_id': instance.id,
       'name': instance.name,
       'slug': instance.slug,
       'origin_name': instance.originName,

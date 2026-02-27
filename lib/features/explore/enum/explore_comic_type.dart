@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 
 enum ExploreComicType {
@@ -6,6 +7,12 @@ enum ExploreComicType {
   ongoing,
   completed,
   genres;
+
+  static ExploreComicType? fromSlug(String? slug) {
+    return ExploreComicType.values.firstWhereOrNull(
+      (e) => e.slug == slug,
+    );
+  }
 }
 
 extension ExploreComicTypeExtension on ExploreComicType {

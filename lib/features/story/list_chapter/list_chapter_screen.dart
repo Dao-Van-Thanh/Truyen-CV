@@ -69,6 +69,9 @@ class ListChapterScreen extends ConsumerWidget {
       floatingActionButton: ObsBuilder(
         streams: [bloc.isContinueReadingSubject],
         builder: (context) {
+          final isShow = bloc.isContinueReadingSubject.value;
+          if (!isShow) return const SizedBox.shrink();
+
           return FloatingActionButton(
             onPressed: () {
               bloc.onTapContinueReading();

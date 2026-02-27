@@ -51,6 +51,7 @@ abstract class BreadCrumbModel with _$BreadCrumbModel {
 @freezed
 abstract class StoryItemModel with _$StoryItemModel {
   const factory StoryItemModel({
+    @JsonKey(name: '_id') String? id,
     @JsonKey(name: 'name') String? name,
     @JsonKey(name: 'slug') String? slug,
     @JsonKey(name: 'origin_name') List<String>? originName,
@@ -118,24 +119,19 @@ abstract class PaginationModel with _$PaginationModel {
       _$PaginationModelFromJson(json);
 }
 
+extension StoryItemModelExtension on StoryItemModel {
+  String get fullId => '${id ?? '-1'}||${slug ?? '-1'}';
+}
+
 extension ListComicResExtension on ListComicRes {
   List<StoryEntity> toStoryEntity() {
-    final listThumb = seoOnPage?.ogImage ?? [];
-
     return items?.map(
           (e) {
-            final thumbName = e.thumbUrl;
-            final thumbUrl = listThumb.firstWhere(
-              (thumb) => thumb.contains(thumbName ?? ''),
-              orElse: () => '',
-            );
-
-            final fullThumbUrl = thumbUrl.isEmpty
-                ? thumbUrl
-                : '${appDomainCdnImage ?? ''}/${thumbUrl}';
+            final fullThumbUrl =
+                '${appDomainCdnImage ?? ''}/uploads/comics/${e.thumbUrl}';
 
             return StoryEntity(
-              id: e.slug ?? '',
+              id: e.fullId,
               name: e.name ?? '',
               thumb: fullThumbUrl,
               process:

@@ -6,6 +6,7 @@ import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/story_search_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/features/library/widgets/library_bookmarks_option.dart';
 import 'package:flutter_template/shared/helper/repository.dart';
@@ -139,7 +140,23 @@ class LibraryBloc extends BlocBase {
 
   void onTapSearch() {
     routerService.push(
-      RouteInput.storySearch(),
+      RouteInput.storySearch(
+        args: StorySearchArgument(
+          fetchSearchStory: (ref, keyword, page) {
+            return RepositoryHelper.fetchStoryNovelSearch(
+              ref,
+              keyword: keyword,
+              page: page,
+            );
+          },
+          fetchStoryDetail: (ref, storyId) {
+            return RepositoryHelper.fetchStoryNovelDetail(
+              ref,
+              storyId: storyId,
+            );
+          },
+        ),
+      ),
     );
   }
 
