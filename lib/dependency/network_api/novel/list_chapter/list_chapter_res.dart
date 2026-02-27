@@ -1,3 +1,4 @@
+import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'list_chapter_res.freezed.dart';
@@ -18,4 +19,13 @@ abstract class ListChapterRes with _$ListChapterRes {
 
   factory ListChapterRes.fromJson(Map<String, dynamic> json) =>
       _$ListChapterResFromJson(json);
+}
+
+extension ListChapterResWrapper on ListChapterRes {
+  ListChapterEntity toEntity() {
+    return ListChapterEntity(
+      id: id ?? '-1',
+      name: name ?? '---',
+    );
+  }
 }

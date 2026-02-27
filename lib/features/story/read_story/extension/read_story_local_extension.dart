@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_template/constants/config.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/config/entities/config_entity.dart';
-import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/utils/route_name.dart';
 import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
 import 'package:flutter_template/features/story/read_story/read_story_bloc.dart';
@@ -58,7 +58,7 @@ extension ReadStoryLocalExtension on ReadStoryBloc {
     required String chapterId,
     required double scrollOffset,
     required String lastReadTime,
-    required List<ListChapterRes> listChapters,
+    required List<ListChapterEntity> listChapters,
   }) async {
     final currentBook = await localApiService.bookRepository.getBookById(
       storyId,

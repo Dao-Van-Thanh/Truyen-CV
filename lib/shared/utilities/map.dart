@@ -53,5 +53,30 @@ class MapUtil {
     return result;
   }
 
+  static Map<String, dynamic> convertKeysToLowerCase(
+    Map<String, dynamic> input,
+  ) {
+    final Map<String, dynamic> result = {};
+
+    input.forEach((key, value) {
+      final lowerKey = key.toLowerCase();
+
+      if (value is Map<String, dynamic>) {
+        result[lowerKey] = convertKeysToLowerCase(value);
+      } else if (value is List) {
+        result[lowerKey] = value.map((e) {
+          if (e is Map<String, dynamic>) {
+            return convertKeysToLowerCase(e);
+          }
+          return e;
+        }).toList();
+      } else {
+        result[lowerKey] = value;
+      }
+    });
+
+    return result;
+  }
+
   const MapUtil._();
 }

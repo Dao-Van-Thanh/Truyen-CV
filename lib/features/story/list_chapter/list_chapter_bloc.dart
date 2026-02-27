@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
@@ -24,8 +25,9 @@ class ListChapterBloc extends BlocBase {
   late final localApiService = ref.read(AppService.localApi);
 
   final isLoadingSubject = BehaviorSubject<bool>.seeded(false);
-  final listChapterSubject = BehaviorSubject<List<ListChapterRes>>.seeded([]);
-  List<ListChapterRes> listChapterTemp = [];
+  final listChapterSubject =
+      BehaviorSubject<List<ListChapterEntity>>.seeded([]);
+  List<ListChapterEntity> listChapterTemp = [];
   final listSortSubject =
       BehaviorSubject<ListSortEnum>.seeded(ListSortEnum.sortOld);
 
@@ -71,9 +73,11 @@ class ListChapterBloc extends BlocBase {
 
     res.whenOrNull(
       success: (data) {
-        final listChapter = data.data;
-        listChapterSubject.value = listChapter ?? [];
-        listChapterTemp = listChapter ?? [];
+        final listChapter = data.data ?? [];
+        listChapterSubject.value = listChapter.map((e) {
+          return e.toEntity();
+        }).toList();
+        listChapterTemp = listChapterSubject.value;
       },
       error: (error) {
         logger.e('ListChapterBloc init error: $error');
@@ -102,7 +106,7 @@ class ListChapterBloc extends BlocBase {
           listChapterSubject.value = listChapterTemp;
         } else {
           final filteredList = listChapterTemp.where((chapter) {
-            final titleLower = chapter.name?.toLowerCase() ?? '';
+            final titleLower = chapter.name.toLowerCase();
             return titleLower.contains(query);
           }).toList();
           listChapterSubject.value = filteredList;
@@ -116,9 +120,9 @@ class ListChapterBloc extends BlocBase {
     searchController.removeListener(_listens);
   }
 
-  void onTapChapter(ListChapterRes chapter) {
+  void onTapChapter(ListChapterEntity chapter) {
     _upsertBookToLocal(
-      chapter.id ?? '',
+      chapter.id,
       0.0,
     ).then(
       (_) {
@@ -127,7 +131,7 @@ class ListChapterBloc extends BlocBase {
           RouteInput.readStory(
             args: ReadStoryArgument(
               storyId: args.storyData?.id ?? '',
-              selectedChapterId: chapter.id ?? '',
+              selectedChapterId: chapter.id,
               listChapter: listChapterSubject.value,
               scrollOffset: 0.0,
             ),

@@ -52,7 +52,7 @@ class LibraryBookmarksOption extends ConsumerWidget {
                     ),
                     clipBehavior: Clip.antiAlias,
                     child: StoryImage(
-                      imageUrl: item.storyModel.thumb ?? '',
+                      imageUrl: item.story.thumb,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -82,7 +82,7 @@ class LibraryBookmarksOption extends ConsumerWidget {
                               ),
                             ),
                             child: Text(
-                              item.storyModel.name ?? '',
+                              item.story.name,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.bodyMedium,
@@ -111,7 +111,7 @@ class LibraryBookmarksOption extends ConsumerWidget {
                               ),
                             ),
                             child: Text(
-                              item.storyModel.author ?? '',
+                              item.story.author ?? '',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.bodyMedium,

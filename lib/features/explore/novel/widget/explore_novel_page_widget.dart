@@ -4,7 +4,6 @@ import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_request.dart';
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
-import 'package:flutter_template/shared/widgets/story_list/entities/story_list_item_entity.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 import 'package:flutter_template/shared/widgets/story_list/story_list.dart';
 
@@ -110,8 +109,7 @@ class _ExploreNovelPageWidgetState
       key: PageStorageKey(
         'explore_${widget.request.cat}_${widget.request.sort}',
       ),
-      stories:
-          _stories.map((e) => StoryListItemEntity.fromStoryModel(e)).toList(),
+      stories: _stories.map((e) => e.toEntity()).toList(),
       isLoading: _isLoading,
       isFirstLoad: _isFirstLoad,
       hasMore: _hasMore,
@@ -119,7 +117,7 @@ class _ExploreNovelPageWidgetState
       onLoadMore: _loadData,
       listType: widget.listType,
       onTapItem: (item) {
-        _onTapStory(item.storyId);
+        _onTapStory(item.id);
       },
     );
   }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 import 'package:flutter_template/shared/widgets/story/story_image.dart';
-import 'package:flutter_template/shared/widgets/story_list/entities/story_list_item_entity.dart';
 
 class StoryGridItem extends StatelessWidget {
-  final StoryListItemEntity story;
+  final StoryEntity story;
   final VoidCallback onTap;
   const StoryGridItem({
     super.key,
@@ -43,7 +43,7 @@ class StoryGridItem extends StatelessWidget {
             AspectRatio(
               aspectRatio: 3 / 4,
               child: StoryImage(
-                imageUrl: story.thumbUrl,
+                imageUrl: story.thumb,
                 fit: BoxFit.cover,
                 memCacheWidth: 250,
               ),

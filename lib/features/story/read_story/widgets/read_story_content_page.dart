@@ -6,8 +6,8 @@ import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/dependency/app_service.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:flutter_template/dependency/network_api/novel/chapter/chapter_response.dart';
-import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_local_extension.dart';
 import 'package:flutter_template/features/story/read_story/extension/read_story_tts_extension.dart';
 import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
@@ -17,7 +17,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 
 class ReadStoryContentPage extends ConsumerStatefulWidget {
   final int index;
-  final ListChapterRes? listChapterItem;
+  final ListChapterEntity? listChapterItem;
   final AutoScrollController controller;
   final bool isLastPage;
   const ReadStoryContentPage({

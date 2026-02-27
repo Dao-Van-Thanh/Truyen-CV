@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
-import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
 
 class BookEntity {
   final String id;
   final String storyData;
-  final List<ListChapterRes> listChapters;
+  final List<ListChapterEntity> listChapters;
   final String? currentChapterId;
   final double scrollOffset;
   final bool isFavorite;
@@ -53,7 +53,7 @@ class BookEntity {
     };
   }
 
-  ListChapterRes? get lastReadChapter {
+  ListChapterEntity? get lastReadChapter {
     if (listChapters.isEmpty) return null;
     if (currentChapterId == null) return listChapters.first;
     return listChapters.firstWhereOrNull(
@@ -78,8 +78,8 @@ class BookEntity {
     return '${index + 1}/${listChapters.length}';
   }
 
-  StoryModel get storyModel {
-    return StoryModel.fromJson(
+  StoryEntity get story {
+    return StoryEntity.fromJson(
       jsonDecode(storyData) as Map<String, dynamic>,
     );
   }
@@ -87,7 +87,7 @@ class BookEntity {
   BookEntity copyWith({
     String? id,
     String? storyData,
-    List<ListChapterRes>? listChapters,
+    List<ListChapterEntity>? listChapters,
     String? currentChapterId,
     double? scrollOffset,
     bool? isFavorite,

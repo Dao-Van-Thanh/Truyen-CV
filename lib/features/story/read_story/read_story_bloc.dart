@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/constants/config.dart';
 import 'package:flutter_template/dependency/app_service.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:flutter_template/dependency/network_api/novel/chapter/chapter_response.dart';
 import 'package:flutter_template/dependency/network_api/novel/detail/story_detail_response.dart';
 import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
@@ -44,7 +45,7 @@ class ReadStoryBloc extends BlocBase {
   late final localApiService = ref.read(AppService.localApi);
   late final toastService = ref.read(AppService.toast);
   final currentListChapterItemSubject =
-      BehaviorSubject<ListChapterRes?>.seeded(null);
+      BehaviorSubject<ListChapterEntity?>.seeded(null);
   final isMenuVisibleSubject = BehaviorSubject<bool>.seeded(false);
 
   final configStorySubject =
@@ -77,7 +78,8 @@ class ReadStoryBloc extends BlocBase {
 
   final isFavoriteSubject = BehaviorSubject<bool>.seeded(false);
 
-  final listChapterSubject = BehaviorSubject<List<ListChapterRes>>.seeded([]);
+  final listChapterSubject =
+      BehaviorSubject<List<ListChapterEntity>>.seeded([]);
 
   BuildContext? timerSettingsContext;
 
@@ -272,7 +274,7 @@ class ReadStoryBloc extends BlocBase {
         // add vào list để dùng Future.wait chờ tất cả (nếu muốn)
         tasks.add(
           _fetchAndCache(
-            chapterItem.id ?? '',
+            chapterItem.id,
           ),
         );
       }
@@ -421,7 +423,7 @@ class ReadStoryBloc extends BlocBase {
     if (res == null) return null;
 
     final oldList = listChapterSubject.value;
-    final newList = res;
+    final newList = res.map((e) => e.toEntity()).toList();
     final countNewChapters = newList.length - oldList.length;
     if (countNewChapters > 0) {
       listChapterSubject.value = newList;

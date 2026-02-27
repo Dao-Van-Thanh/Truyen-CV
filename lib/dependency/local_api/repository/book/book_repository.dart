@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/chapter/chapter_repository.dart';
 import 'package:flutter_template/dependency/local_api/repository/chapter/entities/chapter_contents_entity.dart';
-import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
@@ -184,14 +184,24 @@ class BookRepository {
       orderBy: 'timeStamp ASC',
     );
 
-    final chapterGroup = <String, List<ListChapterRes>>{};
+    final chapterGroup = <String, List<ListChapterEntity>>{};
 
     for (final map in chapterMaps) {
       final bookId = map['bookId'] as String;
+
+      final listChapterItemDataStr = map['listChapterItemData'] as String?;
+
+      if (listChapterItemDataStr == null) {
+        logger.w(
+          '⚠️ Bản ghi chapter thiếu trường listChapterItemData, id: ${map['id']}',
+        );
+        continue;
+      }
+
       final json = jsonDecode(map['listChapterItemData'] as String);
 
       chapterGroup.putIfAbsent(bookId, () => []);
-      chapterGroup[bookId]!.add(ListChapterRes.fromJson(json));
+      chapterGroup[bookId]!.add(ListChapterEntity.fromJson(json));
     }
 
     return bookMaps.map((bookMap) {
@@ -202,7 +212,7 @@ class BookRepository {
     }).toList();
   }
 
-  Future<List<ListChapterRes>> _getChaptersByBookId(String bookId) async {
+  Future<List<ListChapterEntity>> _getChaptersByBookId(String bookId) async {
     final maps = await db.query(
       _chaptersTable,
       where: 'bookId = ?',
@@ -212,7 +222,7 @@ class BookRepository {
 
     return maps.map((e) {
       final json = jsonDecode(e['listChapterItemData'] as String);
-      return ListChapterRes.fromJson(json);
+      return ListChapterEntity.fromJson(json);
     }).toList();
   }
 
@@ -261,7 +271,7 @@ class BookRepository {
 
           return ChapterContentsEntity(
             id: const Uuid().v4(), // ID của dòng content
-            chapterId: chapterId ?? '-1',
+            chapterId: chapterId,
             content: chapterContents[index].content,
           );
         });

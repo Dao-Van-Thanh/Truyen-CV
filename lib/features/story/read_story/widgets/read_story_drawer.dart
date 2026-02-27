@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/constants/constants.dart';
-import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
@@ -16,7 +16,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 
 class ReadStoryDrawer extends ConsumerStatefulWidget {
-  final List<ListChapterRes> listChapter;
+  final List<ListChapterEntity> listChapter;
   const ReadStoryDrawer({super.key, required this.listChapter});
 
   @override
@@ -206,7 +206,7 @@ class _ReadStoryDrawerState extends ConsumerState<ReadStoryDrawer> {
                                     controller: _scrollController,
                                     index: index,
                                     child: _buildItem(
-                                      chapter.name ?? '',
+                                      chapter.name,
                                       highlight: index == currentChapterIndex,
                                       textColor: textColor,
                                       onTap: () {

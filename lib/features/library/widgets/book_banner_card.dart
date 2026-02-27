@@ -1,6 +1,7 @@
 // book_banner_card.dart
-import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
+
+import 'package:flutter/material.dart';
 import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/shared/utilities/datetime.dart';
@@ -41,7 +42,7 @@ class BookBannerCard extends StatelessWidget {
                 child: ImageFiltered(
                   imageFilter: ui.ImageFilter.blur(sigmaX: 40, sigmaY: 40),
                   child: StoryImage(
-                    imageUrl: book.storyModel.thumb ?? '',
+                    imageUrl: book.story.thumb,
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,
@@ -75,7 +76,7 @@ class BookBannerCard extends StatelessWidget {
                       child: AspectRatio(
                         aspectRatio: 2 / 3,
                         child: StoryImage(
-                          imageUrl: book.storyModel.thumb ?? '',
+                          imageUrl: book.story.thumb,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -93,7 +94,7 @@ class BookBannerCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  book.storyModel.name ?? '',
+                                  book.story.name,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(

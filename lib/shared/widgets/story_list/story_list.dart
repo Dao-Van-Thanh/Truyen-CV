@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/story_list/entities/story_list_item_entity.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 import 'package:flutter_template/shared/widgets/story_list/widgets/story_grid_item.dart';
 import 'package:flutter_template/shared/widgets/story_list/widgets/story_list_item.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class StoryList extends StatefulWidget {
-  final List<StoryListItemEntity> stories;
+  final List<StoryEntity> stories;
   final bool isLoading;
   final bool isFirstLoad;
   final bool hasMore;
   final Future<void> Function() onRefresh;
   final VoidCallback onLoadMore;
   final StoryListType listType;
-  final void Function(StoryListItemEntity item) onTapItem;
+  final void Function(StoryEntity item) onTapItem;
 
   const StoryList({
     super.key,
