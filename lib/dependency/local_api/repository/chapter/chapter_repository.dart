@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/chapter/entities/chapter_contents_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/chapter/entities/chapter_entity.dart';
 import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
@@ -33,7 +34,7 @@ class ChapterRepository {
 
   Future<void> upsertChaptersBatch({
     required String bookId,
-    required List<ListChapterRes> chapters,
+    required List<ListChapterEntity> chapters,
     int batchSize = 300,
     DatabaseExecutor? dbOverride,
   }) async {

@@ -45,11 +45,6 @@ extension ReadStoryTtsExtension on ReadStoryBloc {
       return;
     }
 
-    if (currentChapter.id == null) {
-      logger.e('Current chapter id is null');
-      return;
-    }
-
     final chapterContent = chaptersMapSubject.value[currentChapter.id];
 
     final paragraphs = chapterContent?.paragraphs ?? [];
@@ -67,7 +62,7 @@ extension ReadStoryTtsExtension on ReadStoryBloc {
       return;
     }
     tts.setData(paragraphs);
-    tts.playToIndex(0, currentChapter.id ?? '');
+    tts.playToIndex(0, currentChapter.id);
     ttsControllerStatusSubject.add(ReadTtsStatus.playing);
   }
 

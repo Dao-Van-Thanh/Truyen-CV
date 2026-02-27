@@ -72,7 +72,7 @@ class ListChapterScreen extends ConsumerWidget {
                             itemBuilder: (context, index) {
                               final chapter = listChapter[index];
                               return _buildItem(
-                                chapter.name ?? '',
+                                chapter.name,
                                 onTap: () {
                                   bloc.onTapChapter(chapter);
                                 },

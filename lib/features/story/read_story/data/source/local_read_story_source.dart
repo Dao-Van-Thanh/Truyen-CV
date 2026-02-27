@@ -52,7 +52,7 @@ class LocalReadStorySource implements IReadStorySource {
 
       if (bookEntity == null) return null;
 
-      final storyModel = bookEntity.storyModel;
+      final storyModel = bookEntity.story;
 
       return StoryDetailResponse(
         id: storyModel.id,

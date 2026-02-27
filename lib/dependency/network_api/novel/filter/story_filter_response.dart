@@ -1,3 +1,4 @@
+import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'story_filter_response.freezed.dart';
@@ -69,5 +70,19 @@ List<StoryModel>? _convertListDynamic(dynamic value) {
     }
   } catch (_) {
     return null;
+  }
+}
+
+extension StoryModelMapper on StoryModel {
+  StoryEntity toEntity() {
+    return StoryEntity(
+      id: id ?? '',
+      name: name ?? '',
+      thumb: thumb ?? '',
+      process: process ?? '',
+      author: author,
+      viewed: viewed,
+      rating: rating,
+    );
   }
 }

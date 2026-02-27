@@ -6,9 +6,9 @@ import 'package:collection/collection.dart';
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/book_repository.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/chapter/entities/chapter_contents_entity.dart';
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
-import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:html/dom.dart' as html_dom;
 import 'package:html/parser.dart' as html_parser;
@@ -92,7 +92,7 @@ class ImportStoryService {
       storyData: jsonEncode(storyModel.toJson()),
       listChapters: data.chapters
           .mapIndexed(
-            (index, c) => ListChapterRes(
+            (index, c) => ListChapterEntity(
               id: _uuid.v4(),
               name: c.title,
             ),

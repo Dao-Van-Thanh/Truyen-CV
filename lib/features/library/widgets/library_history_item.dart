@@ -17,8 +17,8 @@ class LibraryHistoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final name = item.storyModel.name ?? '';
-    final thumbUrl = item.storyModel.thumb ?? '';
+    final name = item.story.name;
+    final thumbUrl = item.story.thumb;
     final currentChapter = item.lastReadChapter?.name ?? '';
     return AppGestureDetector(
       onTap: onPress,

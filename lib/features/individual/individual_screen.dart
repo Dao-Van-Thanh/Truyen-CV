@@ -70,13 +70,13 @@ class IndividualScreen extends ConsumerWidget {
                 title: t.individual.settings,
                 onTap: bloc.onTapSetting,
               ),
-              if (isLoggedIn)
-                _buildMenuItem(
-                  context,
-                  icon: Icons.logout_outlined,
-                  title: t.individual.logout,
-                  onTap: () {},
-                ),
+              // if (isLoggedIn)
+              //   _buildMenuItem(
+              //     context,
+              //     icon: Icons.logout_outlined,
+              //     title: t.individual.logout,
+              //     onTap: () {},
+              //   ),
               FutureBuilder<String>(
                 future: Device.getVersion(),
                 builder: (context, snapshot) {

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:flutter_template/dependency/network_api/novel/detail/story_detail_response.dart';
 import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
@@ -28,7 +29,8 @@ class StoryDetailBloc extends BlocBase {
   final isLoadingListChapterSubject = BehaviorSubject<bool>.seeded(false);
 
   final storyDetailSubject = BehaviorSubject<StoryDetailResponse?>.seeded(null);
-  final listChapterSubject = BehaviorSubject<List<ListChapterRes>>.seeded([]);
+  final listChapterSubject =
+      BehaviorSubject<List<ListChapterEntity>>.seeded([]);
   final isContinueReadingSubject = BehaviorSubject<bool>.seeded(false);
   final isFavoriteSubject = BehaviorSubject<bool>.seeded(false);
 
@@ -106,8 +108,10 @@ class StoryDetailBloc extends BlocBase {
 
     res.whenOrNull(
       success: (data) {
-        final listChapter = data.data;
-        listChapterSubject.value = listChapter ?? [];
+        final listChapter = data.data ?? [];
+        listChapterSubject.value = listChapter.map((e) {
+          return e.toEntity();
+        }).toList();
       },
       error: (error) {
         logger
@@ -168,7 +172,7 @@ class StoryDetailBloc extends BlocBase {
           ? listChapterSubject.value.first
           : null;
       if (firstChapter != null) {
-        selectedChapterId = firstChapter.id ?? '';
+        selectedChapterId = firstChapter.id;
       }
     }
     if (selectedChapterId.isEmpty) {

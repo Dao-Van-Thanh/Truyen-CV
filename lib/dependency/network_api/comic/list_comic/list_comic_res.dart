@@ -1,4 +1,4 @@
-import 'package:flutter_template/shared/widgets/story_list/entities/story_list_item_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'list_comic_res.freezed.dart';
@@ -119,7 +119,7 @@ abstract class PaginationModel with _$PaginationModel {
 }
 
 extension ListComicResExtension on ListComicRes {
-  List<StoryListItemEntity> toListStoryItemEntity() {
+  List<StoryEntity> toStoryEntity() {
     final listThumb = seoOnPage?.ogImage ?? [];
 
     return items?.map(
@@ -134,10 +134,10 @@ extension ListComicResExtension on ListComicRes {
                 ? thumbUrl
                 : '${appDomainCdnImage ?? ''}/${thumbUrl}';
 
-            return StoryListItemEntity(
-              storyId: e.slug ?? '',
+            return StoryEntity(
+              id: e.slug ?? '',
               name: e.name ?? '',
-              thumbUrl: fullThumbUrl,
+              thumb: fullThumbUrl,
               process:
                   'Chương ${e.chaptersLatest?.firstOrNull?.chapterName ?? 0}',
             );
