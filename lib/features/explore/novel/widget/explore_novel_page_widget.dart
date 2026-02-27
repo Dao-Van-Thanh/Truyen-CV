@@ -3,24 +3,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_request.dart';
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
+import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/shared/widgets/story_list/entities/story_list_item_entity.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 import 'package:flutter_template/shared/widgets/story_list/story_list.dart';
 
-class ExplorePageWidget extends ConsumerStatefulWidget {
+class ExploreNovelPageWidget extends ConsumerStatefulWidget {
   final StoryFilterRequest request;
   final StoryListType listType;
-  const ExplorePageWidget({
+  const ExploreNovelPageWidget({
     super.key,
     required this.listType,
     required this.request,
   });
 
   @override
-  ConsumerState<ExplorePageWidget> createState() => _ExplorePageWidgetState();
+  ConsumerState<ExploreNovelPageWidget> createState() =>
+      _ExploreNovelPageWidgetState();
 }
 
-class _ExplorePageWidgetState extends ConsumerState<ExplorePageWidget> {
+class _ExploreNovelPageWidgetState
+    extends ConsumerState<ExploreNovelPageWidget> {
   late final networkApiService = ref.read(AppService.networkApi);
 
   final List<StoryModel> _stories = [];
@@ -95,6 +98,12 @@ class _ExplorePageWidgetState extends ConsumerState<ExplorePageWidget> {
     await _loadData();
   }
 
+  void _onTapStory(String storyId) {
+    ref.read(AppService.router).push(
+          RouteInput.storyDetail(storyId: storyId),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoryList(
@@ -109,6 +118,9 @@ class _ExplorePageWidgetState extends ConsumerState<ExplorePageWidget> {
       onRefresh: _onRefresh,
       onLoadMore: _loadData,
       listType: widget.listType,
+      onTapItem: (item) {
+        _onTapStory(item.storyId);
+      },
     );
   }
 }

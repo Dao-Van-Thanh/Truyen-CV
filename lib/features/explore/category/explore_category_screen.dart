@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/features/explore/widgets/explore_page_widget.dart';
+import 'package:flutter_template/dependency/router/arguments/explore_category_argument.dart';
+import 'package:flutter_template/features/explore/category/explore_category_bloc.dart';
+import 'package:flutter_template/features/explore/comic/widget/explore_comic_page_widget.dart';
+import 'package:flutter_template/features/explore/novel/widget/explore_novel_page_widget.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 
@@ -25,7 +28,6 @@ class ExploreCategoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final bloc = ref.watch(BlocProvider.exploreCategory);
-    final initialRequest = bloc.args.request;
     final title = bloc.args.title ?? context.t.exploreScreen.title;
     final appConfigBloc = ref.read(BlocProvider.config);
 
@@ -80,14 +82,32 @@ class ExploreCategoryScreen extends ConsumerWidget {
         ],
       ),
       body: ObsBuilder(
-        streams: [appConfigBloc.typeListDisplaySubject],
+        streams: [
+          appConfigBloc.typeListDisplaySubject,
+        ],
         builder: (context) {
-          return ExplorePageWidget(
-            request: initialRequest,
-            listType: appConfigBloc.typeListDisplaySubject.value,
-          );
+          return _buildBody(bloc, appConfigBloc.typeListDisplaySubject.value);
         },
       ),
     );
+  }
+
+  Widget _buildBody(ExploreCategoryBloc bloc, StoryListType type) {
+    final args = bloc.args;
+
+    if (args is ExploreNovelCategoryArgument) {
+      final initialRequest = args.request;
+      return ExploreNovelPageWidget(
+        request: initialRequest,
+        listType: type,
+      );
+    }
+
+    if (args is ExploreComicCategoryArgument) {
+      final slug = args.categorySlug;
+      return ExploreComicPageWidget(listType: type, categorySlug: slug);
+    }
+
+    return SizedBox();
   }
 }

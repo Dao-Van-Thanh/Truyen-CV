@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
@@ -7,8 +9,6 @@ import 'package:flutter_template/constants/size_box.dart';
 import 'package:flutter_template/features/story/detail/story_detail_bloc.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/string.dart';
-import 'dart:ui' as ui;
-
 import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 import 'package:flutter_template/shared/widgets/refresh_indicator/app_refresh_indicator.dart';
 import 'package:flutter_template/shared/widgets/story/story_image.dart';
@@ -42,6 +42,8 @@ class StoryDetailScreen extends ConsumerWidget {
             alignment: Alignment.center,
             color: theme.scaffoldBackgroundColor,
             child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   t.storyDetail.loadingError,

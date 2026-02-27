@@ -21,7 +21,7 @@ class NovelRepository {
       shouldCache: true,
     );
 
-    return response.parseData(
+    return response.parseDataNovel(
       (json) => BaseDataResponseModel<List<CategoryModel>>.fromJson(
         json,
         (data) => (data as List<dynamic>)
@@ -39,7 +39,7 @@ class NovelRepository {
       queryParameters: req.toJson(),
     );
 
-    return res.parseData(
+    return res.parseDataNovel(
       (json) => StoryFilterResponse.fromJson(json),
     );
   }
@@ -54,7 +54,7 @@ class NovelRepository {
       },
     );
 
-    return res.parseData(
+    return res.parseDataNovel(
       (json) => BaseDataResponseModel<StoryDetailResponse>.fromJson(
         json,
         (data) => StoryDetailResponse.fromJson(data as Map<String, dynamic>),
@@ -72,7 +72,7 @@ class NovelRepository {
       },
     );
 
-    return response.parseData(
+    return response.parseDataNovel(
       (json) => BaseDataResponseModel<List<ListChapterRes>>.fromJson(
         json,
         (data) => (data as List<dynamic>)
@@ -93,7 +93,7 @@ class NovelRepository {
     );
 
     // ChapterResponse
-    return res.parseData(
+    return res.parseDataNovel(
       (json) => BaseDataResponseModel<ChapterResponse>.fromJson(
         json,
         (data) => ChapterResponse.fromJson(data as Map<String, dynamic>),
@@ -113,7 +113,7 @@ class NovelRepository {
       },
     );
 
-    return res.parseData(
+    return res.parseDataNovel(
       (json) => StoryFilterResponse.fromJson(json),
     );
   }

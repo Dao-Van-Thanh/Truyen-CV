@@ -5,6 +5,7 @@ enum ExploreComicType {
   upcoming,
   ongoing,
   completed,
+  genres;
 }
 
 extension ExploreComicTypeExtension on ExploreComicType {
@@ -18,6 +19,8 @@ extension ExploreComicTypeExtension on ExploreComicType {
         return 'dang-phat-hanh';
       case ExploreComicType.completed:
         return 'hoan-thanh';
+      case ExploreComicType.genres:
+        return 'the-loai';
     }
   }
 
@@ -31,6 +34,8 @@ extension ExploreComicTypeExtension on ExploreComicType {
         return t.comic.type.ongoing;
       case ExploreComicType.completed:
         return t.comic.type.completed;
+      case ExploreComicType.genres:
+        return t.comic.type.genres;
     }
   }
 }

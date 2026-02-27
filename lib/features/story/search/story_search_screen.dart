@@ -37,6 +37,9 @@ class StorySearchScreen extends ConsumerWidget {
             onRefresh: bloc.onRefresh,
             onLoadMore: bloc.loadData,
             listType: StoryListType.list,
+            onTapItem: (item) {
+              bloc.onTapStory(item.storyId);
+            },
           );
         },
       ),

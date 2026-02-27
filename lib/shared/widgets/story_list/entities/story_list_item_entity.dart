@@ -1,16 +1,17 @@
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
 
 class StoryListItemEntity {
-  final String storyId, name, thumbUrl, viewed, process;
-  final double rating;
+  final String storyId, name, thumbUrl, process;
+  final String? viewed;
+  final double? rating;
 
   StoryListItemEntity({
     required this.storyId,
     required this.name,
     required this.thumbUrl,
-    required this.viewed,
+    this.viewed,
     required this.process,
-    required this.rating,
+    this.rating,
   });
 
   static StoryListItemEntity fromStoryModel(StoryModel e) {
