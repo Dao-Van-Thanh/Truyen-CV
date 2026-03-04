@@ -1,13 +1,15 @@
+import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
 import 'package:flutter_template/shared/utilities/map.dart';
 
 class StoryEntity {
-  final String id; 
+  final String id;
   final String name;
   final String thumb;
   final String process; // last chapter update
   final String? author;
   final String? viewed;
   final double? rating;
+  final StoryType storyType;
 
   const StoryEntity({
     required this.id,
@@ -17,10 +19,11 @@ class StoryEntity {
     this.author,
     this.viewed,
     this.rating,
+    required this.storyType,
   });
 
   factory StoryEntity.empty() {
-    return const StoryEntity(
+    return StoryEntity(
       id: '',
       name: '',
       thumb: '',
@@ -28,6 +31,7 @@ class StoryEntity {
       author: '',
       viewed: '',
       rating: 0.0,
+      storyType: StoryType.values.first,
     );
   }
 
@@ -41,6 +45,8 @@ class StoryEntity {
       author: jsonLowCase['author'] as String?,
       viewed: jsonLowCase['viewed'] as String?,
       rating: (jsonLowCase['rating'] as num?)?.toDouble(),
+      storyType:
+          StoryType.fromString(jsonLowCase['storyType'] as String? ?? ''),
     );
   }
 
@@ -53,6 +59,7 @@ class StoryEntity {
       'author': author,
       'viewed': viewed,
       'rating': rating,
+      'storyType': storyType.name,
     };
   }
 
@@ -64,6 +71,7 @@ class StoryEntity {
     String? author,
     String? viewed,
     double? rating,
+    StoryType? storyType,
   }) {
     return StoryEntity(
       id: id ?? this.id,
@@ -73,6 +81,7 @@ class StoryEntity {
       author: author ?? this.author,
       viewed: viewed ?? this.viewed,
       rating: rating ?? this.rating,
+      storyType: storyType ?? this.storyType,
     );
   }
 
@@ -86,6 +95,7 @@ class StoryEntity {
   author: $author,
   viewed: $viewed,
   rating: $rating,
+  storyType: $storyType,
 )''';
   }
 
@@ -100,7 +110,8 @@ class StoryEntity {
         other.process == process &&
         other.author == author &&
         other.viewed == viewed &&
-        other.rating == rating;
+        other.rating == rating &&
+        other.storyType == storyType;
   }
 
   @override
@@ -111,6 +122,7 @@ class StoryEntity {
         process.hashCode ^
         author.hashCode ^
         viewed.hashCode ^
-        rating.hashCode;
+        rating.hashCode ^
+        storyType.hashCode;
   }
 }

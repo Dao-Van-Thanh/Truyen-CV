@@ -43,6 +43,10 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
   double _offSet = 0.0;
   bool _isInitScrollDone = false;
 
+  //handle Gesture
+  bool _isDragging = false;
+  late DateTime _pointerDownTime;
+
   StreamSubscription? _ttsIndexSubscription;
 
   ChapterResponse? get _chapterFromCache {
@@ -152,6 +156,7 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
           bloc.configStorySubject,
           bloc.chaptersMapSubject,
           bloc.currentListChapterItemSubject,
+          bloc.ttsControllerStatusSubject,
         ],
         builder: (context) {
           final config = bloc.configStorySubject.value;
@@ -169,56 +174,74 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
             _isInitScrollDone = true;
           });
 
-          return AppGestureDetector(
-            onTap: () => bloc.toggleMenuVisibility(),
-            behavior: HitTestBehavior.translucent,
-            child: ListView.separated(
-              itemCount: chapterData.paragraphs.length + 1,
-              controller: _scrollController,
-              padding: const EdgeInsets.only(top: 16, bottom: 16),
-              physics: const NeverScrollableScrollPhysics(),
-              separatorBuilder: (context, index) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                if (index == chapterData.paragraphs.length) {
-                  return _buildChapterEndFooter(config);
-                }
-                return ObsBuilder(
-                  streams: [
-                    bloc.ttsControllerStatusSubject,
-                  ],
-                  builder: (context) {
-                    final isPlaying =
-                        !bloc.ttsControllerStatusSubject.value.isStopped;
-                    final isCurrentChapter =
-                        widget.listChapterItem?.id == bloc.tts.currentChapterId;
-                    final isHightLight =
-                        isPlaying && (index == _ttsIndex) && isCurrentChapter;
-                    return AutoScrollTag(
-                      key: Key('paragraph_$index'),
-                      index: index,
-                      controller: _scrollController,
-                      child: _buildParagraphItem(
-                        isPlaying: isPlaying,
-                        isHightLight: isHightLight,
-                        content: chapterData.paragraphs[index],
-                        index: index,
-                        config: config,
-                        onTap: () {
-                          if (isHightLight) {
-                            bloc.toggleMenuVisibility();
-                            return;
-                          }
-                          bloc.onTapPlayToIndex(
-                            index,
-                            widget.listChapterItem?.id ?? '',
-                          );
-                        },
-                      ),
+          final isPlaying = !bloc.ttsControllerStatusSubject.value.isStopped;
+
+          Widget listView = ListView.separated(
+            itemCount: chapterData.paragraphs.length + 1,
+            controller: _scrollController,
+            padding: const EdgeInsets.only(top: 16, bottom: 16),
+            physics: const NeverScrollableScrollPhysics(),
+            separatorBuilder: (context, index) => const SizedBox(height: 12),
+            itemBuilder: (context, index) {
+              if (index == chapterData.paragraphs.length) {
+                return _buildChapterEndFooter(config);
+              }
+
+              final isCurrentChapter =
+                  widget.listChapterItem?.id == bloc.tts.currentChapterId;
+
+              final isHightLight =
+                  isPlaying && (index == _ttsIndex) && isCurrentChapter;
+
+              return AutoScrollTag(
+                key: Key('paragraph_$index'),
+                index: index,
+                controller: _scrollController,
+                child: _buildParagraphItem(
+                  isPlaying: isPlaying,
+                  isHightLight: isHightLight,
+                  content: chapterData.paragraphs[index],
+                  index: index,
+                  config: config,
+                  onTap: () {
+                    if (isHightLight) {
+                      bloc.toggleMenuVisibility();
+                      return;
+                    }
+                    bloc.onTapPlayToIndex(
+                      index,
+                      widget.listChapterItem?.id ?? '',
                     );
                   },
-                );
-              },
-            ),
+                ),
+              );
+            },
+          );
+
+          if (!isPlaying) {
+            listView = SelectionArea(child: listView);
+          }
+
+          return Listener(
+            behavior: HitTestBehavior.translucent,
+            onPointerUp: (event) {
+              final duration = DateTime.now().difference(_pointerDownTime);
+
+              final isTap =
+                  !_isDragging && duration < const Duration(milliseconds: 300);
+
+              if (isTap) {
+                bloc.toggleMenuVisibility();
+              }
+            },
+            onPointerDown: (_) {
+              _pointerDownTime = DateTime.now();
+              _isDragging = false;
+            },
+            onPointerMove: (_) {
+              _isDragging = true;
+            },
+            child: listView,
           );
         },
       ),
@@ -246,25 +269,22 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
       textAlign = TextAlign.center;
     }
 
-    return IgnorePointer(
-      ignoring: !isPlaying,
-      child: AppGestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          color:
-              isHightLight ? color.withValues(alpha: 0.3) : Colors.transparent,
-          child: Text(
-            content,
-            style: TextStyle(
-              fontSize: fontSize,
-              height: lineHeight,
-              color: color,
-              fontWeight: fontWeight,
-              fontFamily: fontFamily,
-            ),
-            textAlign: textAlign,
+    return AppGestureDetector(
+      onTap: onTap,
+      isDisable: !isPlaying,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        color: isHightLight ? color.withValues(alpha: 0.3) : Colors.transparent,
+        child: Text(
+          content,
+          style: TextStyle(
+            fontSize: fontSize,
+            height: lineHeight,
+            color: color,
+            fontWeight: fontWeight,
+            fontFamily: fontFamily,
           ),
+          textAlign: textAlign,
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'story_filter_response.freezed.dart';
@@ -83,6 +84,7 @@ extension StoryModelMapper on StoryModel {
       author: author,
       viewed: viewed,
       rating: rating,
+      storyType: StoryType.novel,
     );
   }
 }

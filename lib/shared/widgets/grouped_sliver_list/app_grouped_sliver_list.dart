@@ -1,45 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/constants/size_box.dart';
-import 'package:flutter_template/shared/widgets/detector/content_height_detector.dart';
+import 'package:flutter_template/bloc/rx/obs_builder.dart';
+import 'package:flutter_template/i18n/strings.g.dart';
+import 'package:flutter_template/shared/widgets/load_more/load_more_list.dart';
+import 'package:flutter_template/shared/widgets/refresh_indicator/app_refresh_indicator.dart';
+import 'package:rxdart/rxdart.dart';
 
 class AppGroupedSliverList<T> extends StatefulWidget {
-  final List<T> data;
-  final String Function(T item) groupBy;
-  final Widget Function(BuildContext context, String title) titleBuilder;
-  final Widget Function(BuildContext context, T item) itemBuilder;
-  final bool isShowFooter;
-  final Future<void> Function()? onLoadMore;
-  final Widget Function(BuildContext context)? buildFooter;
-
-  final Axis scrollDirection;
-  final bool reverse;
-  final ScrollPhysics? physics;
-  final bool shrinkWrap;
-  final ScrollController? controller;
-  final bool isLoadMore;
-  final bool isLastPage;
-  final EdgeInsetsGeometry padding;
-  final Widget Function(BuildContext context, int index)? separatorBuilder;
-
   const AppGroupedSliverList({
     super.key,
     required this.data,
     required this.groupBy,
     required this.titleBuilder,
     required this.itemBuilder,
-    this.scrollDirection = Axis.vertical,
-    this.reverse = false,
-    this.physics,
-    this.shrinkWrap = false,
-    this.controller,
-    this.isLoadMore = false,
-    this.isLastPage = false,
-    this.isShowFooter = true,
-    this.padding = EdgeInsets.zero,
     this.separatorBuilder,
+    this.padding = EdgeInsets.zero,
+    this.controller,
     this.onLoadMore,
-    this.buildFooter,
+    this.isLastPage = true,
+    this.footerBuilder,
+    this.onRefresh,
   });
+
+  final List<T> data;
+  final String Function(T item) groupBy;
+
+  final Future<void> Function()? onRefresh;
+  final Widget Function(BuildContext context, String title) titleBuilder;
+  final Widget Function(BuildContext context, T item) itemBuilder;
+  final Widget Function(BuildContext context, int index)? separatorBuilder;
+
+  final EdgeInsetsGeometry padding;
+  final ScrollController? controller;
+
+  final Future<void> Function()? onLoadMore;
+  final bool isLastPage;
+
+  final Widget Function(BuildContext context)? footerBuilder;
 
   @override
   State<AppGroupedSliverList<T>> createState() =>
@@ -47,24 +43,25 @@ class AppGroupedSliverList<T> extends StatefulWidget {
 }
 
 class _AppGroupedSliverListState<T> extends State<AppGroupedSliverList<T>> {
-  late Map<String, List<T>> groupedData;
-  ScrollController _scrollController = ScrollController();
+  late Map<String, List<T>> _groupedData;
+  late ScrollController _scrollController;
+
+  final _isLoadMoreSubject = BehaviorSubject<bool>.seeded(false);
 
   @override
   void initState() {
     super.initState();
-    groupedData = _groupData();
+    _groupedData = _groupData(widget.data);
     _scrollController = widget.controller ?? ScrollController();
     _scrollController.addListener(_onScroll);
   }
 
   @override
-  void didUpdateWidget(AppGroupedSliverList<T> oldWidget) {
+  void didUpdateWidget(covariant AppGroupedSliverList<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     if (oldWidget.data != widget.data) {
-      setState(() {
-        groupedData = _groupData();
-      });
+      _groupedData = _groupData(widget.data);
     }
   }
 
@@ -74,93 +71,107 @@ class _AppGroupedSliverListState<T> extends State<AppGroupedSliverList<T>> {
     if (widget.controller == null) {
       _scrollController.dispose();
     }
+    _isLoadMoreSubject.close();
     super.dispose();
   }
 
-  void _onScroll() {
-    if (_scrollController.hasClients) {
-      final maxScroll = _scrollController.position.maxScrollExtent;
-      final currentScroll = _scrollController.position.pixels;
-      const delta = 200.0; // Trigger khi còn 200px nữa đến cuối
+  void _onScroll() async {
+    if (widget.onLoadMore == null || widget.isLastPage) return;
+    if (_isLoadMoreSubject.value) return;
+    if (!_scrollController.hasClients) return;
 
-      if (maxScroll - currentScroll <= delta) {
-        if (!widget.isLoadMore && !widget.isLastPage) {
-          widget.onLoadMore?.call();
-        }
-      }
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+
+    const delta = 200.0;
+
+    if (maxScroll - currentScroll <= delta) {
+      _isLoadMoreSubject.value = true;
+
+      await widget.onLoadMore?.call();
+
+      if (!mounted) return;
+
+      _isLoadMoreSubject.value = false;
     }
+  }
+
+  Map<String, List<T>> _groupData(List<T> data) {
+    final Map<String, List<T>> grouped = {};
+
+    for (final item in data) {
+      final key = widget.groupBy(item);
+      grouped.putIfAbsent(key, () => []).add(item);
+    }
+
+    return grouped;
   }
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      scrollDirection: widget.scrollDirection,
-      reverse: widget.reverse,
-      physics: widget.physics,
-      shrinkWrap: widget.shrinkWrap,
-      controller: _scrollController,
-      slivers: groupedData.entries.map(
-        (entry) {
-          return _buildGroupedSlivers(
-            context: context,
-            groupKey: entry.key,
-            group: entry.value,
-          );
-        },
-      ).toList()
-        ..addAll(
-          widget.isShowFooter
-              ? [
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return AppContentHeightDetector(
-                          buildFooter: widget.buildFooter,
-                          scrollController: _scrollController,
-                          builder: (context, buildEndOfList, isTaller) {
-                            if (!isTaller) return SizedBoxConstants.shrink;
-
-                            if (widget.isLastPage) {
-                              return buildEndOfList.call(widget.isLoadMore);
-                            }
-
-                            return SizedBoxConstants.shrink;
-                          },
-                        );
-                      },
-                      childCount: 1,
-                    ),
-                  ),
-                ]
-              : [],
-        ),
+    return AppRefreshIndicator(
+      onRefresh: widget.onRefresh,
+      child: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          ..._groupedData.entries.map(
+            (entry) => _buildGroup(
+              context: context,
+              groupKey: entry.key,
+              group: entry.value,
+            ),
+          ),
+          if (widget.footerBuilder != null)
+            SliverToBoxAdapter(
+              child: widget.footerBuilder!(context),
+            )
+          else
+            SliverToBoxAdapter(
+              child: ObsBuilder(
+                streams: [_isLoadMoreSubject],
+                builder: (context) {
+                  return _buildFooter(context);
+                },
+              ),
+            ),
+        ],
+      ),
     );
   }
 
-  Map<String, List<T>> _groupData() {
-    final Map<String, List<T>> grouped = {};
-    for (final item in widget.data) {
-      final key = widget.groupBy(item);
-      if (grouped.containsKey(key)) {
-        grouped[key]!.add(item);
-      } else {
-        grouped[key] = [item];
-      }
+  Widget _buildFooter(BuildContext context) {
+    if (widget.onLoadMore == null) {
+      return const SizedBox.shrink();
     }
-    return grouped;
+
+    if (_isLoadMoreSubject.value) {
+      return const LoadMoreList();
+    }
+
+    if (widget.isLastPage) {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Center(
+          child: Text(
+            context.t.libraryScreen.historyFooterEnd,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 
-  Widget _buildGroupedSlivers({
+  Widget _buildGroup({
     required BuildContext context,
     required String groupKey,
     required List<T> group,
   }) {
-    final bool hasSeparator = widget.separatorBuilder != null;
+    final hasSeparator = widget.separatorBuilder != null;
 
-    // Tính toán số lượng phần tử (childCount)
-    final int childCount = hasSeparator
-        ? 1 + group.length * 2 - 1 // 1 cho title, xen kẽ item và separator
-        : 1 + group.length; // 1 cho title, còn lại là các item
+    final childCount =
+        hasSeparator ? 1 + group.length * 2 - 1 : 1 + group.length;
 
     return SliverPadding(
       padding: widget.padding,
@@ -168,40 +179,23 @@ class _AppGroupedSliverListState<T> extends State<AppGroupedSliverList<T>> {
         delegate: SliverChildBuilderDelegate(
           (context, index) {
             if (index == 0) {
-              // Vị trí đầu tiên là title
-              return KeyedSubtree(
-                key: ValueKey('title-$groupKey'),
-                child: widget.titleBuilder(context, groupKey),
-              );
+              return widget.titleBuilder(context, groupKey);
             }
 
             if (hasSeparator) {
-              // Với separator, các index lẻ là item, chẵn là separator
-              final int adjustedIndex = index - 1;
-              final int itemIndex = adjustedIndex ~/ 2;
+              final adjustedIndex = index - 1;
+              final itemIndex = adjustedIndex ~/ 2;
 
               if (adjustedIndex.isEven) {
-                // Build item
                 final item = group[itemIndex];
-                return KeyedSubtree(
-                  key: ValueKey('item-$groupKey-$itemIndex'),
-                  child: widget.itemBuilder(context, item),
-                );
+                return widget.itemBuilder(context, item);
               } else {
-                // Build separator
-                return KeyedSubtree(
-                  key: ValueKey('sep-$groupKey-$itemIndex'),
-                  child: widget.separatorBuilder!(context, itemIndex),
-                );
+                return widget.separatorBuilder!(context, itemIndex);
               }
             } else {
-              // Không có separator, chỉ build item
-              final int itemIndex = index - 1;
+              final itemIndex = index - 1;
               final item = group[itemIndex];
-              return KeyedSubtree(
-                key: ValueKey('item-$groupKey-$itemIndex'),
-                child: widget.itemBuilder(context, item),
-              );
+              return widget.itemBuilder(context, item);
             }
           },
           childCount: childCount,

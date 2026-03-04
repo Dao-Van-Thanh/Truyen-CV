@@ -52,7 +52,7 @@ class StoryDetailScreen extends ConsumerWidget {
                 SizedBoxConstants.s4,
                 ElevatedButton(
                   onPressed: () {
-                    bloc.loadStoryDetail();
+                    bloc.onRefresh();
                   },
                   child: Text(t.storyDetail.retry),
                 ),
@@ -173,7 +173,8 @@ class StoryDetailScreen extends ConsumerWidget {
                                   storyDetail.cat,
                                 ]
                                     .where(
-                                        (e) => e != null && e.trim().isNotEmpty)
+                                      (e) => e != null && e.trim().isNotEmpty,
+                                    )
                                     .join('\n'),
                               ),
                               SafeArea(

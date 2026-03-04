@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
+import 'package:flutter_template/constants/common.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:flutter_template/features/library/extension/library_extension.dart';
 import 'package:flutter_template/features/library/widgets/library_history_item.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/datetime.dart';
@@ -25,8 +27,15 @@ class LibraryHistoryPage extends ConsumerWidget {
           return AppEmptyState(title: t.libraryScreen.listHistoryEmpty);
         }
 
+        final page = bloc.historyCurrentPage;
+        final limit = CommonConstants.pageSize;
+        final isLastPage = data.length < (page + 1) * limit;
         return AppGroupedSliverList<BookEntity>(
           data: data,
+          onLoadMore: bloc.onLoadMoreHistory,
+          onRefresh: bloc.onRefreshHistory,
+          isLastPage: isLastPage,
+          controller: bloc.historyScrollController,
           groupBy: (item) {
             final lastReadDate = DatetimeUtil.parseIsoToDateTime(
               item.lastReadTime,
@@ -47,6 +56,7 @@ class LibraryHistoryPage extends ConsumerWidget {
           },
           itemBuilder: (context, item) {
             return LibraryHistoryItem(
+              key: ValueKey(item.id),
               item: item,
               onPress: () => bloc.onTapReadStory(item),
               onLongPress: () => bloc.onTapLongPressStory(item),

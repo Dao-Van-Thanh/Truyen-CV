@@ -79,48 +79,51 @@ class ExploreBloc extends BlocBase {
 
     showModalBottomSheet<ExploreNavigationEnum>(
       context: routerService.rootContext,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(8),
-        ),
-      ),
       builder: (context) {
         return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: ExploreNavigationEnum.values.map((type) {
-              final isSelected = type == current;
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(8),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: ExploreNavigationEnum.values.map((type) {
+                final isSelected = type == current;
 
-              return ListTile(
-                leading: IconTheme(
-                  data: IconThemeData(
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.primary
-                        : null,
+                return ListTile(
+                  leading: IconTheme(
+                    data: IconThemeData(
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
+                    ),
+                    child: type.icon,
                   ),
-                  child: type.icon,
-                ),
-                title: Text(
-                  type.displayName,
-                  style: TextStyle(
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.primary
-                        : null,
-                    fontWeight:
-                        isSelected ? FontWeight.w600 : FontWeight.normal,
+                  title: Text(
+                    type.displayName,
+                    style: TextStyle(
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.normal,
+                    ),
                   ),
-                ),
-                trailing: isSelected
-                    ? Icon(
-                        Icons.check,
-                        color: Theme.of(context).colorScheme.primary,
-                      )
-                    : null,
-                onTap: () {
-                  Navigator.pop(context, type);
-                },
-              );
-            }).toList(),
+                  trailing: isSelected
+                      ? Icon(
+                          Icons.check,
+                          color: Theme.of(context).colorScheme.primary,
+                        )
+                      : null,
+                  onTap: () {
+                    Navigator.pop(context, type);
+                  },
+                );
+              }).toList(),
+            ),
           ),
         );
       },

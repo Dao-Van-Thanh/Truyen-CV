@@ -5,10 +5,11 @@ import 'package:flutter_template/dependency/local_api/repository/book/entities/s
 import 'package:flutter_template/dependency/network_api/comic/list_comic/list_comic_res.dart';
 import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
+import 'package:flutter_template/shared/extensions/infinite_scroll_paination.dart';
 import 'package:flutter_template/shared/helper/repository.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 import 'package:flutter_template/shared/widgets/story_list/story_list.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ExploreComicPageWidget extends ConsumerStatefulWidget {
   final String categorySlug;
@@ -28,74 +29,41 @@ class _ExploreComicPageWidgetState
     extends ConsumerState<ExploreComicPageWidget> {
   late final networkApiService = ref.read(AppService.networkApi);
 
-  final List<StoryEntity> _stories = [];
-  bool _isLoading = false;
-  bool _isFirstLoad = true;
-  bool _hasMore = true;
-  int _currentPage = 1;
+  late final _pagingController = PagingController<int, StoryEntity>(
+    getNextPageKey: (state) => state.isLastPage() ? null : state.nextIntPageKey,
+    fetchPage: (pageKey) => _loadData(pageKey),
+  );
 
   @override
-  void initState() {
-    super.initState();
-    _loadData();
+  void dispose() {
+    super.dispose();
+    _pagingController.dispose();
   }
 
-  Future<void> _loadData() async {
-    if (_isLoading) return;
-
-    setState(() => _isLoading = true);
-
+  Future<List<StoryEntity>> _loadData(int page) async {
     try {
       final res = await networkApiService.comicRepository.getListByType(
         widget.categorySlug,
-        page: _currentPage,
+        page: page,
       );
 
-      if (!mounted) return;
+      if (!mounted) return [];
 
-      res.whenOrNull(
+      return res.when<List<StoryEntity>>(
         success: (data) {
           final newStories = data.data?.toStoryEntity() ?? [];
-
-          setState(() {
-            if (newStories.isEmpty) {
-              _hasMore = false;
-            } else {
-              _stories.addAll(newStories);
-              _currentPage++;
-            }
-            _isLoading = false;
-            _isFirstLoad = false;
-          });
+          return newStories;
         },
         error: (error) {
-          setState(() {
-            _isLoading = false;
-            _isFirstLoad = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${error.errorMessage}')),
-          );
+          throw Exception(error.errorMessage);
+        },
+        handled: () {
+          return [];
         },
       );
     } catch (e) {
-      logger.e('Error loading comics: $e');
-      if (!mounted) return;
-      setState(() {
-        _isLoading = false;
-        _isFirstLoad = false;
-      });
+      throw Exception(e);
     }
-  }
-
-  Future<void> _onRefresh() async {
-    setState(() {
-      _stories.clear();
-      _currentPage = 1;
-      _hasMore = true;
-      _isFirstLoad = true;
-    });
-    await _loadData();
   }
 
   void _onTapItem(StoryEntity item) {
@@ -103,7 +71,7 @@ class _ExploreComicPageWidgetState
     ref.read(AppService.router).push(
           RouteInput.storyDetail(
             args: StoryDetailArgument(
-              storyId: item.id,
+              story: item,
               fetchStoryDetail: (ref) {
                 return RepositoryHelper.fetchStoryComicDetail(
                   ref,
@@ -121,12 +89,7 @@ class _ExploreComicPageWidgetState
       key: PageStorageKey(
         'explore_${widget.categorySlug}_${widget.listType}',
       ),
-      stories: _stories,
-      isLoading: _isLoading,
-      isFirstLoad: _isFirstLoad,
-      hasMore: _hasMore,
-      onRefresh: _onRefresh,
-      onLoadMore: _loadData,
+      pagingController: _pagingController,
       listType: widget.listType,
       onTapItem: _onTapItem,
     );

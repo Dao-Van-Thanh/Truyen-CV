@@ -303,6 +303,9 @@ class TranslationsLibraryScreenVi {
 	/// vi: 'Lịch sử'
 	String get history => 'Lịch sử';
 
+	/// vi: 'Đã hết lịch sử. Dữ liệu lịch sử chỉ xem được trong 30 ngày gần nhất'
+	String get historyFooterEnd => 'Đã hết lịch sử.\nDữ liệu lịch sử chỉ xem được trong 30 ngày gần nhất';
+
 	/// vi: 'Chưa có lịch sử nào'
 	String get listHistoryEmpty => 'Chưa có lịch sử nào';
 
@@ -846,6 +849,7 @@ extension on Translations {
 			'libraryScreen.listBookmarksEmpty' => 'Chưa có đánh dấu nào',
 			'libraryScreen.downloads' => 'Tải về',
 			'libraryScreen.history' => 'Lịch sử',
+			'libraryScreen.historyFooterEnd' => 'Đã hết lịch sử.\nDữ liệu lịch sử chỉ xem được trong 30 ngày gần nhất',
 			'libraryScreen.listHistoryEmpty' => 'Chưa có lịch sử nào',
 			'libraryScreen.unfavoriteConfirmationTitle' => 'Xác nhận bỏ yêu thích',
 			'libraryScreen.unfavoriteConfirmationMessage' => 'Bạn có chắc chắn muốn bỏ yêu thích truyện này không?',

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppRefreshIndicator extends StatelessWidget {
   final Widget child;
-  final Future<void> Function() onRefresh;
+  final Future<void> Function()? onRefresh;
   final ScrollController? controller;
   final bool enableRefresh;
 
@@ -19,15 +19,20 @@ class AppRefreshIndicator extends StatelessWidget {
     if (!enableRefresh) {
       return child;
     }
+
+    if (onRefresh == null) {
+      return child;
+    }
+
     return RefreshIndicator(
-      onRefresh: onRefresh,
+      onRefresh: onRefresh!,
       child: CustomScrollView(
         controller: controller,
         slivers: [
           SliverFillRemaining(
             fillOverscroll: true,
             child: RefreshIndicator(
-              onRefresh: onRefresh,
+              onRefresh: onRefresh!,
               child: child,
             ),
           ),
