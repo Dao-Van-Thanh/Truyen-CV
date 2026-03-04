@@ -35,6 +35,7 @@ class LibraryHistoryPage extends ConsumerWidget {
           onLoadMore: bloc.onLoadMoreHistory,
           onRefresh: bloc.onRefreshHistory,
           isLastPage: isLastPage,
+          controller: bloc.historyScrollController,
           groupBy: (item) {
             final lastReadDate = DatetimeUtil.parseIsoToDateTime(
               item.lastReadTime,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
 import 'package:flutter_template/features/story/search/widgets/story_search_app_bar.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 import 'package:flutter_template/shared/widgets/story_list/story_list.dart';
@@ -18,26 +17,11 @@ class StorySearchScreen extends ConsumerWidget {
         child: StorySearchAppBar(),
       ),
       resizeToAvoidBottomInset: false,
-      body: ObsBuilder(
-        streams: [
-          bloc.storiesSubject,
-          bloc.isLoadingSubject,
-          bloc.isFirstLoadSubject,
-          bloc.hasMoreSubject,
-        ],
-        builder: (context) {
-          return StoryList(
-            stories: bloc.storiesSubject.value,
-            isLoading: bloc.isLoadingSubject.value,
-            isFirstLoad: bloc.isFirstLoadSubject.value,
-            hasMore: bloc.hasMoreSubject.value,
-            onRefresh: bloc.onRefresh,
-            onLoadMore: bloc.loadData,
-            listType: StoryListType.list,
-            onTapItem: (item) {
-              bloc.onTapStory(item);
-            },
-          );
+      body: StoryList(
+        pagingController: bloc.pagingController,
+        listType: StoryListType.list,
+        onTapItem: (item) {
+          bloc.onTapStory(item);
         },
       ),
     );

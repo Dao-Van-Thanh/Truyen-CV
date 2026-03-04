@@ -24,7 +24,10 @@ class AppGestureDetector extends StatelessWidget {
         behavior: behavior,
         onTap: onTap,
         onLongPress: onLongPress,
-        child: child,
+        child: Container(
+          color: Colors.transparent,
+          child: child,
+        ),
       ),
     );
   }

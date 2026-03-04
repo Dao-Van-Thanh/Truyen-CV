@@ -28,6 +28,7 @@ class LibraryBloc extends BlocBase {
   final isLoadingSubject = BehaviorSubject<bool>.seeded(false);
 
   final bookmarksScrollController = ScrollController();
+  final historyScrollController = ScrollController();
 
   final isLoadMoreBookmarksSubject = BehaviorSubject<bool>.seeded(false);
 
@@ -50,6 +51,7 @@ class LibraryBloc extends BlocBase {
     isLoadingSubject.close();
     bookmarksScrollController.dispose();
     isLoadMoreBookmarksSubject.close();
+    historyScrollController.dispose();
   }
 
   Future<void> _init() async {

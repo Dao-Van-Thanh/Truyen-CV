@@ -44,9 +44,13 @@ class StoryDetailBloc extends BlocBase {
     required StoryDetailArgument args,
   }) {
     _args = args;
-    _getBookLocal();
-    loadStoryDetail();
+    onRefresh();
     _listeners();
+  }
+
+  void onRefresh() {
+    loadStoryDetail();
+    _getBookLocal();
   }
 
   @override

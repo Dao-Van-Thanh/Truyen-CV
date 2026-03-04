@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
-import 'package:flutter_template/constants/common.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
 import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/story_search_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
+import 'package:flutter_template/shared/extensions/infinite_scroll_paination.dart';
 import 'package:flutter_template/shared/extensions/text_editing_controller_extension.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class StorySearchBloc extends BlocBase {
   Ref ref;
@@ -19,14 +19,12 @@ class StorySearchBloc extends BlocBase {
 
   final searchController = TextEditingController();
 
-  final storiesSubject = BehaviorSubject<List<StoryEntity>>.seeded([]);
-  final isLoadingSubject = BehaviorSubject<bool>.seeded(false);
-  final isFirstLoadSubject = BehaviorSubject<bool>.seeded(true);
-  final hasMoreSubject = BehaviorSubject<bool>.seeded(true);
-
   final searchFocusNode = FocusNode();
 
-  int _currentPage = 1;
+  late final pagingController = PagingController<int, StoryEntity>(
+    getNextPageKey: (state) => state.isLastPage() ? null : state.nextIntPageKey,
+    fetchPage: (pageKey) => _loadData(pageKey),
+  );
 
   StorySearchBloc(this.ref, {required StorySearchArgument args}) {
     _args = args;
@@ -37,11 +35,8 @@ class StorySearchBloc extends BlocBase {
   void dispose() {
     super.dispose();
     searchController.dispose();
-    storiesSubject.close();
-    isLoadingSubject.close();
-    isFirstLoadSubject.close();
-    hasMoreSubject.close();
     searchFocusNode.dispose();
+    pagingController.dispose();
   }
 
   void onTapClearSearch() {
@@ -49,7 +44,6 @@ class StorySearchBloc extends BlocBase {
   }
 
   void _init() {
-    loadData();
     _listenSearchInput();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       searchFocusNode.requestFocus();
@@ -59,50 +53,27 @@ class StorySearchBloc extends BlocBase {
   void _listenSearchInput() {
     searchController.addListenerText(
       (_) {
-        storiesSubject.value = [];
-        _currentPage = 1;
-        hasMoreSubject.value = true;
-        isFirstLoadSubject.value = true;
-        loadData();
+        pagingController.refresh();
       },
       debounce: Debounce(milliseconds: 300),
     );
   }
 
-  Future<void> loadData() async {
-    if (isLoadingSubject.value) return;
-
-    isLoadingSubject.value = true;
-
+  Future<List<StoryEntity>> _loadData(int page) async {
     try {
       final newStories = await _args.fetchSearchStory(
         ref,
         searchController.text,
-        _currentPage,
+        page,
       );
 
-      if (isDispose) return;
+      if (isDispose) return [];
 
-      if (newStories.length < CommonConstants.pageSize) {
-        hasMoreSubject.value = false;
-      }
-      storiesSubject.value.addAll(newStories);
-      _currentPage++;
-      isLoadingSubject.value = false;
-      isFirstLoadSubject.value = false;
+      return newStories;
     } catch (e) {
-      if (isDispose) return;
-      isLoadingSubject.value = false;
-      isFirstLoadSubject.value = false;
+      if (isDispose) return [];
+      return [];
     }
-  }
-
-  Future<void> onRefresh() async {
-    storiesSubject.value.clear();
-    _currentPage = 1;
-    hasMoreSubject.value = true;
-    isFirstLoadSubject.value = true;
-    await loadData();
   }
 
   void onTapStory(StoryEntity story) {
@@ -118,4 +89,3 @@ class StorySearchBloc extends BlocBase {
     );
   }
 }
-      

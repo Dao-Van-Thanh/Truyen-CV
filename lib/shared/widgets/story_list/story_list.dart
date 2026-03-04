@@ -4,26 +4,17 @@ import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 import 'package:flutter_template/shared/widgets/story_list/widgets/story_grid_item.dart';
 import 'package:flutter_template/shared/widgets/story_list/widgets/story_list_item.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class StoryList extends StatefulWidget {
-  final List<StoryEntity> stories;
-  final bool isLoading;
-  final bool isFirstLoad;
-  final bool hasMore;
-  final Future<void> Function() onRefresh;
-  final VoidCallback onLoadMore;
+  final PagingController<int, StoryEntity> pagingController;
   final StoryListType listType;
   final void Function(StoryEntity item) onTapItem;
 
   const StoryList({
     super.key,
-    required this.stories,
-    required this.isLoading,
-    required this.isFirstLoad,
-    required this.hasMore,
-    required this.onRefresh,
-    required this.onLoadMore,
+    required this.pagingController,
     required this.listType,
     required this.onTapItem,
   });
@@ -49,14 +40,6 @@ class _StoryListState extends State<StoryList> {
   }
 
   void _onScroll() {
-    final pos = _scrollController.position;
-
-    if (pos.pixels >= pos.maxScrollExtent - 200 &&
-        widget.hasMore &&
-        !widget.isLoading) {
-      widget.onLoadMore();
-    }
-
     final shouldShow =
         _scrollController.offset > MediaQuery.of(context).size.height;
     if (_showScrollToTop != shouldShow) {
@@ -80,49 +63,79 @@ class _StoryListState extends State<StoryList> {
     );
   }
 
-  Widget _buildGrid(double heightItem) {
-    final itemCount = widget.stories.length + (widget.hasMore ? 1 : 0);
-
-    return GridView.builder(
-      controller: _scrollController,
-      padding: const EdgeInsets.all(12),
-      cacheExtent: 500,
-      addRepaintBoundaries: true,
-      addAutomaticKeepAlives: true,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        mainAxisExtent: heightItem,
+  Widget _buildEmptyState() {
+    final t = context.t;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(t.story.noData),
+          const SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {
+              widget.pagingController.refresh();
+            },
+            child: Text(t.story.reload),
+          ),
+        ],
       ),
-      itemCount: itemCount,
-      itemBuilder: (context, index) {
-        if (index >= widget.stories.length) return _loader();
-        return StoryGridItem(
-          story: widget.stories[index],
-          onTap: () => widget.onTapItem(widget.stories[index]),
-        );
-      },
     );
   }
 
-  Widget _buildList() {
-    final itemCount = widget.stories.length + (widget.hasMore ? 1 : 0);
-
-    return ListView.builder(
-      controller: _scrollController,
-      cacheExtent: 500,
-      addRepaintBoundaries: true,
-      addAutomaticKeepAlives: true,
-      itemCount: itemCount,
-      itemBuilder: (context, index) {
-        if (index >= widget.stories.length) return _loader();
+  PagedChildBuilderDelegate<StoryEntity> _buildDelegate() {
+    return PagedChildBuilderDelegate<StoryEntity>(
+      itemBuilder: (context, item, index) {
+        if (widget.listType == StoryListType.grid) {
+          return StoryGridItem(
+            story: item,
+            onTap: () => widget.onTapItem(item),
+          );
+        }
         return StoryListItem(
-          story: widget.stories[index],
+          story: item,
           isCompact: widget.listType == StoryListType.listCompact,
-          onTap: () => widget.onTapItem(widget.stories[index]),
+          onTap: () => widget.onTapItem(item),
         );
       },
+      firstPageProgressIndicatorBuilder: (_) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+      newPageProgressIndicatorBuilder: (_) => _loader(),
+      noItemsFoundIndicatorBuilder: (_) => _buildEmptyState(),
+      firstPageErrorIndicatorBuilder: (_) => _buildEmptyState(),
+      newPageErrorIndicatorBuilder: (_) => _newPageErrorIndicatorBuilder(),
+    );
+  }
+
+  Widget _newPageErrorIndicatorBuilder() {
+    final t = context.t;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return InkWell(
+      onTap: () => widget.pagingController.fetchNextPage(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.refresh_rounded,
+              color: colorScheme.primary,
+              size: 24,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              t.story.reload,
+              style: TextStyle(
+                color: colorScheme.primary,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -130,48 +143,61 @@ class _StoryListState extends State<StoryList> {
     switch (widget.listType) {
       case StoryListType.grid:
         final heightItem = MediaQuery.of(context).size.height * 0.29;
-        return _buildGrid(heightItem);
+        return PagingListener(
+          controller: widget.pagingController,
+          builder: (context, state, fetchNextPage) {
+            return PagedGridView<int, StoryEntity>(
+              scrollController: _scrollController,
+              state: state,
+              fetchNextPage: fetchNextPage,
+              padding: const EdgeInsets.all(12),
+              cacheExtent: 500,
+              addRepaintBoundaries: true,
+              addAutomaticKeepAlives: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                mainAxisExtent: heightItem,
+              ),
+              builderDelegate: _buildDelegate(),
+            );
+          },
+        );
       case StoryListType.list:
       case StoryListType.listCompact:
-        return _buildList();
+        return PagingListener(
+          controller: widget.pagingController,
+          builder: (context, state, fetchNextPage) {
+            return PagedListView<int, StoryEntity>(
+              scrollController: _scrollController,
+              fetchNextPage: fetchNextPage,
+              state: state,
+              cacheExtent: 500,
+              addRepaintBoundaries: true,
+              addAutomaticKeepAlives: true,
+              builderDelegate: _buildDelegate(),
+            );
+          },
+        );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final t = context.t;
-
-    if (widget.isFirstLoad && widget.stories.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (!widget.isFirstLoad && widget.stories.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(t.story.noData),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: widget.onRefresh,
-              child: Text(t.story.reload),
-            ),
-          ],
-        ),
-      );
-    }
-
     return Stack(
       children: [
-        RefreshIndicator(
-          onRefresh: widget.onRefresh,
-          child: GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onVerticalDragDown: (details) {
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-            onTapDown: (details) {
-              FocusManager.instance.primaryFocus?.unfocus();
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onVerticalDragDown: (_) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          onTapDown: (_) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: RefreshIndicator(
+            onRefresh: () async {
+              widget.pagingController.refresh();
             },
             child: _buildListView(),
           ),

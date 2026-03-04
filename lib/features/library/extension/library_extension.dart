@@ -13,6 +13,20 @@ extension LibraryExtension on LibraryBloc {
   void _resetData() {
     bookmarksCurrentPage = 0;
     historyCurrentPage = 0;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      //scroll to top
+
+      if (bookmarksScrollController.hasClients &&
+          bookmarksScrollController.offset > 0) {
+        bookmarksScrollController.jumpTo(0);
+      }
+
+      if (historyScrollController.hasClients &&
+          historyScrollController.offset > 0) {
+        historyScrollController.jumpTo(0);
+      }
+    });
   }
 
   void listenScroll() {
@@ -42,8 +56,8 @@ extension LibraryExtension on LibraryBloc {
   }
 
   Future<void> _loadBookmarks({int page = 0}) async {
-    final bookmarks =
-        await localApiService.bookRepository.getFavoriteBooks(page: page);
+    final bookmarks = await localApiService.bookRepository
+        .getFavoriteBooks(page: page, limit: 100);
     if (isDispose) return;
 
     if (page == 0) {
