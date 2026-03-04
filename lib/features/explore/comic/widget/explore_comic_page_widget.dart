@@ -103,7 +103,7 @@ class _ExploreComicPageWidgetState
     ref.read(AppService.router).push(
           RouteInput.storyDetail(
             args: StoryDetailArgument(
-              storyId: item.id,
+              story: item,
               fetchStoryDetail: (ref) {
                 return RepositoryHelper.fetchStoryComicDetail(
                   ref,

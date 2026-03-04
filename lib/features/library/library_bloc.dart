@@ -1,13 +1,17 @@
+import 'dart:convert';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/story_search_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
+import 'package:flutter_template/features/library/extension/library_extension.dart';
 import 'package:flutter_template/features/library/widgets/library_bookmarks_option.dart';
 import 'package:flutter_template/shared/helper/repository.dart';
 import 'package:flutter_template/shared/widgets/dialog/file_import_dialog.dart';
@@ -23,8 +27,19 @@ class LibraryBloc extends BlocBase {
   final listHistorySubject = BehaviorSubject<List<BookEntity>>.seeded([]);
   final isLoadingSubject = BehaviorSubject<bool>.seeded(false);
 
+  final bookmarksScrollController = ScrollController();
+
+  final isLoadMoreBookmarksSubject = BehaviorSubject<bool>.seeded(false);
+
+  int bookmarksCurrentPage = 0;
+  int historyCurrentPage = 0;
+
+  bool get isLastPageBookmarks =>
+      listBookmarksSubject.value.length < (bookmarksCurrentPage + 1) * 20;
+
   LibraryBloc(this.ref) {
     _init();
+    listenScroll();
   }
 
   @override
@@ -33,35 +48,15 @@ class LibraryBloc extends BlocBase {
     listBookmarksSubject.close();
     listHistorySubject.close();
     isLoadingSubject.close();
+    bookmarksScrollController.dispose();
+    isLoadMoreBookmarksSubject.close();
   }
 
   Future<void> _init() async {
     isLoadingSubject.value = true;
-    await Future.wait([
-      _loadBookmarks(),
-      _loadHistory(),
-    ]);
+    await loadData();
     if (isDispose) return;
     isLoadingSubject.value = false;
-  }
-
-  void refreshData() {
-    _loadBookmarks();
-    _loadHistory();
-  }
-
-  Future<void> _loadBookmarks() async {
-    final bookmarks = await localApiService.bookRepository.getFavoriteBooks();
-    if (isDispose) return;
-    listBookmarksSubject.add(bookmarks);
-  }
-
-  Future<void> _loadHistory() async {
-    final now = DateTime.now();
-    final history =
-        await localApiService.bookRepository.getRecentReadBooks(fromDate: now);
-    if (isDispose) return;
-    listHistorySubject.add(history);
   }
 
   void onTapLongPressStory(BookEntity item) async {
@@ -96,7 +91,7 @@ class LibraryBloc extends BlocBase {
       item.copyWith(isFavorite: false),
       isHasUpdateListChapter: false,
     );
-    refreshData();
+    loadData();
   }
 
   void _handleAddBookmark(BookEntity item) async {
@@ -105,14 +100,15 @@ class LibraryBloc extends BlocBase {
       item.copyWith(isFavorite: true),
       isHasUpdateListChapter: false,
     );
-    refreshData();
+    loadData();
   }
 
   void _handleViewInfo(BookEntity item) {
+    final story = StoryEntity.fromJson(jsonDecode(item.storyData));
     routerService.push(
       RouteInput.storyDetail(
         args: StoryDetailArgument(
-          storyId: item.id,
+          story: story,
           fetchStoryDetail: (ref) {
             return RepositoryHelper.fetchStoryNovelDetail(
               ref,
@@ -183,6 +179,6 @@ class LibraryBloc extends BlocBase {
 
   void _handleRemoveStory(BookEntity item) {
     localApiService.bookRepository.deleteBook(item.id);
-    refreshData();
+    loadData();
   }
 }

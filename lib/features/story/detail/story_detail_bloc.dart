@@ -21,6 +21,8 @@ class StoryDetailBloc extends BlocBase {
 
   late StoryDetailArgument _args;
 
+  String get storyId => _args.story.id;
+
   late final routerService = ref.read(AppService.router);
   late final localApiService = ref.read(AppService.localApi);
 
@@ -112,7 +114,7 @@ class StoryDetailBloc extends BlocBase {
     }
 
     final bookEntityLocal =
-        await localApiService.bookRepository.getBookById(_args.storyId);
+        await localApiService.bookRepository.getBookById(storyId);
 
     String selectedChapterId = '';
 
@@ -128,7 +130,7 @@ class StoryDetailBloc extends BlocBase {
       }
     }
     if (selectedChapterId.isEmpty) {
-      logger.e('No chapter available to read for storyId: ${_args.storyId}');
+      logger.e('No chapter available to read for storyId: ${storyId}');
       return;
     }
 
@@ -144,7 +146,7 @@ class StoryDetailBloc extends BlocBase {
         .push(
       RouteInput.readStory(
         args: ReadStoryArgument(
-          storyId: _args.storyId,
+          storyId: storyId,
           selectedChapterId: selectedChapterId,
           listChapter: storyDetailSubject.value?.listChapter ?? [],
           scrollOffset: scrollOffset,
@@ -159,7 +161,7 @@ class StoryDetailBloc extends BlocBase {
   Future<void> _getBookLocal() async {
     if (_isLoadingLocal) return;
     _isLoadingLocal = true;
-    final res = await localApiService.bookRepository.getBookById(_args.storyId);
+    final res = await localApiService.bookRepository.getBookById(storyId);
     _isLoadingLocal = false;
     if (isDispose) return;
     if (res != null) {
@@ -181,7 +183,7 @@ class StoryDetailBloc extends BlocBase {
     try {
       final listChapter = storyDetailSubject.value?.listChapter ?? [];
       final bookEntity = BookEntity(
-        id: _args.storyId,
+        id: storyId,
         listChapters: listChapter,
         storyData: jsonEncode(storyDetailSubject.value?.toJson()),
         currentChapterId: selectedChapterId,
@@ -207,7 +209,7 @@ class StoryDetailBloc extends BlocBase {
     final newStatus = !currentStatus;
 
     final bookEntityLocal =
-        await localApiService.bookRepository.getBookById(_args.storyId);
+        await localApiService.bookRepository.getBookById(storyId);
 
     _upsertBookToLocal(
       selectedChapterId: bookEntityLocal?.currentChapterId,

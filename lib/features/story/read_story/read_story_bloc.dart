@@ -138,16 +138,8 @@ class ReadStoryBloc extends BlocBase {
     listChapterSubject.value = _args.listChapter;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _listen();
-      final selectedIndex = listChapterSubject.value.indexWhere(
-        (chapter) => chapter.id == selectedChapterId,
-      );
-      if (selectedIndex != -1) {
-        pageController.jumpToPage(selectedIndex);
-        onPageChanged(selectedIndex);
-      } else {
-        preloadChapters(0);
-      }
     });
+    _handleLoadFirstChapter();
     _loadStoryDetail();
     isLoadingSubject.value = true;
     await Future.wait([
@@ -159,11 +151,28 @@ class ReadStoryBloc extends BlocBase {
     initTts();
   }
 
-  void onPageChanged(int p1) {
-    if (p1 < 0 || p1 >= listChapterSubject.value.length) return;
-    currentListChapterItemSubject.value = listChapterSubject.value[p1];
+  void _handleLoadFirstChapter() {
+    final selectedIndex = listChapterSubject.value.indexWhere(
+      (chapter) => chapter.id == selectedChapterId,
+    );
+    if (selectedIndex != -1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        pageController.jumpToPage(selectedIndex);
+      });
+
+      onPageChanged(selectedIndex);
+    } else {
+      currentListChapterItemSubject.value =
+          listChapterSubject.value[0];
+      preloadChapters(0);
+    }
+  }
+
+  void onPageChanged(int page) {
+    if (page < 0 || page >= listChapterSubject.value.length) return;
+    currentListChapterItemSubject.value = listChapterSubject.value[page];
     _preloadDebounce.run(() {
-      preloadChapters(p1);
+      preloadChapters(page);
     });
   }
 
@@ -351,18 +360,27 @@ class ReadStoryBloc extends BlocBase {
   }
 
   void onTapNextStoryDetail() {
-    routerService.push(
-      RouteInput.storyDetail(
-        args: StoryDetailArgument(
-          storyId: storyId,
-          fetchStoryDetail: (ref) {
-            return RepositoryHelper.fetchStoryNovelDetail(
-              ref,
-              storyId: storyId,
-            );
-          },
-        ),
-      ),
+    getStoryFromLocal(storyId).then(
+      (value) {
+        if (value == null) {
+          toastService.showText(message: 'Error getting story from local');
+          return;
+        }
+
+        routerService.push(
+          RouteInput.storyDetail(
+            args: StoryDetailArgument(
+              story: value,
+              fetchStoryDetail: (ref) {
+                return RepositoryHelper.fetchStoryNovelDetail(
+                  ref,
+                  storyId: storyId,
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 

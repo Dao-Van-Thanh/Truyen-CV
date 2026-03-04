@@ -1,15 +1,17 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_template/shared/bloc/config/app_theme.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/router/utils/route_name.dart';
 import 'package:flutter_template/dependency/router/utils/route_page.dart';
+import 'package:flutter_template/i18n/strings.g.dart';
+import 'package:flutter_template/shared/bloc/config/app_theme.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 
 Future<void> _initLocalServices(ProviderContainer container) async {
@@ -23,8 +25,23 @@ Future<void> _initLocalServices(ProviderContainer container) async {
   }
 }
 
+void _addDebugModes() {
+  if (!kDebugMode) return;
+  // Enable Flutter's debug painting to visualize layout boundaries
+  // debugPaintSizeEnabled = true;
+
+  // Enable Flutter's performance overlay to visualize rendering performance
+  // WidgetsApp.showPerformanceOverlayOverride = true;
+
+  // Enable Flutter's widget inspector to visualize widget trees
+  // debugDumpRenderTree();
+
+  debugRepaintRainbowEnabled = true;
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // _addDebugModes();
 
   final container = ProviderContainer();
   await _initLocalServices(container);

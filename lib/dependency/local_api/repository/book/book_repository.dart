@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_template/constants/constants.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/chapter/chapter_repository.dart';
@@ -73,19 +74,27 @@ class BookRepository {
     return _attachChaptersToBooks(books);
   }
 
-  Future<List<BookEntity>> getFavoriteBooks() async {
+  Future<List<BookEntity>> getFavoriteBooks({
+    required int page,
+    int limit = CommonConstants.pageSize,
+  }) async {
     final books = await db.query(
       _booksTable,
       where: 'isFavorite = ?',
       whereArgs: [1],
       orderBy: 'timeStamp DESC',
+      limit: limit,
+      offset: (page - 1) * limit,
     );
 
     return _attachChaptersToBooks(books);
   }
 
-  Future<List<BookEntity>> getRecentReadBooks({DateTime? fromDate}) async {
-    final now = fromDate ?? DateTime.now();
+  Future<List<BookEntity>> getRecentReadBooks({
+    required int page,
+    int limit = CommonConstants.pageSize,
+  }) async {
+    final now = DateTime.now();
     final oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
 
     final books = await db.query(
@@ -93,6 +102,8 @@ class BookRepository {
       where: 'lastReadTime >= ?',
       whereArgs: [oneMonthAgo.toIso8601String()],
       orderBy: 'lastReadTime DESC',
+      limit: limit,
+      offset: (page - 1) * limit,
     );
 
     return _attachChaptersToBooks(books);

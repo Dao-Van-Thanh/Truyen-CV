@@ -7,6 +7,7 @@ import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/constants/config.dart';
 import 'package:flutter_template/constants/font_family_enum.dart';
 import 'package:flutter_template/dependency/app_service.dart';
+import 'package:flutter_template/features/library/extension/library_extension.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 import 'package:rxdart/rxdart.dart';
@@ -132,7 +133,7 @@ class AppConfigBloc extends BlocBase {
           );
     }).whenComplete(() {
       ref.read(AppService.toast).showText(message: t.setting.deleteDataSuccess);
-      ref.read(BlocProvider.library).refreshData();
+      ref.read(BlocProvider.library).loadData();
     });
   }
 }

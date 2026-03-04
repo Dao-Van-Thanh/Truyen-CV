@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/dependency/app_service.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
 import 'package:flutter_template/dependency/network_api/novel/category/category_model.dart';
 import 'package:flutter_template/dependency/network_api/novel/detail/story_detail_response.dart';
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_request.dart';
@@ -60,15 +61,15 @@ class ExploreNovelBloc extends BlocBase {
     );
   }
 
-  void onTapStory(String storyId) {
+  void onTapStory(StoryEntity story) {
     routerService.push(
       RouteInput.storyDetail(
         args: StoryDetailArgument(
-          storyId: storyId,
+          story: story,
           fetchStoryDetail: (ref) {
             return RepositoryHelper.fetchStoryNovelDetail(
               ref,
-              storyId: storyId,
+              storyId: story.id,
             );
           },
         ),

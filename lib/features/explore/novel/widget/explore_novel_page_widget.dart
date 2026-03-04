@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/dependency/app_service.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_request.dart';
 import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
 import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
@@ -76,7 +77,7 @@ class _ExploreNovelPageWidgetState
             _isFirstLoad = false;
           });
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${error.errorMessage}')),
+            SnackBar(content: Text(error.errorMessage)),
           );
         },
       );
@@ -99,15 +100,15 @@ class _ExploreNovelPageWidgetState
     await _loadData();
   }
 
-  void _onTapStory(String storyId) {
+  void _onTapStory(StoryEntity story) {
     ref.read(AppService.router).push(
           RouteInput.storyDetail(
             args: StoryDetailArgument(
-              storyId: storyId,
+              story: story,
               fetchStoryDetail: (ref) {
                 return RepositoryHelper.fetchStoryNovelDetail(
                   ref,
-                  storyId: storyId,
+                  storyId: story.id,
                 );
               },
             ),
@@ -129,7 +130,7 @@ class _ExploreNovelPageWidgetState
       onLoadMore: _loadData,
       listType: widget.listType,
       onTapItem: (item) {
-        _onTapStory(item.id);
+        _onTapStory(item);
       },
     );
   }

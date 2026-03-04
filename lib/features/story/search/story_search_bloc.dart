@@ -105,16 +105,17 @@ class StorySearchBloc extends BlocBase {
     await loadData();
   }
 
-  void onTapStory(String storyId) {
+  void onTapStory(StoryEntity story) {
     routerService.push(
       RouteInput.storyDetail(
         args: StoryDetailArgument(
-          storyId: storyId,
+          story: story,
           fetchStoryDetail: (ref) {
-            return _args.fetchStoryDetail(ref, storyId);
+            return _args.fetchStoryDetail(ref, story.id);
           },
         ),
       ),
     );
   }
 }
+      

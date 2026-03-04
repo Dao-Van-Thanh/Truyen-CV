@@ -110,6 +110,7 @@
         "listBookmarksEmpty": "Chưa có đánh dấu nào",
         "downloads": "Tải về",
         "history": "Lịch sử",
+        "historyFooterEnd": "Đã hết lịch sử.,\nDữ liệu lịch sử chỉ xem được trong 30 ngày gần nhất",
         "listHistoryEmpty": "Chưa có lịch sử nào",
         "unfavoriteConfirmationTitle": "Xác nhận bỏ yêu thích",
         "unfavoriteConfirmationMessage": "Bạn có chắc chắn muốn bỏ yêu thích truyện này không?",
