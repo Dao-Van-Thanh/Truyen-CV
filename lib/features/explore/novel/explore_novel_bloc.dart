@@ -65,7 +65,7 @@ class ExploreNovelBloc extends BlocBase {
     routerService.push(
       RouteInput.storyDetail(
         args: StoryDetailArgument(
-          story: story,
+          storyId: story.id,
           fetchStoryDetail: (ref) {
             return RepositoryHelper.fetchStoryNovelDetail(
               ref,

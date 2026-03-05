@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/story_search_argument.dart';
@@ -106,20 +104,37 @@ class LibraryBloc extends BlocBase {
   }
 
   void _handleViewInfo(BookEntity item) {
-    final story = StoryEntity.fromJson(jsonDecode(item.storyData));
-    routerService.push(
-      RouteInput.storyDetail(
-        args: StoryDetailArgument(
-          story: story,
-          fetchStoryDetail: (ref) {
-            return RepositoryHelper.fetchStoryNovelDetail(
-              ref,
-              storyId: item.id,
-            );
-          },
+    final isNovel = item.storyData.type.isNovel;
+
+    if (isNovel) {
+      routerService.push(
+        RouteInput.storyDetail(
+          args: StoryDetailArgument(
+            storyId: item.id,
+            fetchStoryDetail: (ref) {
+              return RepositoryHelper.fetchStoryNovelDetail(
+                ref,
+                storyId: item.id,
+              );
+            },
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      routerService.push(
+        RouteInput.storyDetail(
+          args: StoryDetailArgument(
+            storyId: item.id,
+            fetchStoryDetail: (ref) {
+              return RepositoryHelper.fetchStoryComicDetail(
+                ref,
+                storyId: item.id,
+              );
+            },
+          ),
+        ),
+      );
+    }
   }
 
   void onTapReadStory(BookEntity item) {

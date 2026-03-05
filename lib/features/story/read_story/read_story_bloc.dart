@@ -359,27 +359,18 @@ class ReadStoryBloc extends BlocBase {
   }
 
   void onTapNextStoryDetail() {
-    getStoryFromLocal(storyId).then(
-      (value) {
-        if (value == null) {
-          toastService.showText(message: 'Error getting story from local');
-          return;
-        }
-
-        routerService.push(
-          RouteInput.storyDetail(
-            args: StoryDetailArgument(
-              story: value,
-              fetchStoryDetail: (ref) {
-                return RepositoryHelper.fetchStoryNovelDetail(
-                  ref,
-                  storyId: storyId,
-                );
-              },
-            ),
-          ),
-        );
-      },
+    routerService.push(
+      RouteInput.storyDetail(
+        args: StoryDetailArgument(
+          storyId: storyId,
+          fetchStoryDetail: (ref) {
+            return RepositoryHelper.fetchStoryNovelDetail(
+              ref,
+              storyId: storyId,
+            );
+          },
+        ),
+      ),
     );
   }
 

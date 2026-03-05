@@ -42,7 +42,7 @@ class BookBannerCard extends StatelessWidget {
                 child: ImageFiltered(
                   imageFilter: ui.ImageFilter.blur(sigmaX: 40, sigmaY: 40),
                   child: StoryImage(
-                    imageUrl: book.story.thumb,
+                    imageUrl: book.storyData.thumb,
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,
@@ -76,7 +76,7 @@ class BookBannerCard extends StatelessWidget {
                       child: AspectRatio(
                         aspectRatio: 2 / 3,
                         child: StoryImage(
-                          imageUrl: book.story.thumb,
+                          imageUrl: book.storyData.thumb,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -94,7 +94,7 @@ class BookBannerCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  book.story.name,
+                                  book.storyData.name,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(

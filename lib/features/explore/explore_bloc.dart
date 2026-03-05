@@ -59,10 +59,9 @@ class ExploreBloc extends BlocBase {
             );
           },
           fetchStoryDetail: (ref, storyId) {
-            final slug = storyId.split('||').lastOrNull ?? '';
             return RepositoryHelper.fetchStoryComicDetail(
               ref,
-              storySlug: slug,
+              storyId: storyId,
             );
           },
         );

@@ -13,3 +13,8 @@ enum StoryType {
     );
   }
 }
+
+extension StoryTypeExtension on StoryType {
+  bool get isNovel => this == StoryType.novel;
+  bool get isComic => this == StoryType.comic;
+}

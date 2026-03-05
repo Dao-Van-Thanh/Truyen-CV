@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,7 +20,7 @@ class StoryDetailBloc extends BlocBase {
 
   late StoryDetailArgument _args;
 
-  String get storyId => _args.story.id;
+  String get storyId => _args.storyId;
 
   late final routerService = ref.read(AppService.router);
   late final localApiService = ref.read(AppService.localApi);
@@ -101,7 +100,7 @@ class StoryDetailBloc extends BlocBase {
 
   void onTapNextListChapter() {
     final args = ListChapterArgument(
-      storyData: storyDetailSubject.value,
+      storyData: storyDetailSubject.value!,
       storyName: storyDetailSubject.value?.name ?? '',
     );
     routerService.push(RouteInput.listChapter(args: args));
@@ -189,7 +188,7 @@ class StoryDetailBloc extends BlocBase {
       final bookEntity = BookEntity(
         id: storyId,
         listChapters: listChapter,
-        storyData: jsonEncode(storyDetailSubject.value?.toJson()),
+        storyData: storyDetailSubject.value!,
         currentChapterId: selectedChapterId,
         scrollOffset: scrollOffset ?? 0.0,
         isFavorite: isFavorite,

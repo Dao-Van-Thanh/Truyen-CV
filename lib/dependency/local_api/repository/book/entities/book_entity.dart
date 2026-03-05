@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
+import 'package:flutter_template/features/story/detail/entities/story_detail_entity.dart';
 
 class BookEntity {
   final String id;
-  final String storyData;
+  final StoryDetailEntity storyData; // StoryDetailEntity
   final List<ListChapterEntity> listChapters;
   final String? currentChapterId;
   final double scrollOffset;
@@ -30,7 +30,9 @@ class BookEntity {
   factory BookEntity.fromMap(Map<String, dynamic> map) {
     return BookEntity(
       id: map['id'] as String,
-      storyData: map['storyData'] as String,
+      storyData: StoryDetailEntity.fromJson(
+        jsonDecode(map['storyData'] as String),
+      ),
       currentChapterId: map['currentChapterId'] as String?,
       scrollOffset: (map['scrollOffset'] as num?)?.toDouble() ?? 0.0,
       isFavorite: (map['isFavorite'] as int? ?? 0) == 1,
@@ -43,7 +45,7 @@ class BookEntity {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'storyData': storyData,
+      'storyData': jsonEncode(storyData.toJson()),
       'currentChapterId': currentChapterId,
       'scrollOffset': scrollOffset,
       'isFavorite': isFavorite ? 1 : 0,
@@ -78,15 +80,9 @@ class BookEntity {
     return '${index + 1}/${listChapters.length}';
   }
 
-  StoryEntity get story {
-    return StoryEntity.fromJson(
-      jsonDecode(storyData) as Map<String, dynamic>,
-    );
-  }
-
   BookEntity copyWith({
     String? id,
-    String? storyData,
+    StoryDetailEntity? storyData,
     List<ListChapterEntity>? listChapters,
     String? currentChapterId,
     double? scrollOffset,

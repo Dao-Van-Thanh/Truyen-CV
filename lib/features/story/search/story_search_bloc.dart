@@ -80,7 +80,7 @@ class StorySearchBloc extends BlocBase {
     routerService.push(
       RouteInput.storyDetail(
         args: StoryDetailArgument(
-          story: story,
+          storyId: story.id,
           fetchStoryDetail: (ref) {
             return _args.fetchStoryDetail(ref, story.id);
           },

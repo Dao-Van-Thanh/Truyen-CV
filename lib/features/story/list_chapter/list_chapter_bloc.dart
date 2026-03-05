@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
@@ -37,7 +35,7 @@ class ListChapterBloc extends BlocBase {
   bool _isLoadingLocal = false;
 
   ListChapterBloc(this.ref, {required this.args}) {
-    final listChapter = args.storyData?.listChapter ?? [];
+    final listChapter = args.storyData.listChapter;
     listChapterSubject.value = listChapter;
     listChapterTemp = listChapter;
     _getBookLocal();
@@ -101,7 +99,7 @@ class ListChapterBloc extends BlocBase {
             .push(
           RouteInput.readStory(
             args: ReadStoryArgument(
-              storyId: args.storyData?.id ?? '',
+              storyId: args.storyData.id,
               selectedChapterId: chapter.id,
               listChapter: listChapterSubject.value,
               scrollOffset: 0.0,
@@ -117,7 +115,7 @@ class ListChapterBloc extends BlocBase {
 
   Future<void> _getBookLocal() async {
     final bookEntityLocal = await localApiService.bookRepository.getBookById(
-      args.storyData?.id ?? '',
+      args.storyData.id,
     );
     if (isDispose) return;
     if (bookEntityLocal != null && bookEntityLocal.currentChapterId != null) {
@@ -136,9 +134,9 @@ class ListChapterBloc extends BlocBase {
     try {
       final listChapter = listChapterSubject.value;
       final bookEntity = BookEntity(
-        id: args.storyData?.id ?? '',
+        id: args.storyData.id,
         listChapters: listChapter,
-        storyData: jsonEncode(args.storyData?.toJson()),
+        storyData: args.storyData,
         currentChapterId: selectedChapterId,
         scrollOffset: scrollOffset,
         lastReadTime: DateTime.now().toIso8601String(),
@@ -158,14 +156,14 @@ class ListChapterBloc extends BlocBase {
 
   void onTapContinueReading() async {
     final bookEntityLocal = await localApiService.bookRepository.getBookById(
-      args.storyData?.id ?? '',
+      args.storyData.id,
     );
     if (isDispose) return;
     if (bookEntityLocal == null) return;
     routerService.push(
       RouteInput.readStory(
         args: ReadStoryArgument(
-          storyId: args.storyData?.id ?? '',
+          storyId: args.storyData.id,
           selectedChapterId: bookEntityLocal.currentChapterId ?? '',
           listChapter: listChapterSubject.value,
           scrollOffset: bookEntityLocal.scrollOffset,
