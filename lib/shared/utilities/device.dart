@@ -1,6 +1,7 @@
+import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-class Device {
+class DeviceUtil {
   // static Future<String> getDeviceId() async {
   //   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   //   try {
@@ -67,7 +68,7 @@ class Device {
   //   };
   // }
 
-  static Future<String> getVersion() async {
+  static Future<String> getFullVersion() async {
     try {
       final packageInfo = await PackageInfo.fromPlatform();
       final version = packageInfo.version;
@@ -80,10 +81,20 @@ class Device {
       }
       return '${packageInfo.version}+${packageInfo.buildNumber}';
     } catch (e) {
-      print('Error getting app version: $e');
+      logger.e('Error getting app version: $e');
       throw Exception('Error getting app version: $e');
     }
   }
 
-  const Device._();
+  static Future<String> getVersion() async {
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      return packageInfo.version;
+    } catch (e) {
+      logger.e('Error getting app version: $e');
+      throw Exception('Error getting app version: $e');
+    }
+  }
+
+  const DeviceUtil._();
 }

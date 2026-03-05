@@ -11,4 +11,8 @@ class IndividualBloc extends BlocBase {
   void onTapSetting() {
     ref.read(AppService.router).push(RouteInput.setting());
   }
+
+  void onTapBackup() {
+    ref.read(AppService.router).push(RouteInput.backup());
+  }
 }

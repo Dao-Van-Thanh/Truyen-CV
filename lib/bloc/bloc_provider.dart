@@ -4,6 +4,7 @@ import 'package:flutter_template/features/explore/category/explore_category_bloc
 import 'package:flutter_template/features/explore/comic/explore_comic_bloc.dart';
 import 'package:flutter_template/features/explore/explore_bloc.dart';
 import 'package:flutter_template/features/explore/novel/explore_novel_bloc.dart';
+import 'package:flutter_template/features/individual/backup/backup_bloc.dart';
 import 'package:flutter_template/features/individual/individual_bloc.dart';
 import 'package:flutter_template/features/individual/setting/setting_bloc.dart';
 import 'package:flutter_template/features/library/library_bloc.dart';
@@ -32,5 +33,6 @@ class BlocProvider {
   static late AutoDisposeProvider<ExploreNovelBloc> exploreNovel;
   static late AutoDisposeProvider<ExploreComicBloc> exploreComic;
   static late AutoDisposeProvider<ExploreCategoryBloc> exploreCategory;
+  static late AutoDisposeProvider<BackupBloc> backup;
   const BlocProvider._();
 }

@@ -23,6 +23,7 @@ class RoutePage {
       RouteName.setting => RouteScreen.settingPageRoute(settings),
       RouteName.exploreCategory =>
         RouteScreen.exploreCategoryPageRoute(settings),
+      RouteName.backup => RouteScreen.backupPageRoute(settings),
       _ => RouteScreen.unknownPageRoute(settings),
     };
   }

@@ -162,8 +162,7 @@ class ReadStoryBloc extends BlocBase {
 
       onPageChanged(selectedIndex);
     } else {
-      currentListChapterItemSubject.value =
-          listChapterSubject.value[0];
+      currentListChapterItemSubject.value = listChapterSubject.value[0];
       preloadChapters(0);
     }
   }

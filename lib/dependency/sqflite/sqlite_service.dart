@@ -1,25 +1,26 @@
 import 'dart:async';
 
+import 'package:flutter_template/constants/common.dart';
 import 'package:flutter_template/dependency/sqflite/schema.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-const String _dbName = 'reading_app.db';
+const int sqliteVersion = 2;
 
-class SqfliteService {
-  SqfliteService();
+class SqliteService {
+  SqliteService();
 
   late Database _database;
   Database get database => _database;
 
   Future<Database> initDB() async {
     final dbPath = await getDatabasesPath();
-    final path = join(dbPath, _dbName);
+    final path = join(dbPath, CommonConstants.dbName);
 
     _database = await openDatabase(
       path,
-      version: 2,
+      version: sqliteVersion,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
       onConfigure: (db) {
@@ -59,7 +60,7 @@ class SqfliteService {
 
   Future<void> deleteDatabaseFile() async {
     final dbPath = await getDatabasesPath();
-    final path = join(dbPath, _dbName);
+    final path = join(dbPath, CommonConstants.dbName);
     await deleteDatabase(path);
     logger.i('Database file deleted at $path');
   }

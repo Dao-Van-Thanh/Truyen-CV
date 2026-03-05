@@ -71,7 +71,7 @@ class MyApp extends ConsumerWidget {
               AppLocale.values.map((e) => e.flutterLocale).toList(),
           localizationsDelegates: GlobalMaterialLocalizations.delegates,
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
+          title: 'Mê truyện CV',
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
           themeMode: configBloc.themeModeSubject.value,

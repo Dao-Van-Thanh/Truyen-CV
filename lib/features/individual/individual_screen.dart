@@ -48,7 +48,7 @@ class IndividualScreen extends ConsumerWidget {
                 icon: Icons.cloud_sync_outlined,
                 title: t.individual.syncBackup,
                 subtitle: t.individual.cloudStorage,
-                onTap: () {},
+                onTap: bloc.onTapBackup,
               ),
               const Divider(
                 height: 32,
@@ -78,7 +78,7 @@ class IndividualScreen extends ConsumerWidget {
               //     onTap: () {},
               //   ),
               FutureBuilder<String>(
-                future: Device.getVersion(),
+                future: DeviceUtil.getFullVersion(),
                 builder: (context, snapshot) {
                   final String versionText = snapshot.hasData
                       ? '${t.individual.appVersion} ${snapshot.data}'

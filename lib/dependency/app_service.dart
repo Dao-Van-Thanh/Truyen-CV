@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_template/dependency/backup/backup_service.dart';
 import 'package:flutter_template/dependency/import_story/import_story_service.dart';
 import 'package:flutter_template/dependency/local_api/local_api_service.dart';
-
 import 'package:flutter_template/dependency/network_api/network_api_service.dart';
 import 'package:flutter_template/dependency/router/router_provider.dart';
 import 'package:flutter_template/dependency/router/router_service.dart';
-import 'package:flutter_template/dependency/sqflite/sqflite_service.dart';
+import 'package:flutter_template/dependency/sqflite/sqlite_service.dart';
 import 'package:flutter_template/dependency/toast/toast_service.dart';
 
 class AppProvider {
@@ -35,7 +35,7 @@ class AppService {
 
   static final localApi = Provider(
     (ref) {
-      final sqfliteService = SqfliteService();
+      final sqfliteService = SqliteService();
       return LocalApiService(
         ref,
         sqfliteService: sqfliteService,
@@ -48,6 +48,12 @@ class AppService {
       return ImportStoryService(
         ref.watch(AppService.localApi).bookRepository,
       );
+    },
+  );
+
+  static final backup = Provider(
+    (ref) {
+      return BackupService();
     },
   );
 
