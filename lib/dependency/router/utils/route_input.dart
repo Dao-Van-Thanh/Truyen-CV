@@ -48,4 +48,6 @@ class RouteInput {
     required ExploreCategoryArgument args,
   })  : routeName = RouteName.exploreCategory,
         arguments = args;
+
+  RouteInput.backup() : routeName = RouteName.backup;
 }

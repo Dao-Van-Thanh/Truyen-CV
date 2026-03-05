@@ -4,6 +4,6 @@ class CommonConstants {
   static const apiTimeout = Duration(seconds: 30);
   static const avatarDefaultPath = 'assets/images/avatar_default.png';
   static const supportedFileExtensions = ['.epub', '.txt'];
-
+  static const dbName = 'reading_app.db';
   CommonConstants._();
 }

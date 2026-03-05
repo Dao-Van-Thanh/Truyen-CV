@@ -16,6 +16,8 @@ import 'package:flutter_template/features/explore/explore_bloc.dart';
 import 'package:flutter_template/features/explore/explore_screen.dart';
 import 'package:flutter_template/features/explore/novel/explore_novel_bloc.dart';
 import 'package:flutter_template/features/explore/novel/explore_novel_screen.dart';
+import 'package:flutter_template/features/individual/backup/backup_bloc.dart';
+import 'package:flutter_template/features/individual/backup/backup_screen.dart';
 import 'package:flutter_template/features/individual/individual_bloc.dart';
 import 'package:flutter_template/features/individual/individual_screen.dart';
 import 'package:flutter_template/features/individual/setting/setting_bloc.dart';
@@ -174,6 +176,16 @@ class RouteScreen {
     return MaterialPageRoute(
       settings: settings,
       builder: (_) => const ExploreCategoryScreen(),
+    );
+  }
+
+  static PageRoute backupPageRoute(RouteSettings settings) {
+    BlocProvider.backup = createAutoDisposeBloc(
+      (ref) => BackupBloc(ref),
+    );
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (_) => const BackupScreen(),
     );
   }
 }
