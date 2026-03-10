@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:async/async.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/constants/common.dart';
@@ -35,10 +36,9 @@ class ApiService {
     );
     (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
       final client = HttpClient();
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) {
-        return true;
-      };
+      if (kDebugMode) {
+        client.badCertificateCallback = (_, __, ___) => true;
+      }
       return client;
     };
   }
@@ -47,7 +47,7 @@ class ApiService {
     dio.interceptors.addAll(interceptors);
   }
 
-  Future<Response?> _request<T>(
+  Future<Response?> request<T>(
     Future<Response<T>> Function(CancelToken) request, {
     String? path,
     CancelToken? externalCancelToken,
@@ -59,7 +59,7 @@ class ApiService {
           final response = await request(cancelToken);
           return response;
         } catch (e) {
-          return _handleError(e, path ?? '');
+          return handleError(e, path ?? '');
         }
       }),
       onCancel: () {
@@ -84,7 +84,7 @@ class ApiService {
     CancelToken? cancelToken,
   }) async {
     if (shouldCache) {
-      final cachedResponse = await _getCachedResponse(
+      final cachedResponse = await getCachedResponse(
         key: key,
         path: path,
         queryParameters: queryParameters,
@@ -92,7 +92,7 @@ class ApiService {
       if (cachedResponse != null) return cachedResponse;
     }
 
-    final result = await _request(
+    final result = await request(
       (cancelT) => dio.get(
         path,
         queryParameters: queryParameters,
@@ -107,7 +107,7 @@ class ApiService {
     final res = result;
 
     if (shouldCache && res != null) {
-      await _cacheResponse(
+      await cacheResponse(
         path,
         res,
         queryParameters: queryParameters,
@@ -127,7 +127,7 @@ class ApiService {
     CancelToken? cancelToken,
   }) async {
     if (shouldCache) {
-      final cachedResponse = await _getCachedResponse(
+      final cachedResponse = await getCachedResponse(
         key: key,
         path: path,
         data: data,
@@ -136,7 +136,7 @@ class ApiService {
       if (cachedResponse != null) return cachedResponse;
     }
 
-    final result = await _request(
+    final result = await request(
       (cancelT) => dio.post(
         path,
         data: data,
@@ -151,7 +151,7 @@ class ApiService {
     final res = result;
 
     if (shouldCache && res != null) {
-      await _cacheResponse(
+      await cacheResponse(
         path,
         res,
         data: data,
@@ -169,7 +169,7 @@ class ApiService {
     bool shouldCache = false,
   }) async {
     if (shouldCache) {
-      final cachedResponse = await _getCachedResponse(
+      final cachedResponse = await getCachedResponse(
         key: key,
         path: path,
         data: data,
@@ -177,7 +177,7 @@ class ApiService {
       if (cachedResponse != null) return cachedResponse;
     }
 
-    final result = await _request(
+    final result = await request(
       (cancelToken) => dio.put(
         path,
         data: data,
@@ -188,7 +188,7 @@ class ApiService {
     final res = result;
 
     if (shouldCache && res != null) {
-      await _cacheResponse(
+      await cacheResponse(
         path,
         res,
         data: data,
@@ -205,7 +205,7 @@ class ApiService {
     bool shouldCache = false,
   }) async {
     if (shouldCache) {
-      final cachedResponse = await _getCachedResponse(
+      final cachedResponse = await getCachedResponse(
         key: key,
         path: path,
         data: data,
@@ -213,7 +213,7 @@ class ApiService {
       if (cachedResponse != null) return cachedResponse;
     }
 
-    final result = await _request(
+    final result = await request(
       (cancelToken) => dio.delete(
         path,
         data: data,
@@ -224,7 +224,7 @@ class ApiService {
     final res = result;
 
     if (shouldCache && res != null) {
-      await _cacheResponse(
+      await cacheResponse(
         path,
         res,
         data: data,
@@ -234,13 +234,13 @@ class ApiService {
     return result;
   }
 
-  Future<Response?> _getCachedResponse({
+  Future<Response?> getCachedResponse({
     String? key,
     required String path,
     Object? data,
     Map<String, dynamic>? queryParameters,
   }) async {
-    final cacheKey = _hashCacheKey([key ?? path, data, queryParameters]);
+    final cacheKey = hashCacheKey([key ?? path, data, queryParameters]);
     final fileInfo = await cacheManager.getFileFromCache(cacheKey);
     if (fileInfo != null && fileInfo.validTill.isAfter(DateTime.now())) {
       final jsonData = jsonDecode(await fileInfo.file.readAsString());
@@ -253,7 +253,7 @@ class ApiService {
     return null;
   }
 
-  Future<void> _cacheResponse(
+  Future<void> cacheResponse(
     String path,
     Response response, {
     Object? data,
@@ -261,7 +261,7 @@ class ApiService {
     String? key,
     Duration maxAge = const Duration(minutes: 10),
   }) async {
-    final cacheKey = _hashCacheKey([key ?? path, data, queryParameters]);
+    final cacheKey = hashCacheKey([key ?? path, data, queryParameters]);
     final cacheData = {
       'data': response.data,
       'lastFetched': DateTime.now().toIso8601String(),
@@ -273,7 +273,7 @@ class ApiService {
     );
   }
 
-  Response? _handleError(dynamic error, String path) {
+  Response? handleError(dynamic error, String path) {
     return null;
     // if (error is! DioException) {
     //   return _handledResponse(path);
@@ -285,14 +285,14 @@ class ApiService {
     // return response ?? _handledResponse(path);
   }
 
-  Response _handledResponse(String path) {
+  Response handledResponse(String path) {
     return Response(
       data: {'_handled': true},
       requestOptions: RequestOptions(path: path),
     );
   }
 
-  String _hashCacheKey(CacheKey key) {
+  String hashCacheKey(CacheKey key) {
     if (key is String) return key;
     return json.encode(key);
   }
@@ -301,7 +301,7 @@ class ApiService {
     if (cacheKey == null) {
       cacheManager.emptyCache();
     } else {
-      cacheManager.removeFile(_hashCacheKey(cacheKey));
+      cacheManager.removeFile(hashCacheKey(cacheKey));
     }
   }
 
@@ -321,7 +321,7 @@ class ApiService {
     Options? options,
     ProgressCallback? onReceiveProgress,
   }) async {
-    return _request(
+    return request(
       (cancelToken) => dio.download(
         path,
         savePath,
