@@ -1,5 +1,6 @@
 import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
+import 'package:flutter_template/shared/utilities/map.dart';
 
 class StoryDetailEntity {
   final String id;
@@ -27,17 +28,22 @@ class StoryDetailEntity {
   });
 
   factory StoryDetailEntity.fromJson(Map<String, dynamic> json) {
+    final newJson = MapUtil.convertKeysToLowerCase(json);
+
     return StoryDetailEntity(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      totalChapter: json['totalChapter'] as String,
-      cat: json['cat'] as String?,
-      author: json['author'] as String?,
-      trans: json['trans'] as String?,
-      desc: json['desc'] as String,
-      thumb: json['thumb'] as String? ?? '',
-      type: StoryType.fromString(json['type'] as String?),
-      listChapter: (json['listChapter'] as List<dynamic>)
+      id: newJson['id'] as String,
+      name: newJson['name'] as String,
+      totalChapter:
+          (newJson['totalChapter'] ?? newJson['totalchapter']) as String,
+      cat: newJson['cat'] as String?,
+      author: newJson['author'] as String?,
+      trans: newJson['trans'] as String?,
+      desc: newJson['desc'] as String,
+      thumb: newJson['thumb'] as String? ?? '',
+      type: StoryType.fromString(newJson['type'] as String?),
+      listChapter: ((newJson['listChapter'] ?? newJson['listchapter'])
+                  as List<dynamic>? ??
+              [])
           .map((e) => ListChapterEntity.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
