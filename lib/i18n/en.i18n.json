@@ -43,6 +43,10 @@
             "list": "List",
             "listCompact": "Compact list",
             "grid": "Grid"
+        },
+        "type": {
+            "novel": "Novel",
+            "comic": "Comic"
         }
     },
     "story": {
@@ -106,6 +110,7 @@
         "listBookmarksEmpty": "No bookmarks yet",
         "downloads": "Downloads",
         "history": "History",
+        "historyFooterEnd": "End of history.\nHistory data is only available for the last 30 days.",
         "listHistoryEmpty": "No reading history",
         "unfavoriteConfirmationTitle": "Confirm remove favorite",
         "unfavoriteConfirmationMessage": "Are you sure you want to remove this story from favorites?",
@@ -118,6 +123,9 @@
             "viewInfo": "View information",
             "removeStory": "Remove story",
             "confirmRemoveStory": "Confirm remove story"
+        },
+        "popupMenuItem": {
+            "addStory": "Add story"
         }
     },
     "common": {
@@ -199,5 +207,54 @@
         "addToLibrary": "Add story to library",
         "cancel": "Cancel",
         "add": "Add"
+    },
+    "comic": {
+        "type": {
+            "newRelease": "New Release",
+            "upcoming": "Upcoming",
+            "ongoing": "Ongoing",
+            "completed": "Completed",
+            "genres": "Genres"
+        }
+    },
+    "backup": {
+        "title": "Backup & Restore",
+        "exportBtn": "Create Backup (Export)",
+        "importBtn": "Restore Data (Import)",
+        "progressStatus": "Progress Status:",
+        "overwriteWarning": {
+            "title": "Overwrite Warning",
+            "content": "Restoring will DELETE ALL your current stories, reading history, and settings on this device, replacing them with the backup data.\n\nAre you sure you want to continue?",
+            "cancel": "Cancel",
+            "confirm": "Restore Now"
+        },
+        "successDialog": {
+            "title": "Success",
+            "content": "Data restored successfully. Please restart the app to apply changes.",
+            "understood": "Understood"
+        },
+        "status": {
+            "idle": "Ready",
+            "preparingExport": "Preparing data...",
+            "compressing": "Compressing data...",
+            "savingFile": "Opening file save dialog...",
+            "exportSuccess": "Backup successful!",
+            "exportCancelled": "Backup cancelled.",
+            "exportError": "Backup error",
+            "checkingFile": "Checking file...",
+            "fileSelectionCancelled": "File selection cancelled.",
+            "importCancelled": "Data restoration cancelled.",
+            "invalidFile": "Invalid or corrupted backup file!",
+            "disconnectingOldDb": "Disconnected old database...",
+            "connectingNewDb": "Connected to new database...",
+            "restoringData": "Restoring data...",
+            "importSuccess": "Restore successful! Please restart the app.",
+            "importError": "Restore error",
+            "requireAppUpdate": "The backup belongs to a newer app version. Please update the app!"
+        }
+    },
+    "renderImage": {
+        "loadFail": "Failed to load image",
+        "loadAgain": "Reload"
     }
 }
