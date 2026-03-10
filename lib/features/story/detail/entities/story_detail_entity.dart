@@ -35,9 +35,8 @@ class StoryDetailEntity {
       author: json['author'] as String?,
       trans: json['trans'] as String?,
       desc: json['desc'] as String,
-      thumb: json['thumb'] as String,
-      // Giả sử StoryType có method fromName hoặc bạn parse từ String/Int
-      type: StoryType.values.byName(json['type'] as String),
+      thumb: json['thumb'] as String? ?? '',
+      type: StoryType.fromString(json['type'] as String?),
       listChapter: (json['listChapter'] as List<dynamic>)
           .map((e) => ListChapterEntity.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -54,7 +53,7 @@ class StoryDetailEntity {
       'trans': trans,
       'desc': desc,
       'thumb': thumb,
-      'type': type.name, // Thêm vào toJson
+      'type': type.name,
       'listChapter': listChapter.map((e) => e.toJson()).toList(),
     };
   }
@@ -68,7 +67,7 @@ class StoryDetailEntity {
     String? trans,
     String? desc,
     String? thumb,
-    StoryType? type, // Thêm vào copyWith
+    StoryType? type,
     List<ListChapterEntity>? listChapter,
   }) {
     return StoryDetailEntity(
@@ -80,7 +79,7 @@ class StoryDetailEntity {
       trans: trans ?? this.trans,
       desc: desc ?? this.desc,
       thumb: thumb ?? this.thumb,
-      type: type ?? this.type, // Gán giá trị mới
+      type: type ?? this.type,
       listChapter: listChapter ?? this.listChapter,
     );
   }
@@ -97,10 +96,7 @@ class StoryDetailEntity {
 
   @override
   int get hashCode =>
-      id.hashCode ^
-      name.hashCode ^
-      type.hashCode ^ // Bổ sung hashCode
-      listChapter.length.hashCode;
+      id.hashCode ^ name.hashCode ^ type.hashCode ^ listChapter.length.hashCode;
 
   @override
   String toString() =>
