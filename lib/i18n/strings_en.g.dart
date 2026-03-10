@@ -67,6 +67,9 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _TranslationsIndividualEn individual = _TranslationsIndividualEn._(_root);
 	@override late final _TranslationsSettingEn setting = _TranslationsSettingEn._(_root);
 	@override late final _TranslationsFileImportEn fileImport = _TranslationsFileImportEn._(_root);
+	@override late final _TranslationsComicEn comic = _TranslationsComicEn._(_root);
+	@override late final _TranslationsBackupEn backup = _TranslationsBackupEn._(_root);
+	@override late final _TranslationsRenderImageEn renderImage = _TranslationsRenderImageEn._(_root);
 }
 
 // Path: login
@@ -102,6 +105,7 @@ class _TranslationsExploreScreenEn extends TranslationsExploreScreenVi {
 	@override String get title => 'Explore';
 	@override late final _TranslationsExploreScreenPagesEn pages = _TranslationsExploreScreenPagesEn._(_root);
 	@override late final _TranslationsExploreScreenListTypeEn listType = _TranslationsExploreScreenListTypeEn._(_root);
+	@override late final _TranslationsExploreScreenTypeEn type = _TranslationsExploreScreenTypeEn._(_root);
 }
 
 // Path: story
@@ -191,10 +195,12 @@ class _TranslationsLibraryScreenEn extends TranslationsLibraryScreenVi {
 	@override String get listBookmarksEmpty => 'No bookmarks yet';
 	@override String get downloads => 'Downloads';
 	@override String get history => 'History';
+	@override String get historyFooterEnd => 'End of history.\nHistory data is only available for the last 30 days.';
 	@override String get listHistoryEmpty => 'No reading history';
 	@override String get unfavoriteConfirmationTitle => 'Confirm remove favorite';
 	@override String get unfavoriteConfirmationMessage => 'Are you sure you want to remove this story from favorites?';
 	@override late final _TranslationsLibraryScreenOptionsBottomSheetEn optionsBottomSheet = _TranslationsLibraryScreenOptionsBottomSheetEn._(_root);
+	@override late final _TranslationsLibraryScreenPopupMenuItemEn popupMenuItem = _TranslationsLibraryScreenPopupMenuItemEn._(_root);
 }
 
 // Path: common
@@ -305,6 +311,43 @@ class _TranslationsFileImportEn extends TranslationsFileImportVi {
 	@override String get add => 'Add';
 }
 
+// Path: comic
+class _TranslationsComicEn extends TranslationsComicVi {
+	_TranslationsComicEn._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsComicTypeEn type = _TranslationsComicTypeEn._(_root);
+}
+
+// Path: backup
+class _TranslationsBackupEn extends TranslationsBackupVi {
+	_TranslationsBackupEn._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Backup & Restore';
+	@override String get exportBtn => 'Create Backup (Export)';
+	@override String get importBtn => 'Restore Data (Import)';
+	@override String get progressStatus => 'Progress Status:';
+	@override late final _TranslationsBackupOverwriteWarningEn overwriteWarning = _TranslationsBackupOverwriteWarningEn._(_root);
+	@override late final _TranslationsBackupSuccessDialogEn successDialog = _TranslationsBackupSuccessDialogEn._(_root);
+	@override late final _TranslationsBackupStatusEn status = _TranslationsBackupStatusEn._(_root);
+}
+
+// Path: renderImage
+class _TranslationsRenderImageEn extends TranslationsRenderImageVi {
+	_TranslationsRenderImageEn._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get loadFail => 'Failed to load image';
+	@override String get loadAgain => 'Reload';
+}
+
 // Path: rootScreen.bottomNavigationBar
 class _TranslationsRootScreenBottomNavigationBarEn extends TranslationsRootScreenBottomNavigationBarVi {
 	_TranslationsRootScreenBottomNavigationBarEn._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -349,6 +392,17 @@ class _TranslationsExploreScreenListTypeEn extends TranslationsExploreScreenList
 	@override String get grid => 'Grid';
 }
 
+// Path: exploreScreen.type
+class _TranslationsExploreScreenTypeEn extends TranslationsExploreScreenTypeVi {
+	_TranslationsExploreScreenTypeEn._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get novel => 'Novel';
+	@override String get comic => 'Comic';
+}
+
 // Path: readStory.ttsSettings
 class _TranslationsReadStoryTtsSettingsEn extends TranslationsReadStoryTtsSettingsVi {
 	_TranslationsReadStoryTtsSettingsEn._(TranslationsEn root) : this._root = root, super.internal(root);
@@ -380,6 +434,81 @@ class _TranslationsLibraryScreenOptionsBottomSheetEn extends TranslationsLibrary
 	@override String get viewInfo => 'View information';
 	@override String get removeStory => 'Remove story';
 	@override String get confirmRemoveStory => 'Confirm remove story';
+}
+
+// Path: libraryScreen.popupMenuItem
+class _TranslationsLibraryScreenPopupMenuItemEn extends TranslationsLibraryScreenPopupMenuItemVi {
+	_TranslationsLibraryScreenPopupMenuItemEn._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get addStory => 'Add story';
+}
+
+// Path: comic.type
+class _TranslationsComicTypeEn extends TranslationsComicTypeVi {
+	_TranslationsComicTypeEn._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get newRelease => 'New Release';
+	@override String get upcoming => 'Upcoming';
+	@override String get ongoing => 'Ongoing';
+	@override String get completed => 'Completed';
+	@override String get genres => 'Genres';
+}
+
+// Path: backup.overwriteWarning
+class _TranslationsBackupOverwriteWarningEn extends TranslationsBackupOverwriteWarningVi {
+	_TranslationsBackupOverwriteWarningEn._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Overwrite Warning';
+	@override String get content => 'Restoring will DELETE ALL your current stories, reading history, and settings on this device, replacing them with the backup data.\n\nAre you sure you want to continue?';
+	@override String get cancel => 'Cancel';
+	@override String get confirm => 'Restore Now';
+}
+
+// Path: backup.successDialog
+class _TranslationsBackupSuccessDialogEn extends TranslationsBackupSuccessDialogVi {
+	_TranslationsBackupSuccessDialogEn._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Success';
+	@override String get content => 'Data restored successfully. Please restart the app to apply changes.';
+	@override String get understood => 'Understood';
+}
+
+// Path: backup.status
+class _TranslationsBackupStatusEn extends TranslationsBackupStatusVi {
+	_TranslationsBackupStatusEn._(TranslationsEn root) : this._root = root, super.internal(root);
+
+	final TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	@override String get idle => 'Ready';
+	@override String get preparingExport => 'Preparing data...';
+	@override String get compressing => 'Compressing data...';
+	@override String get savingFile => 'Opening file save dialog...';
+	@override String get exportSuccess => 'Backup successful!';
+	@override String get exportCancelled => 'Backup cancelled.';
+	@override String get exportError => 'Backup error';
+	@override String get checkingFile => 'Checking file...';
+	@override String get fileSelectionCancelled => 'File selection cancelled.';
+	@override String get importCancelled => 'Data restoration cancelled.';
+	@override String get invalidFile => 'Invalid or corrupted backup file!';
+	@override String get disconnectingOldDb => 'Disconnected old database...';
+	@override String get connectingNewDb => 'Connected to new database...';
+	@override String get restoringData => 'Restoring data...';
+	@override String get importSuccess => 'Restore successful! Please restart the app.';
+	@override String get importError => 'Restore error';
+	@override String get requireAppUpdate => 'The backup belongs to a newer app version. Please update the app!';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -419,6 +548,8 @@ extension on TranslationsEn {
 			'exploreScreen.listType.list' => 'List',
 			'exploreScreen.listType.listCompact' => 'Compact list',
 			'exploreScreen.listType.grid' => 'Grid',
+			'exploreScreen.type.novel' => 'Novel',
+			'exploreScreen.type.comic' => 'Comic',
 			'story.reload' => 'Reload',
 			'story.noData' => 'No stories available',
 			'storyDetail.loadingError' => 'Failed to load story details',
@@ -469,6 +600,7 @@ extension on TranslationsEn {
 			'libraryScreen.listBookmarksEmpty' => 'No bookmarks yet',
 			'libraryScreen.downloads' => 'Downloads',
 			'libraryScreen.history' => 'History',
+			'libraryScreen.historyFooterEnd' => 'End of history.\nHistory data is only available for the last 30 days.',
 			'libraryScreen.listHistoryEmpty' => 'No reading history',
 			'libraryScreen.unfavoriteConfirmationTitle' => 'Confirm remove favorite',
 			'libraryScreen.unfavoriteConfirmationMessage' => 'Are you sure you want to remove this story from favorites?',
@@ -480,6 +612,7 @@ extension on TranslationsEn {
 			'libraryScreen.optionsBottomSheet.viewInfo' => 'View information',
 			'libraryScreen.optionsBottomSheet.removeStory' => 'Remove story',
 			'libraryScreen.optionsBottomSheet.confirmRemoveStory' => 'Confirm remove story',
+			'libraryScreen.popupMenuItem.addStory' => 'Add story',
 			'common.minuteAgo' => 'minutes ago',
 			'common.hourAgo' => 'hours ago',
 			'common.dayAgo' => 'days ago',
@@ -552,6 +685,41 @@ extension on TranslationsEn {
 			'fileImport.addToLibrary' => 'Add story to library',
 			'fileImport.cancel' => 'Cancel',
 			'fileImport.add' => 'Add',
+			'comic.type.newRelease' => 'New Release',
+			'comic.type.upcoming' => 'Upcoming',
+			'comic.type.ongoing' => 'Ongoing',
+			'comic.type.completed' => 'Completed',
+			'comic.type.genres' => 'Genres',
+			'backup.title' => 'Backup & Restore',
+			'backup.exportBtn' => 'Create Backup (Export)',
+			'backup.importBtn' => 'Restore Data (Import)',
+			'backup.progressStatus' => 'Progress Status:',
+			'backup.overwriteWarning.title' => 'Overwrite Warning',
+			'backup.overwriteWarning.content' => 'Restoring will DELETE ALL your current stories, reading history, and settings on this device, replacing them with the backup data.\n\nAre you sure you want to continue?',
+			'backup.overwriteWarning.cancel' => 'Cancel',
+			'backup.overwriteWarning.confirm' => 'Restore Now',
+			'backup.successDialog.title' => 'Success',
+			'backup.successDialog.content' => 'Data restored successfully. Please restart the app to apply changes.',
+			'backup.successDialog.understood' => 'Understood',
+			'backup.status.idle' => 'Ready',
+			'backup.status.preparingExport' => 'Preparing data...',
+			'backup.status.compressing' => 'Compressing data...',
+			'backup.status.savingFile' => 'Opening file save dialog...',
+			'backup.status.exportSuccess' => 'Backup successful!',
+			'backup.status.exportCancelled' => 'Backup cancelled.',
+			'backup.status.exportError' => 'Backup error',
+			'backup.status.checkingFile' => 'Checking file...',
+			'backup.status.fileSelectionCancelled' => 'File selection cancelled.',
+			'backup.status.importCancelled' => 'Data restoration cancelled.',
+			'backup.status.invalidFile' => 'Invalid or corrupted backup file!',
+			'backup.status.disconnectingOldDb' => 'Disconnected old database...',
+			'backup.status.connectingNewDb' => 'Connected to new database...',
+			'backup.status.restoringData' => 'Restoring data...',
+			'backup.status.importSuccess' => 'Restore successful! Please restart the app.',
+			'backup.status.importError' => 'Restore error',
+			'backup.status.requireAppUpdate' => 'The backup belongs to a newer app version. Please update the app!',
+			'renderImage.loadFail' => 'Failed to load image',
+			'renderImage.loadAgain' => 'Reload',
 			_ => null,
 		};
 	}
