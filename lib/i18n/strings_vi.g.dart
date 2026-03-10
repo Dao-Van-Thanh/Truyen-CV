@@ -79,6 +79,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsSettingVi setting = TranslationsSettingVi.internal(_root);
 	late final TranslationsFileImportVi fileImport = TranslationsFileImportVi.internal(_root);
 	late final TranslationsComicVi comic = TranslationsComicVi.internal(_root);
+	late final TranslationsBackupVi backup = TranslationsBackupVi.internal(_root);
+	late final TranslationsRenderImageVi renderImage = TranslationsRenderImageVi.internal(_root);
 }
 
 // Path: login
@@ -316,6 +318,7 @@ class TranslationsLibraryScreenVi {
 	String get unfavoriteConfirmationMessage => 'Bạn có chắc chắn muốn bỏ yêu thích truyện này không?';
 
 	late final TranslationsLibraryScreenOptionsBottomSheetVi optionsBottomSheet = TranslationsLibraryScreenOptionsBottomSheetVi.internal(_root);
+	late final TranslationsLibraryScreenPopupMenuItemVi popupMenuItem = TranslationsLibraryScreenPopupMenuItemVi.internal(_root);
 }
 
 // Path: common
@@ -580,6 +583,46 @@ class TranslationsComicVi {
 	late final TranslationsComicTypeVi type = TranslationsComicTypeVi.internal(_root);
 }
 
+// Path: backup
+class TranslationsBackupVi {
+	TranslationsBackupVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// vi: 'Sao lưu & Khôi phục'
+	String get title => 'Sao lưu & Khôi phục';
+
+	/// vi: 'Tạo bản sao lưu (Export)'
+	String get exportBtn => 'Tạo bản sao lưu (Export)';
+
+	/// vi: 'Khôi phục dữ liệu (Import)'
+	String get importBtn => 'Khôi phục dữ liệu (Import)';
+
+	/// vi: 'Trạng thái tiến trình:'
+	String get progressStatus => 'Trạng thái tiến trình:';
+
+	late final TranslationsBackupOverwriteWarningVi overwriteWarning = TranslationsBackupOverwriteWarningVi.internal(_root);
+	late final TranslationsBackupSuccessDialogVi successDialog = TranslationsBackupSuccessDialogVi.internal(_root);
+	late final TranslationsBackupStatusVi status = TranslationsBackupStatusVi.internal(_root);
+}
+
+// Path: renderImage
+class TranslationsRenderImageVi {
+	TranslationsRenderImageVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// vi: 'Ảnh tải thất bại'
+	String get loadFail => 'Ảnh tải thất bại';
+
+	/// vi: 'Tải lại'
+	String get loadAgain => 'Tải lại';
+}
+
 // Path: rootScreen.bottomNavigationBar
 class TranslationsRootScreenBottomNavigationBarVi {
 	TranslationsRootScreenBottomNavigationBarVi.internal(this._root);
@@ -736,6 +779,18 @@ class TranslationsLibraryScreenOptionsBottomSheetVi {
 	String get confirmRemoveStory => 'Xác nhận xóa truyện';
 }
 
+// Path: libraryScreen.popupMenuItem
+class TranslationsLibraryScreenPopupMenuItemVi {
+	TranslationsLibraryScreenPopupMenuItemVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// vi: 'Thêm truyện'
+	String get addStory => 'Thêm truyện';
+}
+
 // Path: comic.type
 class TranslationsComicTypeVi {
 	TranslationsComicTypeVi.internal(this._root);
@@ -758,6 +813,105 @@ class TranslationsComicTypeVi {
 
 	/// vi: 'Thể loại'
 	String get genres => 'Thể loại';
+}
+
+// Path: backup.overwriteWarning
+class TranslationsBackupOverwriteWarningVi {
+	TranslationsBackupOverwriteWarningVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// vi: 'Cảnh báo ghi đè'
+	String get title => 'Cảnh báo ghi đè';
+
+	/// vi: 'Việc khôi phục sẽ XÓA TOÀN BỘ truyện, lịch sử đọc và cài đặt hiện tại trên máy của bạn, thay thế bằng dữ liệu từ bản sao lưu. Bạn có chắc chắn muốn tiếp tục?'
+	String get content => 'Việc khôi phục sẽ XÓA TOÀN BỘ truyện, lịch sử đọc và cài đặt hiện tại trên máy của bạn, thay thế bằng dữ liệu từ bản sao lưu.\n\nBạn có chắc chắn muốn tiếp tục?';
+
+	/// vi: 'Hủy'
+	String get cancel => 'Hủy';
+
+	/// vi: 'Khôi phục ngay'
+	String get confirm => 'Khôi phục ngay';
+}
+
+// Path: backup.successDialog
+class TranslationsBackupSuccessDialogVi {
+	TranslationsBackupSuccessDialogVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// vi: 'Thành công'
+	String get title => 'Thành công';
+
+	/// vi: 'Dữ liệu đã được khôi phục thành công. Vui lòng khởi động lại ứng dụng để áp dụng thay đổi.'
+	String get content => 'Dữ liệu đã được khôi phục thành công. Vui lòng khởi động lại ứng dụng để áp dụng thay đổi.';
+
+	/// vi: 'Đã hiểu'
+	String get understood => 'Đã hiểu';
+}
+
+// Path: backup.status
+class TranslationsBackupStatusVi {
+	TranslationsBackupStatusVi.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// vi: 'Sẵn sàng'
+	String get idle => 'Sẵn sàng';
+
+	/// vi: 'Đang chuẩn bị dữ liệu...'
+	String get preparingExport => 'Đang chuẩn bị dữ liệu...';
+
+	/// vi: 'Đang nén dữ liệu...'
+	String get compressing => 'Đang nén dữ liệu...';
+
+	/// vi: 'Đang mở hộp thoại lưu file...'
+	String get savingFile => 'Đang mở hộp thoại lưu file...';
+
+	/// vi: 'Sao lưu thành công!'
+	String get exportSuccess => 'Sao lưu thành công!';
+
+	/// vi: 'Đã hủy sao lưu.'
+	String get exportCancelled => 'Đã hủy sao lưu.';
+
+	/// vi: 'Lỗi sao lưu'
+	String get exportError => 'Lỗi sao lưu';
+
+	/// vi: 'Đang kiểm tra file...'
+	String get checkingFile => 'Đang kiểm tra file...';
+
+	/// vi: 'Đã hủy chọn file.'
+	String get fileSelectionCancelled => 'Đã hủy chọn file.';
+
+	/// vi: 'Đã hủy khôi phục dữ liệu.'
+	String get importCancelled => 'Đã hủy khôi phục dữ liệu.';
+
+	/// vi: 'File backup không hợp lệ hoặc sai định dạng!'
+	String get invalidFile => 'File backup không hợp lệ hoặc sai định dạng!';
+
+	/// vi: 'Đã ngắt kết nối DB cũ...'
+	String get disconnectingOldDb => 'Đã ngắt kết nối DB cũ...';
+
+	/// vi: 'Đã kết nối lại DB mới...'
+	String get connectingNewDb => 'Đã kết nối lại DB mới...';
+
+	/// vi: 'Đang khôi phục dữ liệu...'
+	String get restoringData => 'Đang khôi phục dữ liệu...';
+
+	/// vi: 'Khôi phục thành công! Vui lòng khởi động lại app.'
+	String get importSuccess => 'Khôi phục thành công! Vui lòng khởi động lại app.';
+
+	/// vi: 'Lỗi khôi phục'
+	String get importError => 'Lỗi khôi phục';
+
+	/// vi: 'Bản sao lưu thuộc về phiên bản ứng dụng mới hơn. Vui lòng cập nhật ứng dụng!'
+	String get requireAppUpdate => 'Bản sao lưu thuộc về phiên bản ứng dụng mới hơn. Vui lòng cập nhật ứng dụng!';
 }
 
 /// The flat map containing all translations for locale <vi>.
@@ -861,6 +1015,7 @@ extension on Translations {
 			'libraryScreen.optionsBottomSheet.viewInfo' => 'Xem thông tin',
 			'libraryScreen.optionsBottomSheet.removeStory' => 'Xoá truyện',
 			'libraryScreen.optionsBottomSheet.confirmRemoveStory' => 'Xác nhận xóa truyện',
+			'libraryScreen.popupMenuItem.addStory' => 'Thêm truyện',
 			'common.minuteAgo' => 'phút trước',
 			'common.hourAgo' => 'giờ trước',
 			'common.dayAgo' => 'ngày trước',
@@ -938,6 +1093,36 @@ extension on Translations {
 			'comic.type.ongoing' => 'Đang phát hành',
 			'comic.type.completed' => 'Hoàn thành',
 			'comic.type.genres' => 'Thể loại',
+			'backup.title' => 'Sao lưu & Khôi phục',
+			'backup.exportBtn' => 'Tạo bản sao lưu (Export)',
+			'backup.importBtn' => 'Khôi phục dữ liệu (Import)',
+			'backup.progressStatus' => 'Trạng thái tiến trình:',
+			'backup.overwriteWarning.title' => 'Cảnh báo ghi đè',
+			'backup.overwriteWarning.content' => 'Việc khôi phục sẽ XÓA TOÀN BỘ truyện, lịch sử đọc và cài đặt hiện tại trên máy của bạn, thay thế bằng dữ liệu từ bản sao lưu.\n\nBạn có chắc chắn muốn tiếp tục?',
+			'backup.overwriteWarning.cancel' => 'Hủy',
+			'backup.overwriteWarning.confirm' => 'Khôi phục ngay',
+			'backup.successDialog.title' => 'Thành công',
+			'backup.successDialog.content' => 'Dữ liệu đã được khôi phục thành công. Vui lòng khởi động lại ứng dụng để áp dụng thay đổi.',
+			'backup.successDialog.understood' => 'Đã hiểu',
+			'backup.status.idle' => 'Sẵn sàng',
+			'backup.status.preparingExport' => 'Đang chuẩn bị dữ liệu...',
+			'backup.status.compressing' => 'Đang nén dữ liệu...',
+			'backup.status.savingFile' => 'Đang mở hộp thoại lưu file...',
+			'backup.status.exportSuccess' => 'Sao lưu thành công!',
+			'backup.status.exportCancelled' => 'Đã hủy sao lưu.',
+			'backup.status.exportError' => 'Lỗi sao lưu',
+			'backup.status.checkingFile' => 'Đang kiểm tra file...',
+			'backup.status.fileSelectionCancelled' => 'Đã hủy chọn file.',
+			'backup.status.importCancelled' => 'Đã hủy khôi phục dữ liệu.',
+			'backup.status.invalidFile' => 'File backup không hợp lệ hoặc sai định dạng!',
+			'backup.status.disconnectingOldDb' => 'Đã ngắt kết nối DB cũ...',
+			'backup.status.connectingNewDb' => 'Đã kết nối lại DB mới...',
+			'backup.status.restoringData' => 'Đang khôi phục dữ liệu...',
+			'backup.status.importSuccess' => 'Khôi phục thành công! Vui lòng khởi động lại app.',
+			'backup.status.importError' => 'Lỗi khôi phục',
+			'backup.status.requireAppUpdate' => 'Bản sao lưu thuộc về phiên bản ứng dụng mới hơn. Vui lòng cập nhật ứng dụng!',
+			'renderImage.loadFail' => 'Ảnh tải thất bại',
+			'renderImage.loadAgain' => 'Tải lại',
 			_ => null,
 		};
 	}

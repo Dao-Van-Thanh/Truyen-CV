@@ -34,11 +34,11 @@ class ConfigRepository {
     if (currentConfig == null) {
       final defaultConfig = ConfigEntity(
         id: '1', // Cố định ID là 1 để dễ quản lý single row
-        fontFamily: defaultConfigStory.fontFamily,
-        fontSize: defaultConfigStory.fontSize,
-        themeMode: defaultConfigStory.themeMode.name,
+        fontFamily: defaultStoryConfig.fontFamily,
+        fontSize: defaultStoryConfig.fontSize,
+        themeMode: defaultStoryConfig.themeMode.name,
         timeStamp: DateTime.now().toIso8601String(),
-        lineHeight: defaultConfigStory.lineHeight,
+        lineHeight: defaultStoryConfig.lineHeight,
       );
       await saveConfig(defaultConfig);
     }

@@ -1,4 +1,4 @@
-// file: lib/dependency/backup/enum/backup_status.dart
+import 'package:flutter_template/i18n/strings.g.dart';
 
 enum BackupStatus {
   idle, // Trạng thái ban đầu: Sẵn sàng
@@ -29,39 +29,39 @@ extension BackupStatusExtension on BackupStatus {
   String get message {
     switch (this) {
       case BackupStatus.idle:
-        return 'Sẵn sàng';
+        return t.backup.status.idle;
       case BackupStatus.preparingExport:
-        return 'Đang chuẩn bị dữ liệu...';
+        return t.backup.status.preparingExport;
       case BackupStatus.compressing:
-        return 'Đang nén dữ liệu...';
+        return t.backup.status.compressing;
       case BackupStatus.savingFile:
-        return 'Đang mở hộp thoại lưu file...';
+        return t.backup.status.savingFile;
       case BackupStatus.exportSuccess:
-        return 'Sao lưu thành công!';
+        return t.backup.status.exportSuccess;
       case BackupStatus.exportCancelled:
-        return 'Đã hủy sao lưu.';
+        return t.backup.status.exportCancelled;
       case BackupStatus.exportError:
-        return 'Lỗi sao lưu';
+        return t.backup.status.exportError;
       case BackupStatus.checkingFile:
-        return 'Đang kiểm tra file...';
+        return t.backup.status.checkingFile;
       case BackupStatus.fileSelectionCancelled:
-        return 'Đã hủy chọn file.';
+        return t.backup.status.fileSelectionCancelled;
       case BackupStatus.importCancelled:
-        return 'Đã hủy khôi phục dữ liệu.';
+        return t.backup.status.importCancelled;
       case BackupStatus.invalidFile:
-        return 'File backup không hợp lệ hoặc sai định dạng!';
+        return t.backup.status.invalidFile;
       case BackupStatus.disconnectingOldDb:
-        return 'Đã ngắt kết nối DB cũ...';
+        return t.backup.status.disconnectingOldDb;
       case BackupStatus.connectingNewDb:
-        return 'Đã kết nối lại DB mới...';
+        return t.backup.status.connectingNewDb;
       case BackupStatus.restoringData:
-        return 'Đang khôi phục dữ liệu...';
+        return t.backup.status.restoringData;
       case BackupStatus.importSuccess:
-        return 'Khôi phục thành công! Vui lòng khởi động lại app.';
+        return t.backup.status.importSuccess;
       case BackupStatus.importError:
-        return 'Lỗi khôi phục';
+        return t.backup.status.importError;
       case BackupStatus.requireAppUpdate:
-        return 'Bản sao lưu thuộc về phiên bản ứng dụng mới hơn. Vui lòng cập nhật ứng dụng!';
+        return t.backup.status.requireAppUpdate;
     }
   }
 
@@ -69,6 +69,8 @@ extension BackupStatusExtension on BackupStatus {
       this == BackupStatus.exportError ||
       this == BackupStatus.importError ||
       this == BackupStatus.invalidFile;
+      
   bool get isSuccess =>
-      this == BackupStatus.exportSuccess || this == BackupStatus.importSuccess;
+      this == BackupStatus.exportSuccess || 
+      this == BackupStatus.importSuccess;
 }

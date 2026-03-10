@@ -1,5 +1,4 @@
 import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'list_comic_res.freezed.dart';
@@ -137,7 +136,6 @@ extension ListComicResExtension on ListComicRes {
               thumb: fullThumbUrl,
               process:
                   'Chương ${e.chaptersLatest?.firstOrNull?.chapterName ?? 0}',
-              storyType: StoryType.comic,
             );
           },
         ).toList() ??

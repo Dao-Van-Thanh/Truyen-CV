@@ -73,7 +73,7 @@ class _ExploreNovelPageWidgetState
     ref.read(AppService.router).push(
           RouteInput.storyDetail(
             args: StoryDetailArgument(
-              story: story,
+              storyId: story.id,
               fetchStoryDetail: (ref) {
                 return RepositoryHelper.fetchStoryNovelDetail(
                   ref,

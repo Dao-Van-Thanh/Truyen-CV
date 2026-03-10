@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_template/constants/config.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/config/entities/config_entity.dart';
 import 'package:flutter_template/dependency/router/utils/route_name.dart';
 import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
@@ -17,7 +14,7 @@ extension ReadStoryLocalExtension on ReadStoryBloc {
       final configLocal = await localApiService.configRepository.getConfig();
       if (isDispose) return;
       final config = configLocal?.toConfigModel();
-      configStorySubject.value = config ?? defaultConfigStory;
+      configStorySubject.value = config ?? defaultStoryConfig;
     } catch (e) {
       logger.e('Error loading config from local: $e');
     }
@@ -94,20 +91,5 @@ extension ReadStoryLocalExtension on ReadStoryBloc {
       newBook,
       isHasUpdateListChapter: !isSameListChapters,
     );
-  }
-
-  Future<StoryEntity?> getStoryFromLocal(String storyId) async {
-    try {
-      final book = await localApiService.bookRepository.getBookById(storyId);
-      if (book == null) {
-        logger.e('No local book found for storyId: $storyId');
-        return null;
-      }
-      return StoryEntity.fromJson(jsonDecode(book.storyData));
-    } catch (e) {
-      logger
-          .e('Error parsing story from local for storyId: $storyId, error: $e');
-      return null;
-    }
   }
 }

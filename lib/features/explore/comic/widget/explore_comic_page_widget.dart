@@ -67,15 +67,14 @@ class _ExploreComicPageWidgetState
   }
 
   void _onTapItem(StoryEntity item) {
-    final slug = item.id.split('||').lastOrNull ?? '';
     ref.read(AppService.router).push(
           RouteInput.storyDetail(
             args: StoryDetailArgument(
-              story: item,
+              storyId: item.id,
               fetchStoryDetail: (ref) {
                 return RepositoryHelper.fetchStoryComicDetail(
                   ref,
-                  storySlug: slug,
+                  storyId: item.id,
                 );
               },
             ),

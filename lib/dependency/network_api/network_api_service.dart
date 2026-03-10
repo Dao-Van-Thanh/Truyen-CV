@@ -42,6 +42,21 @@ final _apiComicProvider = Provider((ref) {
   return apiService;
 });
 
+final _apiComicContentProvider = Provider((ref) {
+  final baseUrl = envVars.comicContentsUrl;
+  final certificateSHA256s = envVars.certificatePins['comicContentsUrl'] ?? [];
+  if (certificateSHA256s.isEmpty) {
+    logger.e('certificateSHA256s is empty');
+  }
+  final apiService = ApiService(ref, baseUrl: baseUrl);
+  _addSSLPinningInterceptor(
+    apiService,
+    allowedSHAFingerprints: certificateSHA256s,
+  );
+
+  return apiService;
+});
+
 class NetworkApiService {
   final Ref ref;
 
@@ -53,7 +68,11 @@ class NetworkApiService {
 
   late final _apiNovelService = ref.watch(_apiNovelProvider);
   late final _apiComicService = ref.watch(_apiComicProvider);
+  late final _apiComicContentService = ref.watch(_apiComicContentProvider);
 
   late final novelRepository = NovelRepository(_apiNovelService);
-  late final comicRepository = ComicRepository(_apiComicService);
+  late final comicRepository = ComicRepository(
+    _apiComicService,
+    _apiComicContentService,
+  );
 }

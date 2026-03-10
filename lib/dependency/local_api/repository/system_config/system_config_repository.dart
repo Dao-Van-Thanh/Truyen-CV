@@ -1,4 +1,6 @@
+import 'package:flutter_template/constants/config.dart';
 import 'package:flutter_template/dependency/local_api/repository/system_config/entities/system_config_entities.dart';
+import 'package:flutter_template/features/explore/enum/explore_navigation_enum.dart';
 import 'package:sqflite/sqflite.dart';
 
 class SystemConfigRepository {
@@ -45,8 +47,8 @@ class SystemConfigRepository {
     } else {
       final newConfig = SystemConfigEntities(
         themeMode: newThemeMode,
-        typeListDisplay: 'list', // Default
-        locale: 'vi', // Default
+        typeListDisplay: defaultSystemConfig.typeListDisplay.name, // Default
+        locale: defaultSystemConfig.locale.languageCode, // Default
         timeStamp: DateTime.now(),
       );
       await saveConfig(newConfig);
@@ -64,9 +66,9 @@ class SystemConfigRepository {
       await saveConfig(newConfig);
     } else {
       final newConfig = SystemConfigEntities(
-        themeMode: 'system', // Default
+        themeMode: defaultSystemConfig.themeMode.name, // Default
         typeListDisplay: newTypeListDisplay,
-        locale: 'vi', // Default
+        locale: defaultSystemConfig.locale.languageCode, // Default
         timeStamp: DateTime.now(),
       );
       await saveConfig(newConfig);
@@ -84,9 +86,32 @@ class SystemConfigRepository {
       await saveConfig(newConfig);
     } else {
       final newConfig = SystemConfigEntities(
-        themeMode: 'system', // Default
-        typeListDisplay: 'list', // Default
+        themeMode: defaultSystemConfig.themeMode.name, // Default
+        typeListDisplay: defaultSystemConfig.typeListDisplay.name, // Default
         locale: newLocale,
+        timeStamp: DateTime.now(),
+      );
+      await saveConfig(newConfig);
+    }
+  }
+
+  // update explore navigation tab
+  Future<void> updateExploreNavigationTab(
+    ExploreNavigationEnum newExploreNavigationTab,
+  ) async {
+    final currentConfig = await getConfig();
+    if (currentConfig != null) {
+      final newConfig = currentConfig.copyWith(
+        exploreNavigationTab: newExploreNavigationTab,
+        timeStamp: DateTime.now(),
+      );
+      await saveConfig(newConfig);
+    } else {
+      final newConfig = SystemConfigEntities(
+        themeMode: defaultSystemConfig.themeMode.name, // Default
+        typeListDisplay: defaultSystemConfig.typeListDisplay.name, // Default
+        locale: defaultSystemConfig.locale.languageCode, // Default
+        exploreNavigationTab: newExploreNavigationTab,
         timeStamp: DateTime.now(),
       );
       await saveConfig(newConfig);

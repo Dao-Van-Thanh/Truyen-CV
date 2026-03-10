@@ -1,3 +1,4 @@
+import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
 import 'package:flutter_template/features/story/detail/entities/story_detail_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -45,6 +46,7 @@ extension StoryDetailResponseExtension on StoryDetailResponse {
       trans: translator,
       desc: description ?? '',
       thumb: thumb ?? '',
+      type: StoryType.novel,
       listChapter: [],
     );
   }

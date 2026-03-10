@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/constants/common.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/backup/enum/backup_status.dart';
+import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -104,25 +105,35 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
   }
 
   Future<bool> _showConfirmOverwriteDialog() async {
+    final tBackup = t.backup;
+
     final result = await showDialog<bool>(
       context: ref.context,
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: const Row(
+          title: Row(
             children: [
-              Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
-              SizedBox(width: 8),
-              Text('Cảnh báo ghi đè', style: TextStyle(color: Colors.red)),
+              const Icon(
+                Icons.warning_amber_rounded,
+                color: Colors.red,
+                size: 28,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                tBackup.overwriteWarning.title,
+                style: const TextStyle(color: Colors.red),
+              ),
             ],
           ),
-          content: const Text(
-            'Việc khôi phục sẽ XÓA TOÀN BỘ truyện, lịch sử đọc và cài đặt hiện tại trên máy của bạn, thay thế bằng dữ liệu từ bản sao lưu.\n\nBạn có chắc chắn muốn tiếp tục?',
-          ),
+          content: Text(tBackup.overwriteWarning.content),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: const Text('Hủy', style: TextStyle(color: Colors.grey)),
+              child: Text(
+                tBackup.overwriteWarning.cancel,
+                style: const TextStyle(color: Colors.grey),
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -130,7 +141,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
                 foregroundColor: Colors.white,
               ),
               onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: const Text('Khôi phục ngay'),
+              child: Text(tBackup.overwriteWarning.confirm),
             ),
           ],
         );
@@ -140,20 +151,20 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
   }
 
   Future<void> _showSuccessDialog() async {
+    final tBackup = t.backup;
+
     await showDialog(
       context: ref.context,
       barrierDismissible: false,
       builder: (dialogContext) => PopScope(
         canPop: false,
         child: AlertDialog(
-          title: const Text('Thành công'),
-          content: const Text(
-            'Dữ liệu đã được khôi phục thành công. Vui lòng khởi động lại ứng dụng để áp dụng thay đổi.',
-          ),
+          title: Text(tBackup.successDialog.title),
+          content: Text(tBackup.successDialog.content),
           actions: [
             ElevatedButton(
               onPressed: () => exit(0),
-              child: const Text('Đã hiểu'),
+              child: Text(tBackup.successDialog.understood),
             ),
           ],
         ),
@@ -163,13 +174,15 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final tBackup = context.t.backup;
+
     final displayText = _errorMessage != null && _currentStatus.isError
         ? '${_currentStatus.message}: $_errorMessage'
         : _currentStatus.message;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sao lưu & Khôi phục'),
+        title: Text(tBackup.title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -187,7 +200,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
             const SizedBox(height: 32),
             ElevatedButton.icon(
               icon: const Icon(Icons.upload_file_rounded),
-              label: const Text('Tạo bản sao lưu (Export)'),
+              label: Text(tBackup.exportBtn),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
@@ -196,31 +209,35 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
             const SizedBox(height: 16),
             OutlinedButton.icon(
               icon: const Icon(Icons.download_rounded),
-              label: const Text('Khôi phục dữ liệu (Import)'),
+              label: Text(tBackup.importBtn),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
               onPressed: _isProcessing ? null : _handleImport,
             ),
             const SizedBox(height: 48),
-            _buildStatusContainer(context, displayText),
+            _buildStatusContainer(context, displayText, tBackup.progressStatus),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStatusContainer(BuildContext context, String displayText) {
+  Widget _buildStatusContainer(
+    BuildContext context,
+    String displayText,
+    String progressStatusText,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.1),
+        color: Colors.grey.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         children: [
           Text(
-            'Trạng thái tiến trình:',
+            progressStatusText,
             style: Theme.of(context).textTheme.titleSmall,
           ),
           const SizedBox(height: 8),

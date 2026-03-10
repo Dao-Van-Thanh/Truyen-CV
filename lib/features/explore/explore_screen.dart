@@ -33,9 +33,9 @@ class ExploreScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: ObsBuilder(
-          streams: [bloc.exploreNavigationEnumSubject],
+          streams: [appConfigBloc.exploreNavigationTabSubject],
           builder: (context) {
-            final tab = bloc.exploreNavigationEnumSubject.value;
+            final tab = appConfigBloc.exploreNavigationTabSubject.value;
 
             return AppGestureDetector(
               onTap: bloc.onTapExploreType,
@@ -104,9 +104,9 @@ class ExploreScreen extends ConsumerWidget {
         ],
       ),
       body: ObsBuilder(
-        streams: [bloc.exploreNavigationEnumSubject],
+        streams: [appConfigBloc.exploreNavigationTabSubject],
         builder: (context) {
-          final tab = bloc.exploreNavigationEnumSubject.value;
+          final tab = appConfigBloc.exploreNavigationTabSubject.value;
 
           return Navigator(
             key: ValueKey(tab),

@@ -15,4 +15,5 @@ class RouteName {
   static const exploreComic = 'exploreComic';
   static const exploreCategory = 'exploreCategory';
   static const backup = 'backup';
+  static const readComic = 'readComic';
 }

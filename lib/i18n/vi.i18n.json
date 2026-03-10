@@ -123,6 +123,9 @@
             "viewInfo": "Xem thông tin",
             "removeStory": "Xoá truyện",
             "confirmRemoveStory": "Xác nhận xóa truyện"
+        },
+        "popupMenuItem": {
+            "addStory": "Thêm truyện"
         }
     },
     "common": {
@@ -213,5 +216,45 @@
             "completed": "Hoàn thành",
             "genres": "Thể loại"
         }
+    },
+    "backup": {
+        "title": "Sao lưu & Khôi phục",
+        "exportBtn": "Tạo bản sao lưu (Export)",
+        "importBtn": "Khôi phục dữ liệu (Import)",
+        "progressStatus": "Trạng thái tiến trình:",
+        "overwriteWarning": {
+            "title": "Cảnh báo ghi đè",
+            "content": "Việc khôi phục sẽ XÓA TOÀN BỘ truyện, lịch sử đọc và cài đặt hiện tại trên máy của bạn, thay thế bằng dữ liệu từ bản sao lưu.\n\nBạn có chắc chắn muốn tiếp tục?",
+            "cancel": "Hủy",
+            "confirm": "Khôi phục ngay"
+        },
+        "successDialog": {
+            "title": "Thành công",
+            "content": "Dữ liệu đã được khôi phục thành công. Vui lòng khởi động lại ứng dụng để áp dụng thay đổi.",
+            "understood": "Đã hiểu"
+        },
+        "status": {
+            "idle": "Sẵn sàng",
+            "preparingExport": "Đang chuẩn bị dữ liệu...",
+            "compressing": "Đang nén dữ liệu...",
+            "savingFile": "Đang mở hộp thoại lưu file...",
+            "exportSuccess": "Sao lưu thành công!",
+            "exportCancelled": "Đã hủy sao lưu.",
+            "exportError": "Lỗi sao lưu",
+            "checkingFile": "Đang kiểm tra file...",
+            "fileSelectionCancelled": "Đã hủy chọn file.",
+            "importCancelled": "Đã hủy khôi phục dữ liệu.",
+            "invalidFile": "File backup không hợp lệ hoặc sai định dạng!",
+            "disconnectingOldDb": "Đã ngắt kết nối DB cũ...",
+            "connectingNewDb": "Đã kết nối lại DB mới...",
+            "restoringData": "Đang khôi phục dữ liệu...",
+            "importSuccess": "Khôi phục thành công! Vui lòng khởi động lại app.",
+            "importError": "Lỗi khôi phục",
+            "requireAppUpdate": "Bản sao lưu thuộc về phiên bản ứng dụng mới hơn. Vui lòng cập nhật ứng dụng!"
+        }
+    },
+    "renderImage": {
+        "loadFail": "Ảnh tải thất bại",
+        "loadAgain": "Tải lại"
     }
 }

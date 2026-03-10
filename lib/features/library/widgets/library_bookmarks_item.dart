@@ -17,8 +17,8 @@ class LibraryBookmarksItem extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final name = item.story.name;
-    final thumbUrl = item.story.thumb;
+    final name = item.storyData.name;
+    final thumbUrl = item.storyData.thumb;
     final currentChapter = item.lastReadChapter?.name ?? '';
     final bloc = ref.read(BlocProvider.library);
     return AppGestureDetector(

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -7,8 +6,9 @@ import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/book_repository.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
 import 'package:flutter_template/dependency/local_api/repository/chapter/entities/chapter_contents_entity.dart';
-import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
+import 'package:flutter_template/features/story/detail/entities/story_detail_entity.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:html/dom.dart' as html_dom;
 import 'package:html/parser.dart' as html_parser;
@@ -79,17 +79,23 @@ class ImportStoryService {
     final bookId = _uuid.v4();
     final now = DateTime.now().toIso8601String();
 
-    final storyModel = StoryModel(
+    final storyModel = StoryDetailEntity(
       id: bookId,
       name: data.title,
       author: data.author,
       thumb: data.thumb,
+      desc: '',
+      listChapter: data.chapters
+          .map((e) => ListChapterEntity(id: _uuid.v4(), name: e.title))
+          .toList(),
+      totalChapter: data.chapters.length.toString(),
+      type: StoryType.novel,
     );
 
     // 1. Tạo BookEntity
     final bookEntity = BookEntity(
       id: bookId,
-      storyData: jsonEncode(storyModel.toJson()),
+      storyData: storyModel,
       listChapters: data.chapters
           .mapIndexed(
             (index, c) => ListChapterEntity(

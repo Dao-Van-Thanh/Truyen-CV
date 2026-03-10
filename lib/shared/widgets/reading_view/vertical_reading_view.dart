@@ -28,18 +28,20 @@ class _VerticalReadingViewState extends State<VerticalReadingView> {
   late PageController _pageController;
   final Map<int, double> _scrollPositions = {};
 
+  int _currentPageIndex = 0;
+
   @override
   void initState() {
     super.initState();
     _pageController = widget.pageController;
+    _currentPageIndex = _pageController.initialPage;
   }
 
-  @override
-  void dispose() {
-    if (_pageController.hasClients) {
-      _pageController.dispose();
-    }
-    super.dispose();
+  void _handlePageChanged(int newIndex) {
+    setState(() {
+      _currentPageIndex = newIndex;
+    });
+    widget.onPageChanged?.call(newIndex);
   }
 
   @override
@@ -47,15 +49,30 @@ class _VerticalReadingViewState extends State<VerticalReadingView> {
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.vertical,
-      onPageChanged: widget.onPageChanged,
+      onPageChanged: _handlePageChanged,
       physics:
           const NeverScrollableScrollPhysics(parent: ClampingScrollPhysics()),
       itemCount: widget.itemCount,
       itemBuilder: (context, index) {
+        // Chỉ giữ 2 trang lân cận trong RAM
+        /* 
+          VD: Đang ở trang 5 (_currentPageIndex = 5).
+
+          Trang 4: |4 - 5| = 1 -> shouldKeepAlive = true.
+
+          Trang 5: |5 - 5| = 0 -> shouldKeepAlive = true.
+
+          Trang 6: |6 - 5| = 1 -> shouldKeepAlive = true.
+
+          Trang 3: |3 - 5| = 2 -> shouldKeepAlive = false.
+        */
+        final bool shouldKeepAlive = (index - _currentPageIndex).abs() <= 1;
+
         return _VerticalPageWrapper(
           key: ValueKey(index),
           pageController: _pageController,
           initialScrollOffset: _scrollPositions[index] ?? 0.0,
+          shouldKeepAlive: shouldKeepAlive,
           onScrollChanged: (offset) {
             _scrollPositions[index] = offset;
           },
@@ -73,11 +90,13 @@ class _VerticalPageWrapper extends StatefulWidget {
   final Widget Function(BuildContext, AutoScrollController) builder;
   final double initialScrollOffset;
   final ValueChanged<double>? onScrollChanged;
+  final bool shouldKeepAlive;
 
   const _VerticalPageWrapper({
     super.key,
     required this.pageController,
     required this.builder,
+    required this.shouldKeepAlive,
     this.initialScrollOffset = 0.0,
     this.onScrollChanged,
   });
@@ -86,32 +105,49 @@ class _VerticalPageWrapper extends StatefulWidget {
   State<_VerticalPageWrapper> createState() => _VerticalPageWrapperState();
 }
 
-class _VerticalPageWrapperState extends State<_VerticalPageWrapper> {
+class _VerticalPageWrapperState extends State<_VerticalPageWrapper>
+    with AutomaticKeepAliveClientMixin {
   late AutoScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
+    // Khởi tạo controller với tọa độ cũ (nếu có)
     _scrollController = AutoScrollController(
       initialScrollOffset: widget.initialScrollOffset,
     );
 
-    // Lắng nghe scroll để lưu position
     _scrollController.addListener(() {
       if (_scrollController.hasClients) {
+        // Cập nhật tọa độ liên tục lên trên Map của cha
         widget.onScrollChanged?.call(_scrollController.offset);
       }
     });
   }
 
   @override
+  void didUpdateWidget(covariant _VerticalPageWrapper oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.shouldKeepAlive != oldWidget.shouldKeepAlive) {
+      updateKeepAlive();
+    }
+  }
+
+  @override
   void dispose() {
+    if (_scrollController.hasClients) {
+      widget.onScrollChanged?.call(_scrollController.offset);
+    }
     _scrollController.dispose();
     super.dispose();
   }
 
   @override
+  bool get wantKeepAlive => widget.shouldKeepAlive;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return _PageViewScrollableChild(
       scrollDirection: Axis.vertical,
       pageController: widget.pageController,

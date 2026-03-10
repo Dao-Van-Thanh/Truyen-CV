@@ -1,4 +1,5 @@
 import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
 
 class StoryDetailEntity {
   final String id;
@@ -9,6 +10,7 @@ class StoryDetailEntity {
   final String? trans;
   final String desc;
   final String thumb;
+  final StoryType type;
   final List<ListChapterEntity> listChapter;
 
   StoryDetailEntity({
@@ -20,6 +22,7 @@ class StoryDetailEntity {
     this.trans,
     required this.desc,
     required this.thumb,
+    required this.type,
     required this.listChapter,
   });
 
@@ -33,6 +36,8 @@ class StoryDetailEntity {
       trans: json['trans'] as String?,
       desc: json['desc'] as String,
       thumb: json['thumb'] as String,
+      // Giả sử StoryType có method fromName hoặc bạn parse từ String/Int
+      type: StoryType.values.byName(json['type'] as String),
       listChapter: (json['listChapter'] as List<dynamic>)
           .map((e) => ListChapterEntity.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -49,6 +54,7 @@ class StoryDetailEntity {
       'trans': trans,
       'desc': desc,
       'thumb': thumb,
+      'type': type.name, // Thêm vào toJson
       'listChapter': listChapter.map((e) => e.toJson()).toList(),
     };
   }
@@ -62,6 +68,7 @@ class StoryDetailEntity {
     String? trans,
     String? desc,
     String? thumb,
+    StoryType? type, // Thêm vào copyWith
     List<ListChapterEntity>? listChapter,
   }) {
     return StoryDetailEntity(
@@ -73,6 +80,7 @@ class StoryDetailEntity {
       trans: trans ?? this.trans,
       desc: desc ?? this.desc,
       thumb: thumb ?? this.thumb,
+      type: type ?? this.type, // Gán giá trị mới
       listChapter: listChapter ?? this.listChapter,
     );
   }
@@ -84,12 +92,17 @@ class StoryDetailEntity {
           runtimeType == other.runtimeType &&
           id == other.id &&
           name == other.name &&
+          type == other.type &&
           listChapter.length == other.listChapter.length;
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ listChapter.length.hashCode;
+  int get hashCode =>
+      id.hashCode ^
+      name.hashCode ^
+      type.hashCode ^ // Bổ sung hashCode
+      listChapter.length.hashCode;
 
   @override
   String toString() =>
-      'StoryDetailEntity(id: $id, name: $name, totalChapter: $totalChapter, cat: $cat, author: $author, trans: $trans, thumb: $thumb, listChapter: ${listChapter.length} chapters)';
+      'StoryDetailEntity(id: $id, name: $name, type: ${type.name}, totalChapter: $totalChapter, cat: $cat, author: $author, trans: $trans, thumb: $thumb, listChapter: ${listChapter.length} chapters)';
 }

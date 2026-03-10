@@ -3,6 +3,7 @@ import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/dependency/router/arguments/explore_category_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/read_comic_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/story_search_argument.dart';
@@ -30,6 +31,8 @@ import 'package:flutter_template/features/story/detail/story_detail_bloc.dart';
 import 'package:flutter_template/features/story/detail/story_detail_screen.dart';
 import 'package:flutter_template/features/story/list_chapter/list_chapter_bloc.dart';
 import 'package:flutter_template/features/story/list_chapter/list_chapter_screen.dart';
+import 'package:flutter_template/features/story/read_comic/read_comic_bloc.dart';
+import 'package:flutter_template/features/story/read_comic/read_comic_screen.dart';
 import 'package:flutter_template/features/story/read_story/read_story_bloc.dart';
 import 'package:flutter_template/features/story/read_story/read_story_screen.dart';
 import 'package:flutter_template/features/story/search/story_search_bloc.dart';
@@ -186,6 +189,17 @@ class RouteScreen {
     return MaterialPageRoute(
       settings: settings,
       builder: (_) => const BackupScreen(),
+    );
+  }
+
+  static PageRoute readComicPageRoute(RouteSettings settings) {
+    final args = settings.arguments as ReadComicArgument;
+    BlocProvider.readComic = createAutoDisposeBloc(
+      (ref) => ReadComicBloc(ref, args: args),
+    );
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (_) => const ReadComicScreen(),
     );
   }
 }

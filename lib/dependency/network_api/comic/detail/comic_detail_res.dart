@@ -1,4 +1,5 @@
 import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
 import 'package:flutter_template/features/story/detail/entities/story_detail_entity.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/string.dart';
@@ -187,6 +188,7 @@ extension ComicDetailResExtension on ComicDetailRes {
       trans: author.isEmpty
           ? null
           : _formatStoryUpdatedTime(item?.updatedAt ?? ''),
+      type: StoryType.comic,
     );
   }
 

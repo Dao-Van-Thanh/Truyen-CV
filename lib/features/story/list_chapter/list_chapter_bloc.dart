@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
@@ -8,8 +6,8 @@ import 'package:flutter_template/dependency/local_api/repository/book/entities/b
 import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
-import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/features/story/list_chapter/enum/list_sort_enum.dart';
+import 'package:flutter_template/shared/extensions/router.dart';
 import 'package:flutter_template/shared/extensions/text_editing_controller_extension.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
@@ -37,7 +35,7 @@ class ListChapterBloc extends BlocBase {
   bool _isLoadingLocal = false;
 
   ListChapterBloc(this.ref, {required this.args}) {
-    final listChapter = args.storyData?.listChapter ?? [];
+    final listChapter = args.storyData.listChapter;
     listChapterSubject.value = listChapter;
     listChapterTemp = listChapter;
     _getBookLocal();
@@ -98,14 +96,13 @@ class ListChapterBloc extends BlocBase {
     ).then(
       (_) {
         routerService
-            .push(
-          RouteInput.readStory(
-            args: ReadStoryArgument(
-              storyId: args.storyData?.id ?? '',
-              selectedChapterId: chapter.id,
-              listChapter: listChapterSubject.value,
-              scrollOffset: 0.0,
-            ),
+            .pushReadStory(
+          args.storyData.type,
+          args: ReadStoryArgument(
+            storyId: args.storyData.id,
+            selectedChapterId: chapter.id,
+            listChapter: listChapterSubject.value,
+            scrollOffset: 0.0,
           ),
         )
             .then((_) {
@@ -117,7 +114,7 @@ class ListChapterBloc extends BlocBase {
 
   Future<void> _getBookLocal() async {
     final bookEntityLocal = await localApiService.bookRepository.getBookById(
-      args.storyData?.id ?? '',
+      args.storyData.id,
     );
     if (isDispose) return;
     if (bookEntityLocal != null && bookEntityLocal.currentChapterId != null) {
@@ -136,9 +133,9 @@ class ListChapterBloc extends BlocBase {
     try {
       final listChapter = listChapterSubject.value;
       final bookEntity = BookEntity(
-        id: args.storyData?.id ?? '',
+        id: args.storyData.id,
         listChapters: listChapter,
-        storyData: jsonEncode(args.storyData?.toJson()),
+        storyData: args.storyData,
         currentChapterId: selectedChapterId,
         scrollOffset: scrollOffset,
         lastReadTime: DateTime.now().toIso8601String(),
@@ -158,18 +155,17 @@ class ListChapterBloc extends BlocBase {
 
   void onTapContinueReading() async {
     final bookEntityLocal = await localApiService.bookRepository.getBookById(
-      args.storyData?.id ?? '',
+      args.storyData.id,
     );
     if (isDispose) return;
     if (bookEntityLocal == null) return;
-    routerService.push(
-      RouteInput.readStory(
-        args: ReadStoryArgument(
-          storyId: args.storyData?.id ?? '',
-          selectedChapterId: bookEntityLocal.currentChapterId ?? '',
-          listChapter: listChapterSubject.value,
-          scrollOffset: bookEntityLocal.scrollOffset,
-        ),
+    routerService.pushReadStory(
+      args.storyData.type,
+      args: ReadStoryArgument(
+        storyId: args.storyData.id,
+        selectedChapterId: bookEntityLocal.currentChapterId ?? '-1',
+        listChapter: bookEntityLocal.listChapters,
+        scrollOffset: bookEntityLocal.scrollOffset,
       ),
     );
   }

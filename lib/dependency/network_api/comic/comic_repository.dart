@@ -3,14 +3,16 @@ import 'package:flutter_template/dependency/api/extension/response_extension.dar
 import 'package:flutter_template/dependency/api/model/api_result.dart';
 import 'package:flutter_template/dependency/network_api/base/base_data_response_model.dart';
 import 'package:flutter_template/dependency/network_api/comic/category/list_category/list_comic_category_res.dart';
+import 'package:flutter_template/dependency/network_api/comic/contents/comic_contents_res.dart';
 import 'package:flutter_template/dependency/network_api/comic/detail/comic_detail_res.dart';
 import 'package:flutter_template/dependency/network_api/comic/list_comic/list_comic_res.dart';
 import 'package:flutter_template/features/explore/enum/explore_comic_type.dart';
 
 class ComicRepository {
   final ApiService apiService;
+  final ApiService apiComicContentService;
 
-  ComicRepository(this.apiService);
+  ComicRepository(this.apiService, this.apiComicContentService);
 
   Future<ApiResult<BaseDataResponseModel<ListComicRes>>> getListByType(
     String typeSlug, {
@@ -94,6 +96,21 @@ class ComicRepository {
       (json) => BaseDataResponseModel<ListComicRes>.fromJson(
         json,
         (data) => ListComicRes.fromJson(data as Map<String, dynamic>),
+      ),
+    );
+  }
+
+  Future<ApiResult<BaseDataResponseModel<ComicContentsRes>>> getContents(
+    String id,
+  ) async {
+    final response = await apiComicContentService.get(
+      '/v1/api/chapter/$id',
+    );
+
+    return response.parseDataComic(
+      (json) => BaseDataResponseModel<ComicContentsRes>.fromJson(
+        json,
+        (data) => ComicContentsRes.fromJson(data as Map<String, dynamic>),
       ),
     );
   }

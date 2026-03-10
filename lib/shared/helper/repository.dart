@@ -50,9 +50,11 @@ class RepositoryHelper {
 
   static Future<StoryDetailEntity?> fetchStoryComicDetail(
     Ref ref, {
-    required String storySlug,
+    required String storyId,
   }) async {
     final networkApiService = ref.read(AppService.networkApi);
+
+    final storySlug = storyId.split('||').lastOrNull ?? '';
     final res =
         await networkApiService.comicRepository.getComicDetail(storySlug);
 

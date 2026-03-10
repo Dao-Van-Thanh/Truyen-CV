@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_template/features/explore/enum/explore_navigation_enum.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 
@@ -7,6 +8,7 @@ class SystemConfigEntities {
   final ThemeMode themeMode; // 'light', 'dark', 'system'
   final StoryListType typeListDisplay; // 'list', 'grid'
   final AppLocale locale; // 'vi', 'en'
+  final ExploreNavigationEnum exploreNavigationTab; // 'novel', 'comic'
   final DateTime? timeStamp;
 
   SystemConfigEntities({
@@ -14,6 +16,7 @@ class SystemConfigEntities {
     required String themeMode,
     required String typeListDisplay,
     required String locale,
+    this.exploreNavigationTab = ExploreNavigationEnum.novel,
     this.timeStamp,
   })  : themeMode = switch (themeMode) {
           'light' => ThemeMode.light,
@@ -30,9 +33,12 @@ class SystemConfigEntities {
   factory SystemConfigEntities.fromMap(Map<String, dynamic> map) {
     return SystemConfigEntities(
       id: map['id'] as String?,
-      themeMode: map['themeMode'] as String? ?? 'system', // Default value
+      themeMode: map['themeMode'] as String? ?? 'system',
       typeListDisplay: map['typeListDisplay'] as String? ?? 'list',
       locale: map['locale'] as String? ?? 'vi',
+      exploreNavigationTab: ExploreNavigationEnum.fromRouteName(
+        map['exploreNavigationTab'] as String?,
+      ),
       timeStamp: map['timeStamp'] != null
           ? DateTime.tryParse(map['timeStamp'] as String)
           : null,
@@ -42,10 +48,11 @@ class SystemConfigEntities {
   // Convert từ Object -> DB Map
   Map<String, dynamic> toMap() {
     return {
-      'id': id, // Thường sẽ để null để Auto Increment hoặc fix cứng = 1
+      'id': id,
       'themeMode': themeMode.name,
       'typeListDisplay': typeListDisplay.name,
       'locale': locale.languageCode,
+      'exploreNavigationTab': exploreNavigationTab.initialRoute,
       'timeStamp': timeStamp?.toIso8601String(),
     };
   }
@@ -56,6 +63,7 @@ class SystemConfigEntities {
     String? themeMode,
     String? typeListDisplay,
     String? locale,
+    ExploreNavigationEnum? exploreNavigationTab,
     DateTime? timeStamp,
   }) {
     return SystemConfigEntities(
@@ -63,6 +71,7 @@ class SystemConfigEntities {
       themeMode: themeMode ?? this.themeMode.name,
       typeListDisplay: typeListDisplay ?? this.typeListDisplay.name,
       locale: locale ?? this.locale.languageCode,
+      exploreNavigationTab: exploreNavigationTab ?? this.exploreNavigationTab,
       timeStamp: timeStamp ?? this.timeStamp,
     );
   }

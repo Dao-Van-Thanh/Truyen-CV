@@ -45,7 +45,7 @@ class BookRepository {
       ''',
         [
           bookToSave.id,
-          bookToSave.storyData,
+          jsonEncode(bookToSave.storyData.toJson()),
           bookToSave.currentChapterId,
           bookToSave.scrollOffset,
           bookToSave.isFavorite ? 1 : 0,
