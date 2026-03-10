@@ -25,6 +25,7 @@ class SqfliteSchema {
         themeMode $_textType,
         typeListDisplay $_textType,
         locale $_textType,
+        exploreNavigationTab $_textType, 
         timeStamp $_textType 
       )
     ''';
@@ -73,6 +74,10 @@ class SqfliteSchema {
       content $_textType, 
       FOREIGN KEY (chapterId) REFERENCES chapters (id) ON DELETE CASCADE
     )
+  ''';
+
+  static const addExploreNavigationTabToSystemConfigs = '''
+    ALTER TABLE system_configs ADD COLUMN exploreNavigationTab $_textType
   ''';
 
   SqfliteSchema._();

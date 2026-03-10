@@ -203,6 +203,8 @@ class StoryDetailScreen extends ConsumerWidget {
   }
 
   Widget _buildBottomNavigationBar(BuildContext context, StoryDetailBloc bloc) {
+    final listChapter = bloc.storyDetailSubject.value?.listChapter ?? [];
+    if (listChapter.isEmpty) return const SizedBox();
     final theme = Theme.of(context);
     return SafeArea(
       child: Container(

@@ -1,33 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
+import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/router/arguments/story_search_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/features/explore/enum/explore_navigation_enum.dart';
 import 'package:flutter_template/shared/helper/repository.dart';
-import 'package:rxdart/rxdart.dart';
 
 class ExploreBloc extends BlocBase {
   Ref ref;
 
   late final routerService = ref.read(AppService.router);
-
-  final exploreNavigationEnumSubject =
-      BehaviorSubject<ExploreNavigationEnum>.seeded(
-    ExploreNavigationEnum.novel,
-  );
+  late final configBloc = ref.read(BlocProvider.config);
 
   ExploreBloc(this.ref);
 
-  @override
-  void dispose() {
-    super.dispose();
-    exploreNavigationEnumSubject.close();
-  }
-
   void onTapSearch() {
-    final currentType = exploreNavigationEnumSubject.value;
+    final currentType = configBloc.exploreNavigationTabSubject.value;
 
     late StorySearchArgument args;
 
@@ -74,7 +64,7 @@ class ExploreBloc extends BlocBase {
   }
 
   void onTapExploreType() {
-    final current = exploreNavigationEnumSubject.value;
+    final current = configBloc.exploreNavigationTabSubject.value;
 
     showModalBottomSheet<ExploreNavigationEnum>(
       context: routerService.rootContext,
@@ -128,12 +118,8 @@ class ExploreBloc extends BlocBase {
       },
     ).then((value) {
       if (value != null && value != current) {
-        _onChangeExploreType(value);
+        configBloc.onChangeExploreNavigationTab(value);
       }
     });
-  }
-
-  void _onChangeExploreType(ExploreNavigationEnum value) {
-    exploreNavigationEnumSubject.value = value;
   }
 }

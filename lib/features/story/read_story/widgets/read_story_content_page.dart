@@ -34,7 +34,7 @@ class ReadStoryContentPage extends ConsumerStatefulWidget {
 }
 
 class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+    with WidgetsBindingObserver {
   late AutoScrollController _scrollController;
   late final networkApiService = ref.read(AppService.networkApi);
   late final bloc = ref.read(BlocProvider.readStory);
@@ -144,7 +144,6 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
@@ -162,10 +161,14 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
           final config = bloc.configStorySubject.value;
           final chapterData = _chapterFromCache;
           if (chapterData == null) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(),
+            ); // (1) Đang đợi Data
           }
 
+          // (2) Khi có Data, ListView CHUẨN BỊ được vẽ
           WidgetsBinding.instance.addPostFrameCallback((_) {
+            // (3) Đợi UI vẽ xong cái ListView rồi mới chạy khối lệnh này
             if (widget.listChapterItem?.id != bloc.selectedChapterId ||
                 _isInitScrollDone) {
               return;
@@ -337,7 +340,4 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
       height: 100,
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

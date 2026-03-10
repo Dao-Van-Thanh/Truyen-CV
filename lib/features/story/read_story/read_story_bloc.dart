@@ -51,7 +51,7 @@ class ReadStoryBloc extends BlocBase {
   final isMenuVisibleSubject = BehaviorSubject<bool>.seeded(false);
 
   final configStorySubject =
-      BehaviorSubject<ConfigStoryModel>.seeded(defaultConfigStory);
+      BehaviorSubject<ConfigStoryModel>.seeded(defaultStoryConfig);
   final pageController = PageController();
 
   final isLoadingSubject = BehaviorSubject<bool>.seeded(false);
@@ -256,7 +256,7 @@ class ReadStoryBloc extends BlocBase {
         toastService.showText(
           message: t.readStory.resetSettingsToDefaultSuccess,
         );
-        configStorySubject.add(defaultConfigStory);
+        configStorySubject.add(defaultStoryConfig);
       },
     );
   }

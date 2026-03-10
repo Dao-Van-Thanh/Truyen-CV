@@ -33,7 +33,7 @@ void _compressFilesIsolate(Map<String, dynamic> args) {
   final filePaths = args['files'] as List<String>;
   final zipPath = args['zipPath'] as String;
   final manifestKey = args['manifestKey'] as String;
-  final dbVersion = args['dbVersion'] as String;
+  final dbVersion = args['dbVersion'] as int;
 
   final archive = Archive();
 
@@ -160,7 +160,7 @@ class BackupService {
         }
       }
     } catch (e) {
-      logger.e(e);
+      logger.e('Error exporting database: $e');
       onProgress(BackupStatus.exportError, errorMessage: e.toString());
     }
   }

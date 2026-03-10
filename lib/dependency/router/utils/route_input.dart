@@ -1,5 +1,6 @@
 import 'package:flutter_template/dependency/router/arguments/explore_category_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/read_comic_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/story_search_argument.dart';
@@ -47,6 +48,11 @@ class RouteInput {
   RouteInput.exploreCategory({
     required ExploreCategoryArgument args,
   })  : routeName = RouteName.exploreCategory,
+        arguments = args;
+
+  RouteInput.readComic({
+    required ReadComicArgument args,
+  })  : routeName = RouteName.readComic,
         arguments = args;
 
   RouteInput.backup() : routeName = RouteName.backup;

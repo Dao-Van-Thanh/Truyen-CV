@@ -51,7 +51,7 @@ class SettingScreen extends ConsumerWidget {
                   context,
                   icon: Icons.language,
                   title: t.setting.language,
-                  subtitle: locale.languageCode == 'vi'
+                  subtitle: locale.languageCode == AppLocale.vi.languageCode
                       ? t.setting.vietnamese
                       : t.setting.english,
                   onTap: () => _showLanguagePicker(context, appConfigBloc),

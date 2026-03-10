@@ -6,7 +6,7 @@ import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-const int sqliteVersion = 2;
+const int sqliteVersion = 3;
 
 class SqliteService {
   SqliteService();
@@ -50,6 +50,10 @@ class SqliteService {
     if (oldVersion < 2) {
       await db.execute(SqfliteSchema.addIsLocalToBooks);
       await db.execute(SqfliteSchema.createChapterContentsTable);
+    }
+
+    if (oldVersion < 3) {
+      await db.execute(SqfliteSchema.addExploreNavigationTabToSystemConfigs);
     }
   }
 

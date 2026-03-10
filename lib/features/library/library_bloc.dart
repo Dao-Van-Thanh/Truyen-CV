@@ -11,6 +11,7 @@ import 'package:flutter_template/dependency/router/arguments/story_search_argume
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/features/library/extension/library_extension.dart';
 import 'package:flutter_template/features/library/widgets/library_bookmarks_option.dart';
+import 'package:flutter_template/shared/extensions/router.dart';
 import 'package:flutter_template/shared/helper/repository.dart';
 import 'package:flutter_template/shared/widgets/dialog/file_import_dialog.dart';
 import 'package:rxdart/rxdart.dart';
@@ -138,15 +139,14 @@ class LibraryBloc extends BlocBase {
   }
 
   void onTapReadStory(BookEntity item) {
-    routerService.push(
-      RouteInput.readStory(
-        args: ReadStoryArgument(
-          storyId: item.id,
-          selectedChapterId: item.currentChapterId ?? '',
-          listChapter: item.listChapters,
-          scrollOffset: item.scrollOffset,
-          isOfflineImport: item.isLocal,
-        ),
+    routerService.pushReadStory(
+      item.storyData.type,
+      args: ReadStoryArgument(
+        storyId: item.id,
+        selectedChapterId: item.currentChapterId ?? '',
+        listChapter: item.listChapters,
+        scrollOffset: item.scrollOffset,
+        isOfflineImport: item.isLocal,
       ),
     );
   }

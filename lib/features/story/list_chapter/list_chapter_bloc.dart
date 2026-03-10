@@ -6,8 +6,8 @@ import 'package:flutter_template/dependency/local_api/repository/book/entities/b
 import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
-import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/features/story/list_chapter/enum/list_sort_enum.dart';
+import 'package:flutter_template/shared/extensions/router.dart';
 import 'package:flutter_template/shared/extensions/text_editing_controller_extension.dart';
 import 'package:flutter_template/shared/utilities/debounce.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
@@ -96,14 +96,13 @@ class ListChapterBloc extends BlocBase {
     ).then(
       (_) {
         routerService
-            .push(
-          RouteInput.readStory(
-            args: ReadStoryArgument(
-              storyId: args.storyData.id,
-              selectedChapterId: chapter.id,
-              listChapter: listChapterSubject.value,
-              scrollOffset: 0.0,
-            ),
+            .pushReadStory(
+          args.storyData.type,
+          args: ReadStoryArgument(
+            storyId: args.storyData.id,
+            selectedChapterId: chapter.id,
+            listChapter: listChapterSubject.value,
+            scrollOffset: 0.0,
           ),
         )
             .then((_) {
@@ -160,14 +159,13 @@ class ListChapterBloc extends BlocBase {
     );
     if (isDispose) return;
     if (bookEntityLocal == null) return;
-    routerService.push(
-      RouteInput.readStory(
-        args: ReadStoryArgument(
-          storyId: args.storyData.id,
-          selectedChapterId: bookEntityLocal.currentChapterId ?? '',
-          listChapter: listChapterSubject.value,
-          scrollOffset: bookEntityLocal.scrollOffset,
-        ),
+    routerService.pushReadStory(
+      args.storyData.type,
+      args: ReadStoryArgument(
+        storyId: args.storyData.id,
+        selectedChapterId: bookEntityLocal.currentChapterId ?? '-1',
+        listChapter: bookEntityLocal.listChapters,
+        scrollOffset: bookEntityLocal.scrollOffset,
       ),
     );
   }

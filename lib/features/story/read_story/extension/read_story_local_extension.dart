@@ -14,7 +14,7 @@ extension ReadStoryLocalExtension on ReadStoryBloc {
       final configLocal = await localApiService.configRepository.getConfig();
       if (isDispose) return;
       final config = configLocal?.toConfigModel();
-      configStorySubject.value = config ?? defaultConfigStory;
+      configStorySubject.value = config ?? defaultStoryConfig;
     } catch (e) {
       logger.e('Error loading config from local: $e');
     }

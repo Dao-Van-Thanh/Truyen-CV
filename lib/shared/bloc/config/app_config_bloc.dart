@@ -7,6 +7,7 @@ import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/constants/config.dart';
 import 'package:flutter_template/constants/font_family_enum.dart';
 import 'package:flutter_template/dependency/app_service.dart';
+import 'package:flutter_template/features/explore/enum/explore_navigation_enum.dart';
 import 'package:flutter_template/features/library/extension/library_extension.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
@@ -22,6 +23,10 @@ class AppConfigBloc extends BlocBase {
   final typeListDisplaySubject =
       BehaviorSubject<StoryListType>.seeded(StoryListType.list);
   final localeSubject = BehaviorSubject<AppLocale>.seeded(AppLocale.vi);
+  final exploreNavigationTabSubject =
+      BehaviorSubject<ExploreNavigationEnum>.seeded(
+    ExploreNavigationEnum.novel,
+  );
 
   // --- Reader Configs Streams ---
   final fontSizeSubject = BehaviorSubject<double>.seeded(18.0);
@@ -67,6 +72,12 @@ class AppConfigBloc extends BlocBase {
     localApiService.systemConfigRepository.updateLocale(locale.languageCode);
   }
 
+  void onChangeExploreNavigationTab(ExploreNavigationEnum tab) {
+    if (tab == exploreNavigationTabSubject.value) return;
+    exploreNavigationTabSubject.add(tab);
+    localApiService.systemConfigRepository.updateExploreNavigationTab(tab);
+  }
+
   // --- Reader Configs Logic ---
 
   void onChangeFontSize(double size) {
@@ -95,10 +106,13 @@ class AppConfigBloc extends BlocBase {
       themeModeSubject.value = systemConfig.themeMode;
       typeListDisplaySubject.value = systemConfig.typeListDisplay;
       localeSubject.value = systemConfig.locale;
+      exploreNavigationTabSubject.value = systemConfig.exploreNavigationTab;
     } else {
       themeModeSubject.value = defaultSystemConfig.themeMode;
       typeListDisplaySubject.value = defaultSystemConfig.typeListDisplay;
       localeSubject.value = defaultSystemConfig.locale;
+      exploreNavigationTabSubject.value =
+          defaultSystemConfig.exploreNavigationTab;
     }
 
     // 2. Load Reader Config
@@ -109,10 +123,10 @@ class AppConfigBloc extends BlocBase {
       fontFamilySubject.value =
           FontFamilyEnum.fromString(readerConfig.fontFamily);
     } else {
-      fontSizeSubject.value = defaultConfigStory.fontSize;
-      lineHeightSubject.value = defaultConfigStory.lineHeight;
+      fontSizeSubject.value = defaultStoryConfig.fontSize;
+      lineHeightSubject.value = defaultStoryConfig.lineHeight;
       fontFamilySubject.value =
-          FontFamilyEnum.fromString(defaultConfigStory.fontFamily);
+          FontFamilyEnum.fromString(defaultStoryConfig.fontFamily);
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {

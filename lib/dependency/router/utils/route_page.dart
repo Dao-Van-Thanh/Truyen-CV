@@ -24,6 +24,7 @@ class RoutePage {
       RouteName.exploreCategory =>
         RouteScreen.exploreCategoryPageRoute(settings),
       RouteName.backup => RouteScreen.backupPageRoute(settings),
+      RouteName.readComic => RouteScreen.readComicPageRoute(settings),
       _ => RouteScreen.unknownPageRoute(settings),
     };
   }

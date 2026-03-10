@@ -6,11 +6,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
 import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
+import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
 import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
+import 'package:flutter_template/dependency/router/arguments/read_comic_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
 import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
 import 'package:flutter_template/dependency/router/utils/route_input.dart';
 import 'package:flutter_template/features/story/detail/entities/story_detail_entity.dart';
+import 'package:flutter_template/features/story/read_comic/entities/comic_chapter_entity.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:rxdart/rxdart.dart';
@@ -103,7 +107,9 @@ class StoryDetailBloc extends BlocBase {
       storyData: storyDetailSubject.value!,
       storyName: storyDetailSubject.value?.name ?? '',
     );
-    routerService.push(RouteInput.listChapter(args: args));
+    routerService.push(RouteInput.listChapter(args: args)).then((_) {
+      _getBookLocal();
+    });
   }
 
   void onTapReadNow() {
@@ -145,20 +151,57 @@ class StoryDetailBloc extends BlocBase {
       isFavorite: bookEntityLocal?.isFavorite ?? false,
     );
 
-    routerService
-        .push(
-      RouteInput.readStory(
-        args: ReadStoryArgument(
+    _pushScreen(
+      isNovel: storyDetailSubject.value!.type.isNovel,
+      listChapter: storyDetailSubject.value!.listChapter,
+      selectedChapterId: selectedChapterId,
+      scrollOffset: scrollOffset,
+      storyId: storyId,
+    ).then((_) {
+      _getBookLocal();
+    });
+  }
+
+  Future _pushScreen({
+    required String storyId,
+    required bool isNovel,
+    required String selectedChapterId,
+    required double scrollOffset,
+    required List<ListChapterEntity> listChapter,
+  }) async {
+    if (isNovel) {
+      return routerService.push(
+        RouteInput.readStory(
+          args: ReadStoryArgument(
+            storyId: storyId,
+            selectedChapterId: selectedChapterId,
+            listChapter: listChapter,
+            scrollOffset: scrollOffset,
+          ),
+        ),
+      );
+    }
+
+    final comicChapter = listChapter.map(
+      (e) {
+        return ComicChapterEntity(
+          id: e.id,
+          name: e.name,
+          pages: [],
+        );
+      },
+    ).toList();
+
+    return routerService.push(
+      RouteInput.readComic(
+        args: ReadComicArgument(
           storyId: storyId,
           selectedChapterId: selectedChapterId,
-          listChapter: storyDetailSubject.value?.listChapter ?? [],
+          listChapter: comicChapter,
           scrollOffset: scrollOffset,
         ),
       ),
-    )
-        .then((_) {
-      _getBookLocal();
-    });
+    );
   }
 
   Future<void> _getBookLocal() async {

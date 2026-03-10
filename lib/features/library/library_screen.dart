@@ -75,7 +75,7 @@ class LibraryScreen extends ConsumerWidget {
                             color: Theme.of(context).iconTheme.color,
                           ),
                           SizedBox(width: 8),
-                          Text('Thêm truyện'),
+                          Text(context.t.libraryScreen.popupMenuItem.addStory),
                         ],
                       ),
                     ),

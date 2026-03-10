@@ -5,9 +5,11 @@ class EnvModelRelease extends EnvModelImplementation {
       : super(
           novelUrl: '',
           comicUrl: '',
+          comicContentsUrl: '',
           certificatePins: {
             'novelUrl': [],
             'comicUrl': [],
+            'comicContentsUrl': [],
           },
         );
 }
