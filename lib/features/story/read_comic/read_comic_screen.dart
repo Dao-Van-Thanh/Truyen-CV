@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/bloc/rx/obs_builder.dart';
@@ -12,32 +13,28 @@ class ReadComicScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final _ = ref.watch(BlocProvider.readComic);
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: ObsBuilder(
-        // streams: [bloc.isLoadingSubject],
-        builder: (context) {
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: ReadComicContent(),
-              ),
-              Positioned.fill(
-                child: ReadComicController(),
-              ),
-              // if (bloc.isLoadingSubject.value)
-              //   Center(
-              //     child: CircularProgressIndicator(
-              //       color: Theme.of(context).colorScheme.primary,
-              //     ),
-              //   ),
 
-              Positioned.fill(
-                child: ReadComicDrawer(),
-              ),
-            ],
-          );
-        },
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: ObsBuilder(
+          builder: (context) {
+            return Stack(
+              children: [
+                Positioned.fill(
+                  child: ReadComicContent(),
+                ),
+                Positioned.fill(
+                  child: ReadComicController(),
+                ),
+                Positioned.fill(
+                  child: ReadComicDrawer(),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

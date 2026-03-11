@@ -68,5 +68,7 @@ style-dictionary/*tokens.json
 
 *.sh
 
-.fvm
 devtools_options.yaml
+
+# FVM Version Cache
+.fvm/
