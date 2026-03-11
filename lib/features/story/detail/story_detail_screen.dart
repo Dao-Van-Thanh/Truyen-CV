@@ -110,22 +110,25 @@ class StoryDetailScreen extends ConsumerWidget {
                     ),
                   ),
                   actions: [
-                    //button save to library
-                    ObsBuilder(
-                      streams: [bloc.isFavoriteSubject],
-                      builder: (context) {
-                        final isFavorite = bloc.isFavoriteSubject.value;
-                        return IconButton(
-                          onPressed: () {
-                            bloc.onTapFavoriteStory();
-                          },
-                          icon: Icon(
-                            isFavorite ? Icons.bookmark : Icons.bookmark_border,
-                            color: iconColor,
-                          ),
-                        );
-                      },
-                    ),
+                    if (storyDetail.listChapter.isNotEmpty)
+                      //button save to library
+                      ObsBuilder(
+                        streams: [bloc.isFavoriteSubject],
+                        builder: (context) {
+                          final isFavorite = bloc.isFavoriteSubject.value;
+                          return IconButton(
+                            onPressed: () {
+                              bloc.onTapFavoriteStory();
+                            },
+                            icon: Icon(
+                              isFavorite
+                                  ? Icons.bookmark
+                                  : Icons.bookmark_border,
+                              color: iconColor,
+                            ),
+                          );
+                        },
+                      ),
                     // button share
                     IconButton(
                       onPressed: () {},
