@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:flutter_template/dependency/app_service.dart';
@@ -62,7 +61,6 @@ class ReadComicBloc extends BlocBase {
     comicChaptersSubject.value = _args.listChapter;
     _handleLoadFirstChapter();
     _getFavoriteStatus();
-    _setupStatusBar();
   }
 
   void _handleLoadFirstChapter() {
@@ -300,11 +298,5 @@ class ReadComicBloc extends BlocBase {
         await localApiService.bookRepository.getBookById(storyId);
     final isFavorite = bookEntityLocal?.isFavorite ?? false;
     isFavoriteSubject.value = isFavorite;
-  }
-
-  void _setupStatusBar() {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle.light,
-    );
   }
 }
