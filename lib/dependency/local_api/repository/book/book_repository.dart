@@ -259,7 +259,7 @@ class BookRepository {
         ''',
         [
           bookToSave.id,
-          bookToSave.storyData,
+          jsonEncode(bookToSave.storyData.toJson()),
           bookToSave.currentChapterId,
           bookToSave.scrollOffset,
           1, // isFavorite = true (Hardcode số 1)
