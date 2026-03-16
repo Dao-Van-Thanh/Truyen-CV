@@ -21,41 +21,41 @@ class LibraryBookmarksPage extends ConsumerWidget {
     final heightItem = MediaQuery.of(context).size.height * 0.27;
     final t = context.t;
 
-    return ObsBuilder(
-      streams: [bloc.listBookmarksSubject],
-      builder: (context) {
-        final list = bloc.listBookmarksSubject.value;
-        final itemCount = list.length;
+    return AppRefreshIndicator(
+      onRefresh: bloc.onRefreshBookmarks,
+      child: ObsBuilder(
+        streams: [bloc.listBookmarksSubject],
+        builder: (context) {
+          final list = bloc.listBookmarksSubject.value;
+          final itemCount = list.length;
 
-        if (itemCount == 0) {
-          return AppEmptyState(title: t.libraryScreen.listBookmarksEmpty);
-        }
+          if (itemCount == 0) {
+            return AppEmptyState(title: t.libraryScreen.listBookmarksEmpty);
+          }
 
-        if (itemCount <= 3) {
-          return ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: itemCount,
-            separatorBuilder: (_, __) => SizedBoxConstants.s12,
-            itemBuilder: (context, index) {
-              final book = list[index];
-              return BookBannerCard(
-                book: book,
-                onTap: () => bloc.onTapReadStory(book),
-                onLongPress: () => bloc.onTapLongPressStory(book),
-              );
-            },
-          );
-        }
+          if (itemCount <= 3) {
+            return ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: itemCount,
+              separatorBuilder: (_, __) => SizedBoxConstants.s12,
+              itemBuilder: (context, index) {
+                final book = list[index];
+                return BookBannerCard(
+                  book: book,
+                  onTap: () => bloc.onTapReadStory(book),
+                  onLongPress: () => bloc.onTapLongPressStory(book),
+                );
+              },
+            );
+          }
 
-        final top3Items = list.take(3).toList();
-        final remainingItems = list.skip(3).toList();
+          final top3Items = list.take(3).toList();
+          final remainingItems = list.skip(3).toList();
 
-        final childCount =
-            remainingItems.length + (bloc.isLastPageBookmarks ? 0 : 1);
+          final childCount =
+              remainingItems.length + (bloc.isLastPageBookmarks ? 0 : 1);
 
-        return AppRefreshIndicator(
-          onRefresh: bloc.onRefreshBookmarks,
-          child: CustomScrollView(
+          return CustomScrollView(
             controller: bloc.bookmarksScrollController,
             slivers: [
               SliverToBoxAdapter(
@@ -96,9 +96,9 @@ class LibraryBookmarksPage extends ConsumerWidget {
               // Padding bottom safe area
               const SliverToBoxAdapter(child: SizedBox(height: 20)),
             ],
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
