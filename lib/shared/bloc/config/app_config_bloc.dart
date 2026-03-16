@@ -38,9 +38,7 @@ class AppConfigBloc extends BlocBase {
 
   StreamSubscription? _localeSubscription;
 
-  AppConfigBloc(this.ref) {
-    _init();
-  }
+  AppConfigBloc(this.ref);
 
   @override
   void dispose() {
@@ -98,7 +96,7 @@ class AppConfigBloc extends BlocBase {
     localApiService.configRepository.updateFontFamily(font.familyName);
   }
 
-  Future<void> _init() async {
+  Future<void> init() async {
     // 1. Load System Config
     final systemConfig =
         await localApiService.systemConfigRepository.getConfig();

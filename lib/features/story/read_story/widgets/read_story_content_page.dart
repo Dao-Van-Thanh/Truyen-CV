@@ -207,10 +207,6 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
                   index: index,
                   config: config,
                   onTap: () {
-                    if (isHightLight) {
-                      bloc.toggleMenuVisibility();
-                      return;
-                    }
                     bloc.onTapPlayToIndex(
                       index,
                       widget.listChapterItem?.id ?? '',

@@ -4,13 +4,25 @@ import 'package:flutter_template/bloc/bloc_provider.dart';
 import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/utilities/device.dart';
 
-class IndividualScreen extends ConsumerWidget {
+class IndividualScreen extends ConsumerStatefulWidget {
   const IndividualScreen({super.key});
 
   @override
-  Widget build(BuildContext context, ref) {
+  ConsumerState<IndividualScreen> createState() => _IndividualScreenState();
+}
+
+class _IndividualScreenState extends ConsumerState<IndividualScreen> {
+  final ScrollController _scrollController = ScrollController();
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final bloc = ref.watch(BlocProvider.individual);
-    const bool isLoggedIn = false;
+    const bool isLoggedIn = true;
     final t = context.t;
 
     final double paddingTop = MediaQuery.of(context).padding.top;
@@ -18,9 +30,22 @@ class IndividualScreen extends ConsumerWidget {
     const double maxHeaderExtent = 280.0;
 
     return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
+      body: NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          if (notification is ScrollEndNotification &&
+              notification.depth == 0) {
+            _onScrollEnd(
+              _scrollController.position.pixels,
+              minHeaderExtent,
+              maxHeaderExtent,
+            );
+          }
+          return false;
+        },
+        child: CustomScrollView(
+          controller: _scrollController,
+          physics: const ClampingScrollPhysics(),
+          slivers: [
             SliverPersistentHeader(
               pinned: true,
               delegate: _ProfileHeaderDelegate(
@@ -29,76 +54,96 @@ class IndividualScreen extends ConsumerWidget {
                 paddingTop: paddingTop,
                 isLoggedIn: isLoggedIn,
                 t: t,
-                onLogout: () {
-                  // Handle Logout
-                },
+                onLogout: () {},
               ),
             ),
-          ];
-        },
-        body: SingleChildScrollView(
-          padding: EdgeInsets.zero,
-          physics: const ClampingScrollPhysics(),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildSectionTitle(context, t.individual.data),
-              _buildMenuItem(
-                context,
-                icon: Icons.cloud_sync_outlined,
-                title: t.individual.syncBackup,
-                subtitle: t.individual.cloudStorage,
-                onTap: bloc.onTapBackup,
-              ),
-              const Divider(
-                height: 32,
-                thickness: 1,
-                indent: 16,
-                endIndent: 16,
-              ),
-              _buildSocialMediaSection(context),
-              const Divider(
-                height: 32,
-                thickness: 1,
-                indent: 16,
-                endIndent: 16,
-              ),
-              _buildSectionTitle(context, t.individual.system),
-              _buildMenuItem(
-                context,
-                icon: Icons.settings_outlined,
-                title: t.individual.settings,
-                onTap: bloc.onTapSetting,
-              ),
-              // if (isLoggedIn)
-              //   _buildMenuItem(
-              //     context,
-              //     icon: Icons.logout_outlined,
-              //     title: t.individual.logout,
-              //     onTap: () {},
-              //   ),
-              FutureBuilder<String>(
-                future: DeviceUtil.getFullVersion(),
-                builder: (context, snapshot) {
-                  final String versionText = snapshot.hasData
-                      ? '${t.individual.appVersion} ${snapshot.data}'
-                      : t.individual.loading;
-                  return Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Text(
-                      versionText,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
+            SliverToBoxAdapter(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height -
+                      maxHeaderExtent +
+                      minHeaderExtent,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildSectionTitle(context, t.individual.data),
+                    _buildMenuItem(
+                      context,
+                      icon: Icons.cloud_sync_outlined,
+                      title: t.individual.syncBackup,
+                      subtitle: t.individual.cloudStorage,
+                      onTap: bloc.onTapBackup,
                     ),
-                  );
-                },
+                    const Divider(
+                      height: 32,
+                      thickness: 1,
+                      indent: 16,
+                      endIndent: 16,
+                    ),
+                    _buildSocialMediaSection(context),
+                    const Divider(
+                      height: 32,
+                      thickness: 1,
+                      indent: 16,
+                      endIndent: 16,
+                    ),
+                    _buildSectionTitle(context, t.individual.system),
+                    _buildMenuItem(
+                      context,
+                      icon: Icons.settings_outlined,
+                      title: t.individual.settings,
+                      onTap: bloc.onTapSetting,
+                    ),
+                    FutureBuilder<String>(
+                      future: DeviceUtil.getFullVersion(),
+                      builder: (context, snapshot) {
+                        final String versionText = snapshot.hasData
+                            ? '${t.individual.appVersion} ${snapshot.data}'
+                            : t.individual.loading;
+                        return Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Text(
+                            versionText,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.outline,
+                                ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  void _onScrollEnd(
+    double pixels,
+    double minExtent,
+    double maxExtent,
+  ) {
+    if (!_scrollController.hasClients) return;
+
+    final scrollAmount = maxExtent - minExtent;
+    final snapThreshold = scrollAmount / 2;
+
+    final targetOffset = pixels < snapThreshold ? 0.0 : scrollAmount;
+
+    Future.microtask(() {
+      _scrollController.animateTo(
+        targetOffset,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCubic,
+      );
+    });
   }
 
   Widget _buildSectionTitle(BuildContext context, String title) {

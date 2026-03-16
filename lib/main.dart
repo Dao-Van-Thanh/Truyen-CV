@@ -15,6 +15,14 @@ import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:flutter_template/shared/bloc/config/app_theme.dart';
 import 'package:flutter_template/shared/utilities/logger.dart';
 
+Future<void> _loadSystemConfigs(ProviderContainer container) async {
+  try {
+    await container.read(BlocProvider.config).init();
+  } catch (e) {
+    logger.e('Error initializing services: $e');
+  }
+}
+
 Future<void> _initLocalServices(ProviderContainer container) async {
   try {
     final localApiService = container.read(AppService.localApi);
@@ -46,6 +54,7 @@ Future<void> main() async {
 
   final container = ProviderContainer();
   await _initLocalServices(container);
+  await _loadSystemConfigs(container);
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
