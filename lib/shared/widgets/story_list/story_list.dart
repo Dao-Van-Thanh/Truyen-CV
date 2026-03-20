@@ -142,25 +142,48 @@ class _StoryListState extends State<StoryList> {
   Widget _buildListView() {
     switch (widget.listType) {
       case StoryListType.grid:
-        final heightItem = MediaQuery.of(context).size.height * 0.29;
         return PagingListener(
           controller: widget.pagingController,
           builder: (context, state, fetchNextPage) {
-            return PagedGridView<int, StoryEntity>(
-              scrollController: _scrollController,
-              state: state,
-              fetchNextPage: fetchNextPage,
-              padding: const EdgeInsets.all(12),
-              cacheExtent: 500,
-              addRepaintBoundaries: true,
-              addAutomaticKeepAlives: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                mainAxisExtent: heightItem,
-              ),
-              builderDelegate: _buildDelegate(),
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final width = constraints.maxWidth;
+
+                final crossAxisCount = switch (width) {
+                  >= 900 => 6,
+                  >= 720 => 5,
+                  >= 520 => 4,
+                  _ => 3,
+                };
+
+                const padding = 12.0;
+                const spacing = 10.0;
+
+                final availableWidth =
+                    (width - padding * 2) - spacing * (crossAxisCount - 1);
+                final itemWidth = availableWidth / crossAxisCount;
+
+                final imageHeight = itemWidth * (4 / 3);
+                final contentHeight = itemWidth < 120 ? 74.0 : 88.0;
+                final heightItem = imageHeight + contentHeight;
+
+                return PagedGridView<int, StoryEntity>(
+                  scrollController: _scrollController,
+                  state: state,
+                  fetchNextPage: fetchNextPage,
+                  padding: const EdgeInsets.all(padding),
+                  cacheExtent: 500,
+                  addRepaintBoundaries: true,
+                  addAutomaticKeepAlives: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    crossAxisSpacing: spacing,
+                    mainAxisSpacing: spacing,
+                    mainAxisExtent: heightItem,
+                  ),
+                  builderDelegate: _buildDelegate(),
+                );
+              },
             );
           },
         );

@@ -34,9 +34,13 @@ class _ReadComicContentPageState extends ConsumerState<ReadComicContentPage>
   late AutoScrollController _scrollController;
   late final networkApiService = ref.read(AppService.networkApi);
   late final bloc = ref.read(BlocProvider.readComic);
+  final ScrollController _horizontalScrollController = ScrollController();
+  late final VoidCallback _scrollListener;
+  bool _hasScrollListener = false;
 
   double _offSet = 0.0;
   bool _isInitScrollDone = false;
+  double _zoomStart = 1.0;
 
   Future<void> _onWillPop(BuildContext context, Object? result) async {
     final isCurrentPage = bloc.isCurrentPage(widget.chapter.id);
@@ -64,13 +68,17 @@ class _ReadComicContentPageState extends ConsumerState<ReadComicContentPage>
   }
 
   void _listenScroll() {
-    _scrollController.addListener(() {
+    _scrollListener = () {
       _offSet = _scrollController.offset;
-    });
+    };
+    _scrollController.addListener(_scrollListener);
+    _hasScrollListener = true;
   }
 
   void _removeScrollListener() {
-    _scrollController.removeListener(() {});
+    if (!_hasScrollListener) return;
+    _scrollController.removeListener(_scrollListener);
+    _hasScrollListener = false;
   }
 
   @override
@@ -85,10 +93,8 @@ class _ReadComicContentPageState extends ConsumerState<ReadComicContentPage>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _horizontalScrollController.dispose();
     super.dispose();
-    if (_scrollController.hasClients) {
-      _scrollController.dispose();
-    }
   }
 
   Future<void> _handleUpsertLocal() async {
@@ -129,23 +135,59 @@ class _ReadComicContentPageState extends ConsumerState<ReadComicContentPage>
             _isInitScrollDone = true;
           });
 
-          return ListView.builder(
-            itemCount: chapterData.pages.length + 1,
-            controller: _scrollController,
-            physics: const NeverScrollableScrollPhysics(),
-            cacheExtent: 3000,
-            itemBuilder: (context, index) {
-              if (index == chapterData.pages.length) {
-                return _buildChapterEndFooter();
-              }
+          return StreamBuilder<double>(
+            stream: bloc.zoomSubject.stream.distinct(),
+            initialData: bloc.zoomSubject.value,
+            builder: (context, snapshot) {
+              final zoom = snapshot.data ?? 1.0;
+              final viewportWidth = MediaQuery.sizeOf(context).width;
+              final contentWidth = viewportWidth * zoom;
 
-              return AutoScrollTag(
-                key: Key('paragraph_$index'),
-                index: index,
-                controller: _scrollController,
-                child: _buildItem(
-                  url: chapterData.pages[index].url,
-                  isLastItem: index == chapterData.pages.length - 1,
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onDoubleTap: () {
+                  bloc.setZoom(1.0);
+                  if (_horizontalScrollController.hasClients) {
+                    _horizontalScrollController.jumpTo(0);
+                  }
+                },
+                onScaleStart: (_) {
+                  _zoomStart = bloc.zoomSubject.value;
+                },
+                onScaleUpdate: (details) {
+                  // Apply one zoom level to the whole chapter content.
+                  bloc.setZoom(_zoomStart * details.scale);
+                },
+                child: SingleChildScrollView(
+                  controller: _horizontalScrollController,
+                  scrollDirection: Axis.horizontal,
+                  physics: zoom > 1.0
+                      ? const ClampingScrollPhysics()
+                      : const NeverScrollableScrollPhysics(),
+                  child: SizedBox(
+                    width: contentWidth,
+                    child: ListView.builder(
+                      itemCount: chapterData.pages.length + 1,
+                      controller: _scrollController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      cacheExtent: 3000,
+                      itemBuilder: (context, index) {
+                        if (index == chapterData.pages.length) {
+                          return _buildChapterEndFooter();
+                        }
+
+                        return AutoScrollTag(
+                          key: Key('paragraph_$index'),
+                          index: index,
+                          controller: _scrollController,
+                          child: _buildItem(
+                            url: chapterData.pages[index].url,
+                            isLastItem: index == chapterData.pages.length - 1,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
               );
             },

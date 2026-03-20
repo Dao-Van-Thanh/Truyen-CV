@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/bloc/bloc_provider.dart';
@@ -56,16 +55,16 @@ Future<void> main() async {
   await _initLocalServices(container);
   await _loadSystemConfigs(container);
 
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]).then((_) {
-    runApp(
-      UncontrolledProviderScope(
-        container: container,
-        child: TranslationProvider(child: const MyApp()),
-      ),
-    );
-  });
+  // SystemChrome.setPreferredOrientations([
+  // DeviceOrientation.portraitUp,
+  // ]).then((_) {
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: TranslationProvider(child: const MyApp()),
+    ),
+  );
+  // });
 }
 
 class MyApp extends ConsumerWidget {
