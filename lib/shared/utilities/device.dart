@@ -1,5 +1,5 @@
-import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 
 class DeviceUtil {
   // static Future<String> getDeviceId() async {

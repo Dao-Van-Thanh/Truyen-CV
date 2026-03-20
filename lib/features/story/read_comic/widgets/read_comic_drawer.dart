@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/features/story/read_comic/entities/comic_chapter_entity.dart';
-import 'package:flutter_template/shared/widgets/scroll_bar/app_raw_scrollbar.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/features/story/read_comic/entities/comic_chapter_entity.dart';
+import 'package:truyen_cv/shared/widgets/scroll_bar/app_raw_scrollbar.dart';
 
 class ReadComicDrawer extends ConsumerWidget {
   const ReadComicDrawer({super.key});

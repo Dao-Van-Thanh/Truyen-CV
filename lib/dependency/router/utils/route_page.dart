@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/constants/common.dart';
-import 'package:flutter_template/dependency/router/utils/route_name.dart';
-import 'package:flutter_template/dependency/router/utils/route_screen.dart';
-import 'package:flutter_template/shared/widgets/dialog/file_import_dialog.dart';
+import 'package:truyen_cv/constants/common.dart';
+import 'package:truyen_cv/dependency/router/utils/route_name.dart';
+import 'package:truyen_cv/dependency/router/utils/route_screen.dart';
+import 'package:truyen_cv/shared/widgets/dialog/file_import_dialog.dart';
 
 class RoutePage {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {

@@ -1,4 +1,4 @@
-import 'package:flutter_template/features/story/read_story/enum/read_theme_mode.dart';
+import 'package:truyen_cv/features/story/read_story/enum/read_theme_mode.dart';
 
 class ConfigStoryModel {
   final double fontSize;

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:flutter_template/dependency/router/utils/route_input.dart';
+import 'package:truyen_cv/dependency/router/utils/route_input.dart';
 
 abstract class RouterProviderInterface {
   BuildContext get rootContext;

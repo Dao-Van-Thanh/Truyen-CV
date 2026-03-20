@@ -1,9 +1,9 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
-import 'package:flutter_template/features/library/widgets/book_banner_card.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:truyen_cv/features/library/widgets/book_banner_card.dart';
 
 class LibraryBookmarksPageSlider extends ConsumerWidget {
   final List<BookEntity> top3Items;

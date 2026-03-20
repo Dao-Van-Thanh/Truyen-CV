@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/constants/constants.dart';
-import 'package:flutter_template/dependency/router/utils/route_page.dart';
-import 'package:flutter_template/features/explore/enum/explore_navigation_enum.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
-import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/constants/constants.dart';
+import 'package:truyen_cv/dependency/router/utils/route_page.dart';
+import 'package:truyen_cv/features/explore/enum/explore_navigation_enum.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/widgets/gesture_detector/app_gesture_detector.dart';
+import 'package:truyen_cv/shared/widgets/story_list/enum/story_list_type.dart';
 
 class ExploreScreen extends ConsumerWidget {
   const ExploreScreen({super.key});

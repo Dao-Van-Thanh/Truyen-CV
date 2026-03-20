@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_template/dependency/network_api/novel/chapter/chapter_response.dart';
-import 'package:flutter_template/features/story/read_story/enum/read_tts_status.dart';
-import 'package:flutter_template/features/story/read_story/read_story_bloc.dart';
-import 'package:flutter_template/features/story/read_story/widgets/read_story_timer_settings.dart';
-import 'package:flutter_template/features/story/read_story/widgets/read_story_tts_settings.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
+import 'package:truyen_cv/dependency/network_api/novel/chapter/chapter_response.dart';
+import 'package:truyen_cv/features/story/read_story/enum/read_tts_status.dart';
+import 'package:truyen_cv/features/story/read_story/read_story_bloc.dart';
+import 'package:truyen_cv/features/story/read_story/widgets/read_story_timer_settings.dart';
+import 'package:truyen_cv/features/story/read_story/widgets/read_story_tts_settings.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 
 extension ReadStoryTtsExtension on ReadStoryBloc {
   void initTts() {

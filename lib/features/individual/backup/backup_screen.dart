@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/constants/common.dart';
-import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/backup/enum/backup_status.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:truyen_cv/constants/common.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
+import 'package:truyen_cv/dependency/backup/enum/backup_status.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
 
 class BackupScreen extends ConsumerStatefulWidget {
   const BackupScreen({super.key});

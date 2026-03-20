@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/shared/widgets/bottom_navigation_bar/enum/bottom_navigation_bar_enum.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/shared/widgets/bottom_navigation_bar/enum/bottom_navigation_bar_enum.dart';
 
 class AppBottomNavigationBar extends ConsumerWidget {
   const AppBottomNavigationBar({super.key});

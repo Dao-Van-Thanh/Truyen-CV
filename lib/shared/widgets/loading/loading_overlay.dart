@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/constants/colors.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/constants/colors.dart';
 
 enum LoadingMode {
   icon,

@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:flutter_template/features/story/read_story/enum/read_tts_status.dart';
-import 'package:flutter_template/features/story/read_story/model/tts_config_model.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:truyen_cv/features/story/read_story/enum/read_tts_status.dart';
+import 'package:truyen_cv/features/story/read_story/model/tts_config_model.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 
 class ReadStoryTts {
   late final FlutterTts _flutterTts;

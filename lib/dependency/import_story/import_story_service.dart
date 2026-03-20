@@ -3,17 +3,17 @@ import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 import 'package:epub_parser/epub_parser.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/book_repository.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
-import 'package:flutter_template/dependency/local_api/repository/chapter/entities/chapter_contents_entity.dart';
-import 'package:flutter_template/features/story/detail/entities/story_detail_entity.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:html/dom.dart' as html_dom;
 import 'package:html/parser.dart' as html_parser;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/book_repository.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/enum/story_type.dart';
+import 'package:truyen_cv/dependency/local_api/repository/chapter/entities/chapter_contents_entity.dart';
+import 'package:truyen_cv/features/story/detail/entities/story_detail_entity.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 import 'package:uuid/uuid.dart';
 
 class ImportBookDto {

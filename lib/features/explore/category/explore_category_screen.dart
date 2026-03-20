@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/dependency/router/arguments/explore_category_argument.dart';
-import 'package:flutter_template/features/explore/category/explore_category_bloc.dart';
-import 'package:flutter_template/features/explore/comic/widget/explore_comic_page_widget.dart';
-import 'package:flutter_template/features/explore/novel/widget/explore_novel_page_widget.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/dependency/router/arguments/explore_category_argument.dart';
+import 'package:truyen_cv/features/explore/category/explore_category_bloc.dart';
+import 'package:truyen_cv/features/explore/comic/widget/explore_comic_page_widget.dart';
+import 'package:truyen_cv/features/explore/novel/widget/explore_novel_page_widget.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/widgets/story_list/enum/story_list_type.dart';
 
 class ExploreCategoryScreen extends ConsumerWidget {
   const ExploreCategoryScreen({super.key});

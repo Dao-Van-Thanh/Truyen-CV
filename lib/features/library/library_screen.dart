@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/constants/constants.dart';
-import 'package:flutter_template/features/library/widgets/library_bookmarks_page.dart';
-import 'package:flutter_template/features/library/widgets/library_history_page.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/page_view/app_page_view.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/constants/constants.dart';
+import 'package:truyen_cv/features/library/widgets/library_bookmarks_page.dart';
+import 'package:truyen_cv/features/library/widgets/library_history_page.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/widgets/page_view/app_page_view.dart';
 
 class LibraryScreen extends ConsumerWidget {
   const LibraryScreen({super.key});

@@ -1,5 +1,5 @@
-import 'package:flutter_template/features/story/read_story/enum/read_theme_mode.dart';
-import 'package:flutter_template/features/story/read_story/model/config_story_model.dart';
+import 'package:truyen_cv/features/story/read_story/enum/read_theme_mode.dart';
+import 'package:truyen_cv/features/story/read_story/model/config_story_model.dart';
 
 class ConfigEntity {
   String id;

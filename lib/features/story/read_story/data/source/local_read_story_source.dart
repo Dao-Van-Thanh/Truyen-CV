@@ -1,9 +1,9 @@
-import 'package:flutter_template/dependency/local_api/local_api_service.dart';
-import 'package:flutter_template/dependency/network_api/novel/chapter/chapter_response.dart';
-import 'package:flutter_template/dependency/network_api/novel/detail/story_detail_response.dart';
-import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
-import 'package:flutter_template/features/story/read_story/data/source/read_story_source.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
+import 'package:truyen_cv/dependency/local_api/local_api_service.dart';
+import 'package:truyen_cv/dependency/network_api/novel/chapter/chapter_response.dart';
+import 'package:truyen_cv/dependency/network_api/novel/detail/story_detail_response.dart';
+import 'package:truyen_cv/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
+import 'package:truyen_cv/features/story/read_story/data/source/read_story_source.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 
 class LocalReadStorySource implements IReadStorySource {
   final LocalApiService _localApi;

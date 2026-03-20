@@ -1,4 +1,4 @@
-import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_request.dart';
+import 'package:truyen_cv/dependency/network_api/novel/filter/story_filter_request.dart';
 
 sealed class ExploreCategoryArgument {
   final String? title;

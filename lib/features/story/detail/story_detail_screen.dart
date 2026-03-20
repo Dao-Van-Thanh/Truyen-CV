@@ -2,16 +2,16 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/constants/constants.dart';
-import 'package:flutter_template/constants/size_box.dart';
-import 'package:flutter_template/features/story/detail/story_detail_bloc.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/utilities/string.dart';
-import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
-import 'package:flutter_template/shared/widgets/refresh_indicator/app_refresh_indicator.dart';
-import 'package:flutter_template/shared/widgets/story/story_image.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/constants/constants.dart';
+import 'package:truyen_cv/constants/size_box.dart';
+import 'package:truyen_cv/features/story/detail/story_detail_bloc.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/utilities/string.dart';
+import 'package:truyen_cv/shared/widgets/gesture_detector/app_gesture_detector.dart';
+import 'package:truyen_cv/shared/widgets/refresh_indicator/app_refresh_indicator.dart';
+import 'package:truyen_cv/shared/widgets/story/story_image.dart';
 
 class StoryDetailScreen extends ConsumerWidget {
   const StoryDetailScreen({super.key});

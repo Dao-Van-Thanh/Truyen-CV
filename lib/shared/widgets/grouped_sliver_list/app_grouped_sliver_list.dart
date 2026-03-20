@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/load_more/load_more_list.dart';
-import 'package:flutter_template/shared/widgets/refresh_indicator/app_refresh_indicator.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/widgets/load_more/load_more_list.dart';
+import 'package:truyen_cv/shared/widgets/refresh_indicator/app_refresh_indicator.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AppGroupedSliverList<T> extends StatefulWidget {

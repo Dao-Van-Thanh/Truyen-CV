@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/constants/constants.dart';
-import 'package:flutter_template/features/story/list_chapter/enum/list_sort_enum.dart';
-import 'package:flutter_template/features/story/list_chapter/widget/list_chapter_app_bar.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/scroll_bar/app_raw_scrollbar.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/constants/constants.dart';
+import 'package:truyen_cv/features/story/list_chapter/enum/list_sort_enum.dart';
+import 'package:truyen_cv/features/story/list_chapter/widget/list_chapter_app_bar.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/widgets/scroll_bar/app_raw_scrollbar.dart';
 
 class ListChapterScreen extends ConsumerWidget {
   const ListChapterScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/features/explore/enum/explore_navigation_enum.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
+import 'package:truyen_cv/features/explore/enum/explore_navigation_enum.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/widgets/story_list/enum/story_list_type.dart';
 
 class SystemConfigEntities {
   final String? id;

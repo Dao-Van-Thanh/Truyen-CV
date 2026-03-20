@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
-import 'package:flutter_template/features/story/detail/entities/story_detail_entity.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
+import 'package:truyen_cv/features/story/detail/entities/story_detail_entity.dart';
 
 class BookEntity {
   final String id;

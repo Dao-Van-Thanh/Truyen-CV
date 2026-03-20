@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter_template/constants/common.dart';
-import 'package:flutter_template/dependency/sqflite/schema.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
+import 'package:truyen_cv/constants/common.dart';
+import 'package:truyen_cv/dependency/sqflite/schema.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 

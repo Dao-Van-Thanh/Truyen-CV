@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/features/story/read_story/widgets/read_story_drawer.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/features/story/read_story/widgets/read_story_drawer.dart';
 
 class ReadStoryDrawerOverlay extends ConsumerStatefulWidget {
   const ReadStoryDrawerOverlay({

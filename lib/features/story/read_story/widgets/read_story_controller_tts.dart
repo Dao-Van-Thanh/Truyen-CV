@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/constants/constants.dart';
-import 'package:flutter_template/features/story/read_story/extension/read_story_tts_extension.dart';
-import 'package:flutter_template/features/story/read_story/widgets/blinking_red_dot.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/constants/constants.dart';
+import 'package:truyen_cv/features/story/read_story/extension/read_story_tts_extension.dart';
+import 'package:truyen_cv/features/story/read_story/widgets/blinking_red_dot.dart';
 
 const _curve = Curves.easeInOut;
 const _duration = Duration(milliseconds: 300);

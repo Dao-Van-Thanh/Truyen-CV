@@ -1,9 +1,9 @@
-import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
-import 'package:flutter_template/dependency/router/arguments/read_comic_argument.dart';
-import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
-import 'package:flutter_template/dependency/router/router_service.dart';
-import 'package:flutter_template/dependency/router/utils/route_input.dart';
-import 'package:flutter_template/features/story/read_comic/entities/comic_chapter_entity.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/enum/story_type.dart';
+import 'package:truyen_cv/dependency/router/arguments/read_comic_argument.dart';
+import 'package:truyen_cv/dependency/router/arguments/read_story_argument.dart';
+import 'package:truyen_cv/dependency/router/router_service.dart';
+import 'package:truyen_cv/dependency/router/utils/route_input.dart';
+import 'package:truyen_cv/features/story/read_comic/entities/comic_chapter_entity.dart';
 
 extension RouterExtension on RouterService {
   Future<Object?> pushReadStory(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 
 class FileImportDialog extends ConsumerStatefulWidget {
   final String filePath;

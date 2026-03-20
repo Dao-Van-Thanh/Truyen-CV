@@ -1,7 +1,7 @@
-import 'package:flutter_template/constants/config.dart';
-import 'package:flutter_template/dependency/local_api/repository/system_config/entities/system_config_entities.dart';
-import 'package:flutter_template/features/explore/enum/explore_navigation_enum.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:truyen_cv/constants/config.dart';
+import 'package:truyen_cv/dependency/local_api/repository/system_config/entities/system_config_entities.dart';
+import 'package:truyen_cv/features/explore/enum/explore_navigation_enum.dart';
 
 class SystemConfigRepository {
   final Database db;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
-import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
-import 'package:flutter_template/shared/widgets/story/story_image.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/story_entity.dart';
+import 'package:truyen_cv/shared/widgets/gesture_detector/app_gesture_detector.dart';
+import 'package:truyen_cv/shared/widgets/story/story_image.dart';
 
 class StoryGridItem extends StatelessWidget {
   final StoryEntity story;

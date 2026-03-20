@@ -2,16 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_base.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/constants/config.dart';
-import 'package:flutter_template/constants/font_family_enum.dart';
-import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/features/explore/enum/explore_navigation_enum.dart';
-import 'package:flutter_template/features/library/extension/library_extension.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:truyen_cv/bloc/bloc_base.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/constants/config.dart';
+import 'package:truyen_cv/constants/font_family_enum.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
+import 'package:truyen_cv/features/explore/enum/explore_navigation_enum.dart';
+import 'package:truyen_cv/features/library/extension/library_extension.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/widgets/story_list/enum/story_list_type.dart';
 
 class AppConfigBloc extends BlocBase {
   Ref ref;

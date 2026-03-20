@@ -1,4 +1,4 @@
-import 'package:flutter_template/shared/utilities/logger.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 
 class ChapterContentsEntity {
   final String id;
