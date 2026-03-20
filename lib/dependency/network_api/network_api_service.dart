@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/dependency/api/api_service.dart';
-import 'package:flutter_template/dependency/api/interceptors/certificate_pinning_interceptor.dart';
-import 'package:flutter_template/dependency/network_api/comic/comic_repository.dart';
-import 'package:flutter_template/dependency/network_api/novel/novel_repository.dart';
-import 'package:flutter_template/shared/env/env_model.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
+import 'package:truyen_cv/dependency/api/api_service.dart';
+import 'package:truyen_cv/dependency/api/interceptors/certificate_pinning_interceptor.dart';
+import 'package:truyen_cv/dependency/network_api/comic/comic_repository.dart';
+import 'package:truyen_cv/dependency/network_api/novel/novel_repository.dart';
+import 'package:truyen_cv/shared/env/env_model.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 
 void _addSSLPinningInterceptor(
   ApiService apiService, {

@@ -1,18 +1,18 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_base.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
-import 'package:flutter_template/dependency/network_api/novel/category/category_model.dart';
-import 'package:flutter_template/dependency/network_api/novel/detail/story_detail_response.dart';
-import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_request.dart';
-import 'package:flutter_template/dependency/router/arguments/explore_category_argument.dart';
-import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
-import 'package:flutter_template/dependency/router/utils/route_input.dart';
-import 'package:flutter_template/features/story/detail/entities/story_detail_entity.dart';
-import 'package:flutter_template/shared/helper/repository.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:truyen_cv/bloc/bloc_base.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/story_entity.dart';
+import 'package:truyen_cv/dependency/network_api/novel/category/category_model.dart';
+import 'package:truyen_cv/dependency/network_api/novel/detail/story_detail_response.dart';
+import 'package:truyen_cv/dependency/network_api/novel/filter/story_filter_request.dart';
+import 'package:truyen_cv/dependency/router/arguments/explore_category_argument.dart';
+import 'package:truyen_cv/dependency/router/arguments/story_detail_argument.dart';
+import 'package:truyen_cv/dependency/router/utils/route_input.dart';
+import 'package:truyen_cv/features/story/detail/entities/story_detail_entity.dart';
+import 'package:truyen_cv/shared/helper/repository.dart';
 
 class ExploreNovelBloc extends BlocBase {
   Ref ref;

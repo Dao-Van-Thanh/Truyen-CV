@@ -1,10 +1,10 @@
-import 'package:flutter_template/dependency/router/arguments/explore_category_argument.dart';
-import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
-import 'package:flutter_template/dependency/router/arguments/read_comic_argument.dart';
-import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
-import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
-import 'package:flutter_template/dependency/router/arguments/story_search_argument.dart';
-import 'package:flutter_template/dependency/router/utils/route_name.dart';
+import 'package:truyen_cv/dependency/router/arguments/explore_category_argument.dart';
+import 'package:truyen_cv/dependency/router/arguments/list_chapter_argument.dart';
+import 'package:truyen_cv/dependency/router/arguments/read_comic_argument.dart';
+import 'package:truyen_cv/dependency/router/arguments/read_story_argument.dart';
+import 'package:truyen_cv/dependency/router/arguments/story_detail_argument.dart';
+import 'package:truyen_cv/dependency/router/arguments/story_search_argument.dart';
+import 'package:truyen_cv/dependency/router/utils/route_name.dart';
 
 class RouteInput {
   String routeName;

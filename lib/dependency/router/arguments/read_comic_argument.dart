@@ -1,4 +1,4 @@
-import 'package:flutter_template/features/story/read_comic/entities/comic_chapter_entity.dart';
+import 'package:truyen_cv/features/story/read_comic/entities/comic_chapter_entity.dart';
 
 class ReadComicArgument {
   final String storyId;

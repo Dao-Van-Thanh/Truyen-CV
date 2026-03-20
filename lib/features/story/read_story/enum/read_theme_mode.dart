@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_template/shared/extensions/color.dart';
+import 'package:truyen_cv/shared/extensions/color.dart';
 
 const double _alpha = 0.95;
 

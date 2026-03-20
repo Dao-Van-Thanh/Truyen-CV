@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/constants/size_box.dart';
+import 'package:truyen_cv/constants/size_box.dart';
 
 class AppEmptyState extends StatelessWidget {
   final String title;

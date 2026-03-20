@@ -1,4 +1,4 @@
-import 'package:flutter_template/shared/env/env_model.release.dart';
+import 'package:truyen_cv/shared/env/env_model.release.dart';
 
 final EnvModelImplementation envVars = generateEnvModel();
 

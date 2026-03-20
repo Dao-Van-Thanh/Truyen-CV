@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/constants/constants.dart';
-import 'package:flutter_template/constants/font_family_enum.dart';
-import 'package:flutter_template/features/story/read_story/enum/read_theme_mode.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/constants/constants.dart';
+import 'package:truyen_cv/constants/font_family_enum.dart';
+import 'package:truyen_cv/features/story/read_story/enum/read_theme_mode.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/widgets/gesture_detector/app_gesture_detector.dart';
 
 class ReadStorySettings extends ConsumerWidget {
   const ReadStorySettings({super.key});

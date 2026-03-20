@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_base.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:truyen_cv/bloc/bloc_base.dart';
 
 class CounterBloc extends BlocBase {
   final counterSubject = BehaviorSubject.seeded(0);

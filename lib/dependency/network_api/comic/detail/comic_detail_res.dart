@@ -1,8 +1,8 @@
-import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
-import 'package:flutter_template/features/story/detail/entities/story_detail_entity.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/utilities/string.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/enum/story_type.dart';
+import 'package:truyen_cv/features/story/detail/entities/story_detail_entity.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/utilities/string.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'comic_detail_res.freezed.dart';

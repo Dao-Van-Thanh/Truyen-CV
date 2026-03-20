@@ -1,6 +1,6 @@
-import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
-import 'package:flutter_template/shared/utilities/map.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/enum/story_type.dart';
+import 'package:truyen_cv/shared/utilities/map.dart';
 
 class StoryDetailEntity {
   final String id;

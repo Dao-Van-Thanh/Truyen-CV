@@ -1,12 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_base.dart';
-import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/router/arguments/explore_category_argument.dart';
-import 'package:flutter_template/dependency/router/utils/route_input.dart';
-import 'package:flutter_template/features/explore/widgets/category_page_widget.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:truyen_cv/bloc/bloc_base.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
+import 'package:truyen_cv/dependency/router/arguments/explore_category_argument.dart';
+import 'package:truyen_cv/dependency/router/utils/route_input.dart';
+import 'package:truyen_cv/features/explore/widgets/category_page_widget.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 
 class ExploreComicBloc extends BlocBase {
   Ref ref;

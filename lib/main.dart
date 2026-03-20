@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/router/utils/route_name.dart';
-import 'package:flutter_template/dependency/router/utils/route_page.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/bloc/config/app_theme.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
+import 'package:truyen_cv/dependency/router/utils/route_name.dart';
+import 'package:truyen_cv/dependency/router/utils/route_page.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/bloc/config/app_theme.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 
 Future<void> _loadSystemConfigs(ProviderContainer container) async {
   try {

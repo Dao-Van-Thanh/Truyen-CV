@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_template/shared/widgets/cache_network_image/app_cache_network_image.dart';
+import 'package:truyen_cv/shared/widgets/cache_network_image/app_cache_network_image.dart';
 
 class StoryImage extends StatelessWidget {
   final String? imageUrl;

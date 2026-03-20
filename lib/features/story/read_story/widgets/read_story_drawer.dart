@@ -2,18 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/constants/constants.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/utilities/debounce.dart';
-import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
-import 'package:flutter_template/shared/widgets/page_view/app_page_view.dart';
-import 'package:flutter_template/shared/widgets/scroll_bar/app_raw_scrollbar.dart';
-import 'package:flutter_template/shared/widgets/story/story_image.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/constants/constants.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/utilities/debounce.dart';
+import 'package:truyen_cv/shared/widgets/gesture_detector/app_gesture_detector.dart';
+import 'package:truyen_cv/shared/widgets/page_view/app_page_view.dart';
+import 'package:truyen_cv/shared/widgets/scroll_bar/app_raw_scrollbar.dart';
+import 'package:truyen_cv/shared/widgets/story/story_image.dart';
 
 class ReadStoryDrawer extends ConsumerStatefulWidget {
   final List<ListChapterEntity> listChapter;

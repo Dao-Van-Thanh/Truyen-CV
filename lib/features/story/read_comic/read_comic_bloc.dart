@@ -1,16 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_base.dart';
-import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
-import 'package:flutter_template/dependency/network_api/comic/contents/comic_contents_res.dart';
-import 'package:flutter_template/dependency/router/arguments/read_comic_argument.dart';
-import 'package:flutter_template/features/story/read_comic/entities/comic_chapter_entity.dart';
-import 'package:flutter_template/shared/utilities/debounce.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:truyen_cv/bloc/bloc_base.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
+import 'package:truyen_cv/dependency/network_api/comic/contents/comic_contents_res.dart';
+import 'package:truyen_cv/dependency/router/arguments/read_comic_argument.dart';
+import 'package:truyen_cv/features/story/read_comic/entities/comic_chapter_entity.dart';
+import 'package:truyen_cv/shared/utilities/debounce.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 
 class ReadComicBloc extends BlocBase {
   Ref ref;

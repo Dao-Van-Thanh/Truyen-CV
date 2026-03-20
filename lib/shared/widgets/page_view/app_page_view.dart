@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
 
 class AppPageView extends StatefulWidget {
   final List<AppPageViewItems> items;

@@ -8,8 +8,8 @@ import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/constants/common.dart';
-import 'package:flutter_template/dependency/app_service.dart';
+import 'package:truyen_cv/constants/common.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
 
 typedef CacheKey = Object;
 

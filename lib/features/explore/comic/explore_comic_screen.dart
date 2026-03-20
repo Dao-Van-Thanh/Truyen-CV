@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/features/explore/comic/widget/explore_comic_page_widget.dart';
-import 'package:flutter_template/features/explore/enum/explore_comic_type.dart';
-import 'package:flutter_template/features/explore/widgets/category_page_widget.dart';
-import 'package:flutter_template/shared/widgets/page_view/app_page_view.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/features/explore/comic/widget/explore_comic_page_widget.dart';
+import 'package:truyen_cv/features/explore/enum/explore_comic_type.dart';
+import 'package:truyen_cv/features/explore/widgets/category_page_widget.dart';
+import 'package:truyen_cv/shared/widgets/page_view/app_page_view.dart';
 
 class ExploreComicScreen extends ConsumerWidget {
   const ExploreComicScreen({super.key});

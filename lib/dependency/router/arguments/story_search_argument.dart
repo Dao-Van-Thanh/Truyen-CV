@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
-import 'package:flutter_template/features/story/detail/entities/story_detail_entity.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/story_entity.dart';
+import 'package:truyen_cv/features/story/detail/entities/story_detail_entity.dart';
 
 class StorySearchArgument {
   final Future<List<StoryEntity>> Function(Ref ref, String keyword, int page)

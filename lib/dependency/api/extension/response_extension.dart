@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_template/dependency/api/model/api_result.dart';
-import 'package:flutter_template/dependency/network_api/error/error_response_model.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
+import 'package:truyen_cv/dependency/api/model/api_result.dart';
+import 'package:truyen_cv/dependency/network_api/error/error_response_model.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 
 typedef FromJsonFunction<T> = T Function(Map<String, dynamic> fromJson);
 

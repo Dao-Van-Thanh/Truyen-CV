@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
-import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_request.dart';
-import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
-import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
-import 'package:flutter_template/dependency/router/utils/route_input.dart';
-import 'package:flutter_template/shared/extensions/infinite_scroll_paination.dart';
-import 'package:flutter_template/shared/helper/repository.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
-import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
-import 'package:flutter_template/shared/widgets/story_list/story_list.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/story_entity.dart';
+import 'package:truyen_cv/dependency/network_api/novel/filter/story_filter_request.dart';
+import 'package:truyen_cv/dependency/network_api/novel/filter/story_filter_response.dart';
+import 'package:truyen_cv/dependency/router/arguments/story_detail_argument.dart';
+import 'package:truyen_cv/dependency/router/utils/route_input.dart';
+import 'package:truyen_cv/shared/extensions/infinite_scroll_paination.dart';
+import 'package:truyen_cv/shared/helper/repository.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
+import 'package:truyen_cv/shared/widgets/story_list/enum/story_list_type.dart';
+import 'package:truyen_cv/shared/widgets/story_list/story_list.dart';
 
 class ExploreNovelPageWidget extends ConsumerStatefulWidget {
   final StoryFilterRequest request;

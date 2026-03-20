@@ -1,4 +1,4 @@
-import 'package:flutter_template/shared/utilities/map.dart';
+import 'package:truyen_cv/shared/utilities/map.dart';
 
 class StoryEntity {
   final String id;

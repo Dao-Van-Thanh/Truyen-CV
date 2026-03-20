@@ -1,4 +1,4 @@
-import 'package:flutter_template/constants/constants.dart';
+import 'package:truyen_cv/constants/constants.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 extension PagingStateExtension<PageKeyType, ItemType>

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/features/story/search/widgets/story_search_app_bar.dart';
-import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
-import 'package:flutter_template/shared/widgets/story_list/story_list.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/features/story/search/widgets/story_search_app_bar.dart';
+import 'package:truyen_cv/shared/widgets/story_list/enum/story_list_type.dart';
+import 'package:truyen_cv/shared/widgets/story_list/story_list.dart';
 
 class StorySearchScreen extends ConsumerWidget {
   const StorySearchScreen({super.key});

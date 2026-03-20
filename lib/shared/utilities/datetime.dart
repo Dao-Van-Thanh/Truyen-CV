@@ -1,5 +1,5 @@
-import 'package:flutter_template/i18n/strings.g.dart';
 import 'package:intl/intl.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
 
 class DatetimeUtil {
   static DateTime? parseIsoToDateTime(String? isoString) {

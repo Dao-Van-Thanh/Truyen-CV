@@ -1,6 +1,6 @@
-import 'package:flutter_template/constants/config.dart';
-import 'package:flutter_template/dependency/local_api/repository/config/entities/config_entity.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:truyen_cv/constants/config.dart';
+import 'package:truyen_cv/dependency/local_api/repository/config/entities/config_entity.dart';
 
 class ConfigRepository {
   final Database db;

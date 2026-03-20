@@ -1,4 +1,4 @@
-import 'package:flutter_template/i18n/strings.g.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
 
 enum BackupStatus {
   idle, // Trạng thái ban đầu: Sẵn sàng
@@ -69,8 +69,7 @@ extension BackupStatusExtension on BackupStatus {
       this == BackupStatus.exportError ||
       this == BackupStatus.importError ||
       this == BackupStatus.invalidFile;
-      
+
   bool get isSuccess =>
-      this == BackupStatus.exportSuccess || 
-      this == BackupStatus.importSuccess;
+      this == BackupStatus.exportSuccess || this == BackupStatus.importSuccess;
 }

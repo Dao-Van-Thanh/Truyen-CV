@@ -1,13 +1,13 @@
-import 'package:flutter_template/dependency/api/api_service.dart';
-import 'package:flutter_template/dependency/api/extension/response_extension.dart';
-import 'package:flutter_template/dependency/api/model/api_result.dart';
-import 'package:flutter_template/dependency/network_api/base/base_data_response_model.dart';
-import 'package:flutter_template/dependency/network_api/novel/category/category_model.dart';
-import 'package:flutter_template/dependency/network_api/novel/chapter/chapter_response.dart';
-import 'package:flutter_template/dependency/network_api/novel/detail/story_detail_response.dart';
-import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_request.dart';
-import 'package:flutter_template/dependency/network_api/novel/filter/story_filter_response.dart';
-import 'package:flutter_template/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
+import 'package:truyen_cv/dependency/api/api_service.dart';
+import 'package:truyen_cv/dependency/api/extension/response_extension.dart';
+import 'package:truyen_cv/dependency/api/model/api_result.dart';
+import 'package:truyen_cv/dependency/network_api/base/base_data_response_model.dart';
+import 'package:truyen_cv/dependency/network_api/novel/category/category_model.dart';
+import 'package:truyen_cv/dependency/network_api/novel/chapter/chapter_response.dart';
+import 'package:truyen_cv/dependency/network_api/novel/detail/story_detail_response.dart';
+import 'package:truyen_cv/dependency/network_api/novel/filter/story_filter_request.dart';
+import 'package:truyen_cv/dependency/network_api/novel/filter/story_filter_response.dart';
+import 'package:truyen_cv/dependency/network_api/novel/list_chapter/list_chapter_res.dart';
 
 class NovelRepository {
   final ApiService apiService;

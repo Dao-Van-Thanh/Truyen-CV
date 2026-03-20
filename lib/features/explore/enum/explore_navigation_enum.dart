@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/dependency/router/utils/route_name.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
+import 'package:truyen_cv/dependency/router/utils/route_name.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
 
 enum ExploreNavigationEnum {
   novel(initialRoute: RouteName.exploreNovel),

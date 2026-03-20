@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/book_repository.dart';
-import 'package:flutter_template/dependency/local_api/repository/chapter/chapter_repository.dart';
-import 'package:flutter_template/dependency/local_api/repository/config/config_repository.dart';
-import 'package:flutter_template/dependency/local_api/repository/router/router_repository.dart';
-import 'package:flutter_template/dependency/local_api/repository/system_config/system_config_repository.dart';
-import 'package:flutter_template/dependency/sqflite/sqlite_service.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/book_repository.dart';
+import 'package:truyen_cv/dependency/local_api/repository/chapter/chapter_repository.dart';
+import 'package:truyen_cv/dependency/local_api/repository/config/config_repository.dart';
+import 'package:truyen_cv/dependency/local_api/repository/router/router_repository.dart';
+import 'package:truyen_cv/dependency/local_api/repository/system_config/system_config_repository.dart';
+import 'package:truyen_cv/dependency/sqflite/sqlite_service.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 
 class LocalApiService {
   Ref ref;

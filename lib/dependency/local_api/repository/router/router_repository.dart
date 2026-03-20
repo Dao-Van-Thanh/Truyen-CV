@@ -1,5 +1,5 @@
-import 'package:flutter_template/dependency/local_api/repository/router/entities/router_entity.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:truyen_cv/dependency/local_api/repository/router/entities/router_entity.dart';
 
 class RouterRepository {
   final Database db;

@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/dependency/backup/backup_service.dart';
-import 'package:flutter_template/dependency/import_story/import_story_service.dart';
-import 'package:flutter_template/dependency/local_api/local_api_service.dart';
-import 'package:flutter_template/dependency/network_api/network_api_service.dart';
-import 'package:flutter_template/dependency/router/router_provider.dart';
-import 'package:flutter_template/dependency/router/router_service.dart';
-import 'package:flutter_template/dependency/sqflite/sqlite_service.dart';
-import 'package:flutter_template/dependency/toast/toast_service.dart';
+import 'package:truyen_cv/dependency/backup/backup_service.dart';
+import 'package:truyen_cv/dependency/import_story/import_story_service.dart';
+import 'package:truyen_cv/dependency/local_api/local_api_service.dart';
+import 'package:truyen_cv/dependency/network_api/network_api_service.dart';
+import 'package:truyen_cv/dependency/router/router_provider.dart';
+import 'package:truyen_cv/dependency/router/router_service.dart';
+import 'package:truyen_cv/dependency/sqflite/sqlite_service.dart';
+import 'package:truyen_cv/dependency/toast/toast_service.dart';
 
 class AppProvider {
   static final router = Provider((ref) => RouterProvider());

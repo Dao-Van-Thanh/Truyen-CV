@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/constants/constants.dart';
-import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/features/story/read_comic/entities/comic_chapter_entity.dart';
-import 'package:flutter_template/features/story/read_comic/widgets/comic_render_image.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/constants/constants.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
+import 'package:truyen_cv/features/story/read_comic/entities/comic_chapter_entity.dart';
+import 'package:truyen_cv/features/story/read_comic/widgets/comic_render_image.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/widgets/gesture_detector/app_gesture_detector.dart';
 
 class ReadComicContentPage extends ConsumerStatefulWidget {
   final int index;

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_base.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
-import 'package:flutter_template/dependency/router/utils/route_input.dart';
-import 'package:flutter_template/features/library/extension/library_extension.dart';
-import 'package:flutter_template/shared/widgets/bottom_navigation_bar/enum/bottom_navigation_bar_enum.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:truyen_cv/bloc/bloc_base.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
+import 'package:truyen_cv/dependency/router/arguments/read_story_argument.dart';
+import 'package:truyen_cv/dependency/router/utils/route_input.dart';
+import 'package:truyen_cv/features/library/extension/library_extension.dart';
+import 'package:truyen_cv/shared/widgets/bottom_navigation_bar/enum/bottom_navigation_bar_enum.dart';
 
 class RootBloc extends BlocBase {
   Ref ref;

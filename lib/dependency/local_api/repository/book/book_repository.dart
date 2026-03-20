@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_template/constants/constants.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
-import 'package:flutter_template/dependency/local_api/repository/chapter/chapter_repository.dart';
-import 'package:flutter_template/dependency/local_api/repository/chapter/entities/chapter_contents_entity.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:truyen_cv/constants/constants.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
+import 'package:truyen_cv/dependency/local_api/repository/chapter/chapter_repository.dart';
+import 'package:truyen_cv/dependency/local_api/repository/chapter/entities/chapter_contents_entity.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 import 'package:uuid/uuid.dart';
 
 class BookRepository {

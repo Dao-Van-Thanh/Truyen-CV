@@ -1,4 +1,4 @@
-import 'package:flutter_template/i18n/strings.g.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'error_response_model.freezed.dart';

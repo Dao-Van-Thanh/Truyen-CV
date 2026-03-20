@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/features/story/read_story/widgets/read_story_background.dart';
-import 'package:flutter_template/features/story/read_story/widgets/read_story_content.dart';
-import 'package:flutter_template/features/story/read_story/widgets/read_story_controller.dart';
-import 'package:flutter_template/features/story/read_story/widgets/read_story_drawer_overlay.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/features/story/read_story/widgets/read_story_background.dart';
+import 'package:truyen_cv/features/story/read_story/widgets/read_story_content.dart';
+import 'package:truyen_cv/features/story/read_story/widgets/read_story_controller.dart';
+import 'package:truyen_cv/features/story/read_story/widgets/read_story_drawer_overlay.dart';
 
 class ReadStoryScreen extends ConsumerWidget {
   const ReadStoryScreen({super.key});

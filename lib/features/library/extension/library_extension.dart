@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/features/library/library_bloc.dart';
+import 'package:truyen_cv/features/library/library_bloc.dart';
 
 extension LibraryExtension on LibraryBloc {
   Future<void> loadData() async {

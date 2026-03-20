@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/constants/constants.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/gesture_detector/app_gesture_detector.dart';
-import 'package:flutter_template/shared/widgets/story/story_image.dart';
-import 'package:flutter_template/shared/widgets/text%20copy/highlight_text.dart';
+import 'package:truyen_cv/constants/constants.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/widgets/gesture_detector/app_gesture_detector.dart';
+import 'package:truyen_cv/shared/widgets/story/story_image.dart';
+import 'package:truyen_cv/shared/widgets/text%20copy/highlight_text.dart';
 
 class LibraryBookmarksOption extends ConsumerWidget {
   final BookEntity item;

@@ -1,12 +1,12 @@
-import 'package:flutter_template/dependency/api/api_service.dart';
-import 'package:flutter_template/dependency/api/extension/response_extension.dart';
-import 'package:flutter_template/dependency/api/model/api_result.dart';
-import 'package:flutter_template/dependency/network_api/base/base_data_response_model.dart';
-import 'package:flutter_template/dependency/network_api/comic/category/list_category/list_comic_category_res.dart';
-import 'package:flutter_template/dependency/network_api/comic/contents/comic_contents_res.dart';
-import 'package:flutter_template/dependency/network_api/comic/detail/comic_detail_res.dart';
-import 'package:flutter_template/dependency/network_api/comic/list_comic/list_comic_res.dart';
-import 'package:flutter_template/features/explore/enum/explore_comic_type.dart';
+import 'package:truyen_cv/dependency/api/api_service.dart';
+import 'package:truyen_cv/dependency/api/extension/response_extension.dart';
+import 'package:truyen_cv/dependency/api/model/api_result.dart';
+import 'package:truyen_cv/dependency/network_api/base/base_data_response_model.dart';
+import 'package:truyen_cv/dependency/network_api/comic/category/list_category/list_comic_category_res.dart';
+import 'package:truyen_cv/dependency/network_api/comic/contents/comic_contents_res.dart';
+import 'package:truyen_cv/dependency/network_api/comic/detail/comic_detail_res.dart';
+import 'package:truyen_cv/dependency/network_api/comic/list_comic/list_comic_res.dart';
+import 'package:truyen_cv/features/explore/enum/explore_comic_type.dart';
 
 class ComicRepository {
   final ApiService apiService;

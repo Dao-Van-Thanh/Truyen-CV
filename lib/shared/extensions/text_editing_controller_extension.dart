@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_template/shared/utilities/debounce.dart';
+import 'package:truyen_cv/shared/utilities/debounce.dart';
 
 extension TextEditingControllerExtension on TextEditingController {
   VoidCallback addListenerText(

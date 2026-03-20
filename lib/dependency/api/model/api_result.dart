@@ -1,4 +1,4 @@
-import 'package:flutter_template/dependency/network_api/error/error_response_model.dart';
+import 'package:truyen_cv/dependency/network_api/error/error_response_model.dart';
 
 enum ApiStatus { success, error, handled }
 

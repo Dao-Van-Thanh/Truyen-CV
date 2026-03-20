@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/constants/constants.dart';
+import 'package:truyen_cv/constants/constants.dart';
 
 class BlocBuilder<T> extends StatelessWidget {
   final T? initialData;

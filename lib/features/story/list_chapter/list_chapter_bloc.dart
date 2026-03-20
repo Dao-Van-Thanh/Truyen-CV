@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_base.dart';
-import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
-import 'package:flutter_template/dependency/router/arguments/list_chapter_argument.dart';
-import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
-import 'package:flutter_template/features/story/list_chapter/enum/list_sort_enum.dart';
-import 'package:flutter_template/shared/extensions/router.dart';
-import 'package:flutter_template/shared/extensions/text_editing_controller_extension.dart';
-import 'package:flutter_template/shared/utilities/debounce.dart';
-import 'package:flutter_template/shared/utilities/logger.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:truyen_cv/bloc/bloc_base.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
+import 'package:truyen_cv/dependency/router/arguments/list_chapter_argument.dart';
+import 'package:truyen_cv/dependency/router/arguments/read_story_argument.dart';
+import 'package:truyen_cv/features/story/list_chapter/enum/list_sort_enum.dart';
+import 'package:truyen_cv/shared/extensions/router.dart';
+import 'package:truyen_cv/shared/extensions/text_editing_controller_extension.dart';
+import 'package:truyen_cv/shared/utilities/debounce.dart';
+import 'package:truyen_cv/shared/utilities/logger.dart';
 
 class ListChapterBloc extends BlocBase {
   Ref ref;

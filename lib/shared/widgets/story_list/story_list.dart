@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/story_entity.dart';
-import 'package:flutter_template/i18n/strings.g.dart';
-import 'package:flutter_template/shared/widgets/story_list/enum/story_list_type.dart';
-import 'package:flutter_template/shared/widgets/story_list/widgets/story_grid_item.dart';
-import 'package:flutter_template/shared/widgets/story_list/widgets/story_list_item.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/story_entity.dart';
+import 'package:truyen_cv/i18n/strings.g.dart';
+import 'package:truyen_cv/shared/widgets/story_list/enum/story_list_type.dart';
+import 'package:truyen_cv/shared/widgets/story_list/widgets/story_grid_item.dart';
+import 'package:truyen_cv/shared/widgets/story_list/widgets/story_list_item.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 

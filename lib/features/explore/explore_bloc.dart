@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_base.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/router/arguments/story_search_argument.dart';
-import 'package:flutter_template/dependency/router/utils/route_input.dart';
-import 'package:flutter_template/features/explore/enum/explore_navigation_enum.dart';
-import 'package:flutter_template/shared/helper/repository.dart';
+import 'package:truyen_cv/bloc/bloc_base.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
+import 'package:truyen_cv/dependency/router/arguments/story_search_argument.dart';
+import 'package:truyen_cv/dependency/router/utils/route_input.dart';
+import 'package:truyen_cv/features/explore/enum/explore_navigation_enum.dart';
+import 'package:truyen_cv/shared/helper/repository.dart';
 
 class ExploreBloc extends BlocBase {
   Ref ref;

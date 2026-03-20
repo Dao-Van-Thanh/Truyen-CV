@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_provider.dart';
-import 'package:flutter_template/bloc/rx/obs_builder.dart';
-import 'package:flutter_template/features/story/read_comic/widgets/read_comic_content_page.dart';
-import 'package:flutter_template/shared/widgets/gesture_detector/app_tap_and_scroll_detector.dart';
-import 'package:flutter_template/shared/widgets/reading_view/vertical_reading_view.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
+import 'package:truyen_cv/bloc/rx/obs_builder.dart';
+import 'package:truyen_cv/features/story/read_comic/widgets/read_comic_content_page.dart';
+import 'package:truyen_cv/shared/widgets/gesture_detector/app_tap_and_scroll_detector.dart';
+import 'package:truyen_cv/shared/widgets/reading_view/vertical_reading_view.dart';
 
 class ReadComicContent extends ConsumerWidget {
   const ReadComicContent({super.key});

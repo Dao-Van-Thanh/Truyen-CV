@@ -1,20 +1,20 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_base.dart';
-import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/entities/book_entity.dart';
-import 'package:flutter_template/dependency/local_api/repository/book/enum/story_type.dart';
-import 'package:flutter_template/dependency/router/arguments/read_story_argument.dart';
-import 'package:flutter_template/dependency/router/arguments/story_detail_argument.dart';
-import 'package:flutter_template/dependency/router/arguments/story_search_argument.dart';
-import 'package:flutter_template/dependency/router/utils/route_input.dart';
-import 'package:flutter_template/features/library/extension/library_extension.dart';
-import 'package:flutter_template/features/library/widgets/library_bookmarks_option.dart';
-import 'package:flutter_template/shared/extensions/router.dart';
-import 'package:flutter_template/shared/helper/repository.dart';
-import 'package:flutter_template/shared/widgets/dialog/file_import_dialog.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:truyen_cv/bloc/bloc_base.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/entities/book_entity.dart';
+import 'package:truyen_cv/dependency/local_api/repository/book/enum/story_type.dart';
+import 'package:truyen_cv/dependency/router/arguments/read_story_argument.dart';
+import 'package:truyen_cv/dependency/router/arguments/story_detail_argument.dart';
+import 'package:truyen_cv/dependency/router/arguments/story_search_argument.dart';
+import 'package:truyen_cv/dependency/router/utils/route_input.dart';
+import 'package:truyen_cv/features/library/extension/library_extension.dart';
+import 'package:truyen_cv/features/library/widgets/library_bookmarks_option.dart';
+import 'package:truyen_cv/shared/extensions/router.dart';
+import 'package:truyen_cv/shared/helper/repository.dart';
+import 'package:truyen_cv/shared/widgets/dialog/file_import_dialog.dart';
 
 class LibraryBloc extends BlocBase {
   Ref ref;

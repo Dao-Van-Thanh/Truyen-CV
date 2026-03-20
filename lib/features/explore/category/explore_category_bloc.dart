@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_template/bloc/bloc_base.dart';
-import 'package:flutter_template/dependency/app_service.dart';
-import 'package:flutter_template/dependency/router/arguments/explore_category_argument.dart';
-import 'package:flutter_template/dependency/router/arguments/story_search_argument.dart';
-import 'package:flutter_template/dependency/router/utils/route_input.dart';
-import 'package:flutter_template/shared/helper/repository.dart';
+import 'package:truyen_cv/bloc/bloc_base.dart';
+import 'package:truyen_cv/dependency/app_service.dart';
+import 'package:truyen_cv/dependency/router/arguments/explore_category_argument.dart';
+import 'package:truyen_cv/dependency/router/arguments/story_search_argument.dart';
+import 'package:truyen_cv/dependency/router/utils/route_input.dart';
+import 'package:truyen_cv/shared/helper/repository.dart';
 
 class ExploreCategoryBloc extends BlocBase {
   Ref ref;
