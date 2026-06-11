@@ -180,6 +180,7 @@ class _TranslationsReadStoryEn extends TranslationsReadStoryVi {
 	@override String haveNewChapters({required int count}) => '${count} new chapters available';
 	@override String get checkNewChapters => 'Check for new chapters';
 	@override String get endChapter => 'End of chapter';
+	@override String get nextChapter => 'Next chapter';
 	@override String get refreshingChapters => 'Refreshing chapters...';
 	@override String get refreshChaptersSuccess => 'Chapters refreshed successfully';
 }
@@ -594,6 +595,7 @@ extension on TranslationsEn {
 			'readStory.haveNewChapters' => ({required int count}) => '${count} new chapters available',
 			'readStory.checkNewChapters' => 'Check for new chapters',
 			'readStory.endChapter' => 'End of chapter',
+			'readStory.nextChapter' => 'Next chapter',
 			'readStory.refreshingChapters' => 'Refreshing chapters...',
 			'readStory.refreshChaptersSuccess' => 'Chapters refreshed successfully',
 			'libraryScreen.bookmarks' => 'Bookmarks',

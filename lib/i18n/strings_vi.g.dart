@@ -278,6 +278,9 @@ class TranslationsReadStoryVi {
 	/// vi: 'Hết chương'
 	String get endChapter => 'Hết chương';
 
+	/// vi: 'Chương tiếp theo'
+	String get nextChapter => 'Chương tiếp theo';
+
 	/// vi: 'Đang làm mới chương...'
 	String get refreshingChapters => 'Đang làm mới chương...';
 
@@ -997,6 +1000,7 @@ extension on Translations {
 			'readStory.haveNewChapters' => ({required int count}) => 'Có ${count} chương mới',
 			'readStory.checkNewChapters' => 'Kiểm tra chương mới',
 			'readStory.endChapter' => 'Hết chương',
+			'readStory.nextChapter' => 'Chương tiếp theo',
 			'readStory.refreshingChapters' => 'Đang làm mới chương...',
 			'readStory.refreshChaptersSuccess' => 'Làm mới chương thành công',
 			'libraryScreen.bookmarks' => 'Đánh dấu',

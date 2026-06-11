@@ -102,6 +102,7 @@
         "haveNewChapters": "{count: int} new chapters available",
         "checkNewChapters": "Check for new chapters",
         "endChapter": "End of chapter",
+        "nextChapter": "Next chapter",
         "refreshingChapters": "Refreshing chapters...",
         "refreshChaptersSuccess": "Chapters refreshed successfully"
     },

@@ -40,8 +40,6 @@ class ReadComicBloc extends BlocBase {
 
   final isFavoriteSubject = BehaviorSubject<bool>.seeded(false);
 
-  final zoomSubject = BehaviorSubject<double>.seeded(1.0);
-
   ReadComicBloc(this.ref, {required ReadComicArgument args}) {
     _args = args;
     _init();
@@ -57,13 +55,6 @@ class ReadComicBloc extends BlocBase {
     isMenuVisibleSubject.close();
     isOpenDrawerSubject.close();
     isFavoriteSubject.close();
-    zoomSubject.close();
-  }
-
-  void setZoom(double zoom) {
-    final next = zoom.clamp(1.0, 4.0);
-    if (next == zoomSubject.value) return;
-    zoomSubject.value = next;
   }
 
   void _init() {
