@@ -102,6 +102,7 @@
         "haveNewChapters": "Có {count: int} chương mới",
         "checkNewChapters": "Kiểm tra chương mới",
         "endChapter": "Hết chương",
+        "nextChapter": "Chương tiếp theo",
         "refreshingChapters": "Đang làm mới chương...",
         "refreshChaptersSuccess": "Làm mới chương thành công"
     },

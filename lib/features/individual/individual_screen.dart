@@ -24,10 +24,14 @@ class _IndividualScreenState extends ConsumerState<IndividualScreen> {
     final bloc = ref.watch(BlocProvider.individual);
     const bool isLoggedIn = true;
     final t = context.t;
+    final isTablet = MediaQuery.of(context).size.width > 600;
+    final double indentValue = isTablet ? 24.0 : 16.0;
 
     final double paddingTop = MediaQuery.of(context).padding.top;
     final double minHeaderExtent = kToolbarHeight + paddingTop;
-    const double maxHeaderExtent = 280.0;
+    // Adaptive header height based on screen width
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double maxHeaderExtent = screenWidth > 600 ? 320.0 : 280.0;
 
     return Scaffold(
       body: NotificationListener<ScrollNotification>(
@@ -75,18 +79,18 @@ class _IndividualScreenState extends ConsumerState<IndividualScreen> {
                       subtitle: t.individual.cloudStorage,
                       onTap: bloc.onTapBackup,
                     ),
-                    const Divider(
+                    Divider(
                       height: 32,
                       thickness: 1,
-                      indent: 16,
-                      endIndent: 16,
+                      indent: indentValue,
+                      endIndent: indentValue,
                     ),
                     _buildSocialMediaSection(context),
-                    const Divider(
+                    Divider(
                       height: 32,
                       thickness: 1,
-                      indent: 16,
-                      endIndent: 16,
+                      indent: indentValue,
+                      endIndent: indentValue,
                     ),
                     _buildSectionTitle(context, t.individual.system),
                     _buildMenuItem(
@@ -132,8 +136,21 @@ class _IndividualScreenState extends ConsumerState<IndividualScreen> {
   ) {
     if (!_scrollController.hasClients) return;
 
+    // Kiểm tra nếu đã scroll đến cuối cùng, không snap nữa
+    final maxScrollExtent = _scrollController.position.maxScrollExtent;
+    if (pixels >= maxScrollExtent - 10) {
+      // Đã ở gần cuối cùng, để người dùng scroll tự do
+      return;
+    }
+
     final scrollAmount = maxExtent - minExtent;
     final snapThreshold = scrollAmount / 2;
+
+    // Chỉ snap nếu scroll position còn trong header range
+    if (pixels >= scrollAmount) {
+      // Đã scroll qua header, không snap
+      return;
+    }
 
     final targetOffset = pixels < snapThreshold ? 0.0 : scrollAmount;
 
@@ -147,8 +164,14 @@ class _IndividualScreenState extends ConsumerState<IndividualScreen> {
   }
 
   Widget _buildSectionTitle(BuildContext context, String title) {
+    final isTablet = MediaQuery.of(context).size.width > 600;
     return Padding(
-      padding: const EdgeInsets.only(left: 16, bottom: 8, top: 8),
+      padding: EdgeInsets.only(
+        left: isTablet ? 24 : 16,
+        bottom: 8,
+        top: 8,
+        right: isTablet ? 24 : 16,
+      ),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
@@ -171,12 +194,18 @@ class _IndividualScreenState extends ConsumerState<IndividualScreen> {
     Widget? trailing,
     required VoidCallback onTap,
   }) {
+    final isTablet = MediaQuery.of(context).size.width > 600;
     return ListTile(
       leading:
           Icon(icon, color: Theme.of(context).colorScheme.primary, size: 22),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
       subtitle: subtitle != null
-          ? Text(subtitle, style: const TextStyle(fontSize: 12))
+          ? Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: isTablet ? 13 : 12,
+              ),
+            )
           : null,
       trailing: trailing ??
           Icon(
@@ -184,7 +213,10 @@ class _IndividualScreenState extends ConsumerState<IndividualScreen> {
             color: Theme.of(context).colorScheme.outline,
           ),
       onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: isTablet ? 24 : 16,
+        vertical: 4,
+      ),
     );
   }
 
@@ -244,38 +276,33 @@ class _ProfileHeaderDelegate extends SliverPersistentHeaderDelegate {
   ) {
     final size = MediaQuery.of(context).size;
     final colorScheme = Theme.of(context).colorScheme;
+    final isTablet = size.width > 600;
 
     // 1. Tính toán phần trăm (0.0 -> 1.0)
-    // Công thức này chuẩn hơn: đảm bảo percent chạy từ 0 đến 1 khớp với quá trình cuộn
     final double percent =
         (shrinkOffset / (maxHeaderExtent - minHeaderExtent)).clamp(0.0, 1.0);
 
-    // 2. Cấu hình kích thước Avatar
-    const double maxImageSize = 90.0;
-    const double minImageSize = 40.0;
-    // Nội suy kích thước
+    // 2. Cấu hình kích thước Avatar (responsive)
+    final double maxImageSize = isTablet ? 120.0 : 90.0;
+    final double minImageSize = 40.0;
     final double currentImageSize =
         (maxImageSize * (1 - percent)).clamp(minImageSize, maxImageSize);
 
-    // 3. Cấu hình Vị trí Avatar (Left)
-    // - Khi mở rộng (max): Nằm giữa màn hình
+    // 3. Cấu hình Vị trí Avatar (Left) - responsive
     final double maxLeftMargin = size.width / 2 - maxImageSize / 2;
-    // - Khi thu nhỏ (min): Cách lề trái 16px
-    const double minLeftMargin = 16.0;
-    // Nội suy vị trí trái
+    final double minLeftMargin = isTablet ? 24.0 : 16.0;
     final double currentLeft =
         minLeftMargin + (maxLeftMargin - minLeftMargin) * (1 - percent);
 
-    // 4. Cấu hình Vị trí Avatar (Bottom)
-    // - Khi mở rộng: Nằm cao hơn text một chút
-    final double maxBottomMargin =
-        maxHeaderExtent * 0.35; // Tùy chỉnh số này để nâng hạ avatar lúc to
-    // - Khi thu nhỏ: Căn giữa theo chiều dọc của Toolbar (Toolbar height = 56)
-    final double minBottomMargin =
-        (kToolbarHeight - minImageSize) / 2 + 2; // +2 để cân chỉnh visual
-    // Nội suy vị trí dưới
+    // 4. Cấu hình Vị trí Avatar (Bottom) - responsive
+    final double maxBottomMargin = maxHeaderExtent * 0.35;
+    final double minBottomMargin = (kToolbarHeight - minImageSize) / 2 + 2;
     final double currentBottom =
         minBottomMargin + (maxBottomMargin - minBottomMargin) * (1 - percent);
+
+    // 5. Tính toán responsive spacing cho text
+    final double textBottomSpacing =
+        maxBottomMargin - (maxImageSize * 0.6) - (isTablet ? 20 : 10);
 
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
@@ -285,50 +312,52 @@ class _ProfileHeaderDelegate extends SliverPersistentHeaderDelegate {
           Positioned(
             left: 0,
             right: 0,
-            // Text nằm dưới avatar lúc to
-            bottom: maxBottomMargin - 60,
+            bottom: textBottomSpacing,
             child: Opacity(
-              opacity: (1 - percent * 1.5).clamp(0.0, 1.0), // Mờ nhanh hơn chút
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    isLoggedIn ? 'Nguyễn Văn A' : t.individual.notLoggedIn,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    isLoggedIn
-                        ? 'nguyenvana@gmail.com'
-                        : t.individual.tapToLoginOrRegister,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                  ),
-                ],
+              opacity: (1 - percent * 1.5).clamp(0.0, 1.0),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: isTablet ? 32 : 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      isLoggedIn ? 'Nguyễn Văn A' : t.individual.notLoggedIn,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      isLoggedIn
+                          ? 'nguyenvana@gmail.com'
+                          : t.individual.tapToLoginOrRegister,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
 
           // B. SMALL TITLE (Tên nhỏ trên AppBar) - Hiện dần khi cuộn lên
           Positioned(
-            left: minLeftMargin + minImageSize + 12, // Né cái avatar nhỏ ra
+            left: minLeftMargin + minImageSize + 12,
             bottom: 0,
-            top: paddingTop, // Căn giữa Toolbar
-            right: 60, // Né nút logout
+            top: paddingTop,
+            right: (isTablet ? 80 : 60),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Opacity(
-                opacity: percent, // Hiện theo percent
+                opacity: percent,
                 child: Text(
                   isLoggedIn ? 'Nguyễn Văn A' : t.individual.individual,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                    fontSize: isTablet ? 20 : 18,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
