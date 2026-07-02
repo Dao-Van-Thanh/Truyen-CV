@@ -4,93 +4,80 @@ import 'package:truyen_cv/shared/extensions/color.dart';
 const double _alpha = 0.95;
 
 enum ReadThemeMode {
-  // ==========================================
-  // 1. CLASSIC & CLEAN (Cơ bản & Sạch sẽ)
-  // ==========================================
+  // Classic
   light(
-    backgroundColor: Color(0xFFFAFAFA), // Off-white, dịu hơn trắng tinh
-    textColor: Color(0xFF1A1A1A), // Đen than (Charcoal), đỡ gắt hơn #000
+    backgroundColor: Color(0xFFFAFAF7),
+    textColor: Color(0xFF202124),
   ),
   dark(
-    backgroundColor: Color(0xFF121212), // Chuẩn Material Dark
-    textColor: Color(0xFFE0E0E0), // Xám sáng, độ tương phản chuẩn WCAG
+    backgroundColor: Color(0xFF171717),
+    textColor: Color(0xFFD8D8D8),
   ),
   amoledBlack(
-    backgroundColor:
-        Color(0xFF000000), // Đen tuyệt đối cho màn OLED tiết kiệm pin
-    textColor: Color(
-      0xFFB3B3B3,
-    ), // Xám trung tính, tránh hiện tượng "bóng ma" (smearing) khi cuộn
+    backgroundColor: Color(0xFF000000),
+    textColor: Color(0xFFC8C8C8),
   ),
 
-  // ==========================================
-  // 2. PAPER & NOSTALGIA (Giấy & Hoài cổ)
-  // ==========================================
+  // Paper
   sepia(
-    backgroundColor: Color(0xFFF5E6C8), // Vàng giấy cũ ấm áp
-    textColor: Color(0xFF4E342E), // Nâu đậm (Coffee), hài hòa với nền vàng
+    backgroundColor: Color(0xFFF0DFC0),
+    textColor: Color(0xFF4B3528),
   ),
   warmPaper(
-    backgroundColor: Color(0xFFFDF6E3), // Solarized Light Base (trắng ngà)
-    textColor: Color(0xFF383A42), // Xám mực in
+    backgroundColor: Color(0xFFFBF3E2),
+    textColor: Color(0xFF37312A),
   ),
   parchment(
-    backgroundColor: Color(0xFFE3DCC2), // Giấy da cừu, hơi trầm hơn Sepia
-    textColor: Color(0xFF3D2C20), // Nâu đất tối
+    backgroundColor: Color(0xFFE4D4B5),
+    textColor: Color(0xFF3D2F23),
   ),
   newsprint(
-    backgroundColor: Color(0xFFDCDCDC), // Giấy báo xám
-    textColor: Color(0xFF212121), // Đen mực in báo
+    backgroundColor: Color(0xFFE6E3DC),
+    textColor: Color(0xFF252525),
   ),
   eInk(
-    backgroundColor:
-        Color(0xFFC4C2BC), // Mô phỏng màn hình Kindle (xám xi măng nhạt)
-    textColor: Color(0xFF0F0F0F), // Đen sâu
+    backgroundColor: Color(0xFFD6D3CA),
+    textColor: Color(0xFF1E1E1E),
   ),
 
-  // ==========================================
-  // 3. EYE CARE & NATURE (Bảo vệ mắt & Thiên nhiên)
-  // ==========================================
+  // Eye care
   mintEyeCare(
-    backgroundColor: Color(0xFFC7EDCC), // Xanh đậu (Eye protection standard)
-    textColor: Color(0xFF003300), // Xanh rêu đậm, đọc rất êm
+    backgroundColor: Color(0xFFDCEBDD),
+    textColor: Color(0xFF233528),
   ),
   forestDark(
-    backgroundColor: Color(0xFF1A261C), // Rừng đêm (Xanh đen)
-    textColor: Color(0xFFAABFA5), // Xanh bạc hà nhạt (Sage green)
+    backgroundColor: Color(0xFF17241D),
+    textColor: Color(0xFFC2D2BE),
   ),
   blueLightFilter(
-    backgroundColor: Color(0xFFF6E6C9), // Hổ phách (Night shift)
-    textColor: Color(0xFF3E2723), // Nâu tối
+    backgroundColor: Color(0xFFF4DFC3),
+    textColor: Color(0xFF3F2F25),
   ),
   blossom(
-    backgroundColor: Color(0xFFFFF0F5), // Lavender Blush (Hồng phấn nhẹ)
-    textColor: Color(0xFF5C3A44), // Đỏ tía đậm (Plum), sang trọng
+    backgroundColor: Color(0xFFF9E9E7),
+    textColor: Color(0xFF52343A),
   ),
 
-  // ==========================================
-  // 4. MODERN DARK & HIGH CONTRAST (Tối hiện đại)
-  // ==========================================
+  // Dark
   midnightBlue(
-    backgroundColor: Color(0xFF15202B), // Twitter Dim (Xanh than)
-    textColor: Color(0xFFF5F8FA), // Trắng hơi xanh
+    backgroundColor: Color(0xFF101820),
+    textColor: Color(0xFFD7E3EA),
   ),
   deepPurple(
-    backgroundColor: Color(0xFF1E1B2E), // Tím than sâu (Deep Space)
-    textColor: Color(0xFFDCD6F7), // Tím oải hương nhạt
+    backgroundColor: Color(0xFF211C2D),
+    textColor: Color(0xFFE0D7EC),
   ),
   slate(
-    backgroundColor: Color(0xFF263238), // Blue Grey 900
-    textColor: Color(0xFFECEFF1), // Blue Grey 50
+    backgroundColor: Color(0xFF202A32),
+    textColor: Color(0xFFD7DEE3),
   ),
   hacker(
-    backgroundColor: Color(0xFF0A0F0D), // Đen hơi xanh lục (Matrix style)
-    textColor:
-        Color(0xFF20C20E), // Xanh lá Terminal (đã giảm độ chói so với neon gốc)
+    backgroundColor: Color(0xFF0E1511),
+    textColor: Color(0xFF94B690),
   ),
   royal(
-    backgroundColor: Color(0xFF212121), // Xám than chì
-    textColor: Color(0xFFFFD700), // Vàng Gold (Sang trọng, vương giả)
+    backgroundColor: Color(0xFF201C24),
+    textColor: Color(0xFFE6D8BC),
   );
 
   final Color backgroundColor;

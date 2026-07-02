@@ -83,6 +83,9 @@ class ReadStoryBloc extends BlocBase {
   final listChapterSubject =
       BehaviorSubject<List<ListChapterEntity>>.seeded([]);
 
+  final backupIndexReadProcessSubject = BehaviorSubject<int?>.seeded(null);
+  final _resetBackupIndexReadProcessDebounce = Debounce(milliseconds: 5000);
+
   BuildContext? timerSettingsContext;
 
   ReadStoryBloc(this.ref, {required ReadStoryArgument args}) : _args = args {
@@ -122,6 +125,8 @@ class ReadStoryBloc extends BlocBase {
     isOpenDrawerSubject.close();
     isFavoriteSubject.close();
     listChapterSubject.close();
+    backupIndexReadProcessSubject.close();
+    _resetBackupIndexReadProcessDebounce.dispose();
   }
 
   void toggleMenuVisibility() {
@@ -130,8 +135,32 @@ class ReadStoryBloc extends BlocBase {
   }
 
   void onChangeReadProgress(double value) {
+    _onBackupIndexReadProcess();
+
     final pageIndex = value.toInt();
     pageController.jumpToPage(pageIndex);
+  }
+
+  void onBackupReadProgress() {
+    final index = backupIndexReadProcessSubject.value;
+    if (index != null) {
+      pageController.jumpToPage(index);
+      backupIndexReadProcessSubject.add(null);
+    }
+  }
+
+  void _onBackupIndexReadProcess() {
+    final currentIndex = pageController.page?.toInt() ?? 0;
+    final hasBackup = backupIndexReadProcessSubject.value != null;
+    if (isDispose || hasBackup) return;
+    backupIndexReadProcessSubject.add(currentIndex);
+
+    _resetBackupIndexReadProcessDebounce.run(() {
+      if (isDispose) return;
+      final hasBackup = backupIndexReadProcessSubject.value != null;
+      if (!hasBackup) return;
+      backupIndexReadProcessSubject.add(null);
+    });
   }
 
   void _init() async {
