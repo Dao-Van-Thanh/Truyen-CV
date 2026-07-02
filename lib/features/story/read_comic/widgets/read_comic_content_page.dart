@@ -68,6 +68,7 @@ class _ReadComicContentPageState extends ConsumerState<ReadComicContentPage>
 
   void _listenScroll() {
     _scrollListener = () {
+      if (!mounted || !_scrollController.hasClients) return;
       _offSet = _scrollController.offset;
     };
     _scrollController.addListener(_scrollListener);

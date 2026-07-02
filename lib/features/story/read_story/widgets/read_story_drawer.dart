@@ -333,6 +333,7 @@ class _ReadStoryDrawerState extends ConsumerState<ReadStoryDrawer> {
       child: Container(
         padding:
             EdgeInsetsConstants.vertical12 + EdgeInsetsConstants.horizontal20,
+        color: highlight ? textColor.withValues(alpha: 0.1) : Colors.transparent,
         child: Text(
           chapterName,
           style: TextStyle(
