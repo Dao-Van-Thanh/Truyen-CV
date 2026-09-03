@@ -42,6 +42,8 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
   int _ttsIndex = -1;
   double _offSet = 0.0;
   bool _isInitScrollDone = false;
+  late final VoidCallback _scrollListener;
+  bool _hasScrollListener = false;
 
   //handle Gesture
   bool _isDragging = false;
@@ -101,13 +103,18 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
   }
 
   void _listenScroll() {
-    _scrollController.addListener(() {
+    _scrollListener = () {
+      if (!mounted || !_scrollController.hasClients) return;
       _offSet = _scrollController.offset;
-    });
+    };
+    _scrollController.addListener(_scrollListener);
+    _hasScrollListener = true;
   }
 
   void _removeScrollListener() {
-    _scrollController.removeListener(() {});
+    if (!_hasScrollListener) return;
+    _scrollController.removeListener(_scrollListener);
+    _hasScrollListener = false;
   }
 
   @override
@@ -123,11 +130,9 @@ class _ReadStoryContentPageState extends ConsumerState<ReadStoryContentPage>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-    if (_scrollController.hasClients) {
-      _scrollController.dispose();
-    }
+    _removeScrollListener();
     _ttsIndexSubscription?.cancel();
+    super.dispose();
   }
 
   Future<void> _handleUpsertLocal() async {

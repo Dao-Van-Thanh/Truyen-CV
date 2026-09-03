@@ -7,6 +7,7 @@ import 'package:truyen_cv/dependency/app_service.dart';
 import 'package:truyen_cv/dependency/router/arguments/read_story_argument.dart';
 import 'package:truyen_cv/dependency/router/utils/route_input.dart';
 import 'package:truyen_cv/features/library/extension/library_extension.dart';
+import 'package:truyen_cv/shared/extensions/router.dart';
 import 'package:truyen_cv/shared/widgets/bottom_navigation_bar/enum/bottom_navigation_bar_enum.dart';
 
 class RootBloc extends BlocBase {
@@ -27,6 +28,8 @@ class RootBloc extends BlocBase {
         previousValue..[element] = GlobalKey<NavigatorState>(),
   );
 
+  bool _isLibraryDirty = false;
+
   RootBloc(this.ref) {
     _init();
   }
@@ -43,6 +46,13 @@ class RootBloc extends BlocBase {
       return;
     }
     selectedNavigationBarSubject.add(item);
+    if (item == BottomNavigationBarEnum.library) {
+      onRefreshLibrary();
+    }
+  }
+
+  void markLibraryDirty() {
+    _isLibraryDirty = true;
   }
 
   List<BottomNavigationBarEnum> get bottomTabs =>
@@ -55,23 +65,24 @@ class RootBloc extends BlocBase {
       routerLocal.bookId,
     );
     if (bookLocal == null) return;
-    routerService.push(
-      RouteInput.readStory(
-        args: ReadStoryArgument(
-          storyId: bookLocal.id,
-          selectedChapterId: bookLocal.currentChapterId ?? '',
-          listChapter: bookLocal.listChapters,
-          scrollOffset: bookLocal.scrollOffset,
-          isOfflineImport: bookLocal.isLocal,
-        ),
+    routerService.pushReadStory(
+      bookLocal.storyData.type,
+      args: ReadStoryArgument(
+        storyId: bookLocal.id,
+        selectedChapterId: bookLocal.currentChapterId ?? '',
+        listChapter: bookLocal.listChapters,
+        scrollOffset: bookLocal.scrollOffset,
+        isOfflineImport: bookLocal.isLocal,
       ),
     );
   }
 
   void onRefreshLibrary() {
+    if (!_isLibraryDirty) return;
     if (selectedNavigationBarSubject.value != BottomNavigationBarEnum.library) {
       return;
     }
+    _isLibraryDirty = false;
     Future.delayed(const Duration(milliseconds: 300), () {
       final libraryBloc = ref.read(BlocProvider.library);
       libraryBloc.loadData();

@@ -35,6 +35,7 @@ class SqfliteSchema {
         id $_idType,
         bookId $_textType,
         listChapterItemData $_textType,
+        orderIndex INTEGER DEFAULT 0,
         timeStamp $_textType,
         FOREIGN KEY (bookId) REFERENCES books (id) ON DELETE CASCADE
       )
@@ -78,6 +79,23 @@ class SqfliteSchema {
 
   static const addExploreNavigationTabToSystemConfigs = '''
     ALTER TABLE system_configs ADD COLUMN exploreNavigationTab $_textType
+  ''';
+
+  static const addOrderIndexToChapters = '''
+    ALTER TABLE chapters ADD COLUMN orderIndex INTEGER DEFAULT 0
+  ''';
+
+  static const createChaptersBookIdIndex = '''
+    CREATE INDEX IF NOT EXISTS idx_chapters_book_id_order_index
+    ON chapters(bookId, orderIndex)
+  ''';
+
+  static const createChapterContentsChapterIdIndex = '''
+    CREATE INDEX IF NOT EXISTS idx_chapter_contents_chapter_id ON chapter_contents(chapterId)
+  ''';
+
+  static const createRoutesBookIdIndex = '''
+    CREATE INDEX IF NOT EXISTS idx_routes_book_id ON routes(bookId)
   ''';
 
   SqfliteSchema._();

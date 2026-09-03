@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:truyen_cv/bloc/bloc_base.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
 import 'package:truyen_cv/dependency/app_service.dart';
 import 'package:truyen_cv/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:truyen_cv/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
@@ -101,7 +102,7 @@ class ListChapterBloc extends BlocBase {
           args: ReadStoryArgument(
             storyId: args.storyData.id,
             selectedChapterId: chapter.id,
-            listChapter: listChapterSubject.value,
+            listChapter: listChapterTemp,
             scrollOffset: 0.0,
           ),
         )
@@ -131,7 +132,7 @@ class ListChapterBloc extends BlocBase {
     if (_isLoadingLocal) return;
 
     try {
-      final listChapter = listChapterSubject.value;
+      final listChapter = listChapterTemp;
       final bookEntity = BookEntity(
         id: args.storyData.id,
         listChapters: listChapter,
@@ -147,6 +148,7 @@ class ListChapterBloc extends BlocBase {
         bookEntity,
         isHasUpdateListChapter: true,
       );
+      ref.read(BlocProvider.root).markLibraryDirty();
       _isLoadingLocal = false;
     } catch (e) {
       logger.e('Error saving book to local: $e');

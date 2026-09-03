@@ -17,11 +17,13 @@ class ChapterRepository {
   Future<void> upsertChapter({
     required String bookId,
     required ListChapterRes chapter,
+    int orderIndex = 0,
   }) async {
     final entity = ChapterEntity(
       id: chapter.id ?? '',
       bookId: bookId,
       listChapterItemData: jsonEncode(chapter.toJson()),
+      orderIndex: orderIndex,
       timeStamp: DateTime.now().toIso8601String(),
     );
 
@@ -35,6 +37,7 @@ class ChapterRepository {
   Future<void> upsertChaptersBatch({
     required String bookId,
     required List<ListChapterEntity> chapters,
+    int startOrderIndex = 0,
     int batchSize = 300,
     DatabaseExecutor? dbOverride,
   }) async {
@@ -45,13 +48,16 @@ class ChapterRepository {
       final end =
           (i + batchSize < chapters.length) ? i + batchSize : chapters.length;
       final slice = chapters.sublist(i, end);
-      for (final chapter in slice) {
+      for (var sliceIndex = 0; sliceIndex < slice.length; sliceIndex++) {
+        final chapter = slice[sliceIndex];
+        final orderIndex = startOrderIndex + i + sliceIndex;
         batch.insert(
           _chaptersTable,
           {
             'id': chapter.id,
             'bookId': bookId,
             'listChapterItemData': jsonEncode(chapter.toJson()),
+            'orderIndex': orderIndex,
             'timeStamp': DateTime.now().toIso8601String(),
           },
           conflictAlgorithm: ConflictAlgorithm.replace,
@@ -71,7 +77,7 @@ class ChapterRepository {
       _chaptersTable,
       where: 'bookId = ?',
       whereArgs: [bookId],
-      orderBy: 'id ASC',
+      orderBy: 'orderIndex ASC, timeStamp ASC',
       limit: limit,
       offset: offset,
     );

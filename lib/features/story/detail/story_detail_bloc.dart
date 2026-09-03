@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:truyen_cv/bloc/bloc_base.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
 import 'package:truyen_cv/dependency/app_service.dart';
 import 'package:truyen_cv/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:truyen_cv/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
@@ -244,6 +245,7 @@ class StoryDetailBloc extends BlocBase {
         bookEntity,
         isHasUpdateListChapter: true,
       );
+      ref.read(BlocProvider.root).markLibraryDirty();
       _isLoadingLocal = false;
     } catch (e) {
       logger.e('Error saving book to local: $e');

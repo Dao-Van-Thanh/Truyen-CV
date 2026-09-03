@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
 import 'package:truyen_cv/constants/config.dart';
 import 'package:truyen_cv/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:truyen_cv/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
@@ -91,5 +92,6 @@ extension ReadStoryLocalExtension on ReadStoryBloc {
       newBook,
       isHasUpdateListChapter: !isSameListChapters,
     );
+    ref.read(BlocProvider.root).markLibraryDirty();
   }
 }

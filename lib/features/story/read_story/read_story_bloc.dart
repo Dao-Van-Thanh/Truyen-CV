@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:truyen_cv/bloc/bloc_base.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
 import 'package:truyen_cv/constants/config.dart';
 import 'package:truyen_cv/dependency/app_service.dart';
 import 'package:truyen_cv/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
@@ -421,6 +422,7 @@ class ReadStoryBloc extends BlocBase {
     )
         .then((_) {
       if (isDispose) return;
+      ref.read(BlocProvider.root).markLibraryDirty();
       isFavoriteSubject.value = newStatus;
     });
   }

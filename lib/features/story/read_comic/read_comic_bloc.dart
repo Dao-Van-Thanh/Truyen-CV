@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:truyen_cv/bloc/bloc_base.dart';
+import 'package:truyen_cv/bloc/bloc_provider.dart';
 import 'package:truyen_cv/dependency/app_service.dart';
 import 'package:truyen_cv/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:truyen_cv/dependency/local_api/repository/book/entities/list_chapter_entity.dart';
 import 'package:truyen_cv/dependency/network_api/comic/contents/comic_contents_res.dart';
 import 'package:truyen_cv/dependency/router/arguments/read_comic_argument.dart';
+import 'package:truyen_cv/dependency/router/utils/route_name.dart';
 import 'package:truyen_cv/features/story/read_comic/entities/comic_chapter_entity.dart';
 import 'package:truyen_cv/shared/utilities/debounce.dart';
 import 'package:truyen_cv/shared/utilities/logger.dart';
@@ -48,6 +50,7 @@ class ReadComicBloc extends BlocBase {
   @override
   void dispose() {
     super.dispose();
+    clearRouterLocal();
     comicChaptersSubject.close();
     pageController.dispose();
     currentChapterSubject.close();
@@ -61,6 +64,26 @@ class ReadComicBloc extends BlocBase {
     comicChaptersSubject.value = _args.listChapter;
     _handleLoadFirstChapter();
     _getFavoriteStatus();
+    saveRouterLocal();
+  }
+
+  Future<void> saveRouterLocal() async {
+    try {
+      await localApiService.routerRepository.saveCurrentRoute(
+        RouteName.readComic,
+        storyId,
+      );
+    } catch (e) {
+      logger.e('Error saving comic router to local: $e');
+    }
+  }
+
+  Future<void> clearRouterLocal() async {
+    try {
+      await localApiService.routerRepository.clearCurrentRoute();
+    } catch (e) {
+      logger.e('Error clearing comic router from local: $e');
+    }
   }
 
   void _handleLoadFirstChapter() {
@@ -269,6 +292,7 @@ class ReadComicBloc extends BlocBase {
       newBook,
       isHasUpdateListChapter: !isSameListChapters,
     );
+    ref.read(BlocProvider.root).markLibraryDirty();
   }
 
   void onTapFavoriteStory() async {
@@ -289,6 +313,7 @@ class ReadComicBloc extends BlocBase {
     )
         .then((_) {
       if (isDispose) return;
+      ref.read(BlocProvider.root).markLibraryDirty();
       isFavoriteSubject.value = newStatus;
     });
   }

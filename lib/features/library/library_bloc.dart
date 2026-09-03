@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:truyen_cv/bloc/bloc_base.dart';
+import 'package:truyen_cv/constants/common.dart';
 import 'package:truyen_cv/dependency/app_service.dart';
 import 'package:truyen_cv/dependency/local_api/repository/book/entities/book_entity.dart';
 import 'package:truyen_cv/dependency/local_api/repository/book/enum/story_type.dart';
@@ -35,7 +36,8 @@ class LibraryBloc extends BlocBase {
   int historyCurrentPage = 0;
 
   bool get isLastPageBookmarks =>
-      listBookmarksSubject.value.length < (bookmarksCurrentPage + 1) * 20;
+      listBookmarksSubject.value.length <
+      (bookmarksCurrentPage + 1) * CommonConstants.pageSize;
 
   LibraryBloc(this.ref) {
     _init();
@@ -186,16 +188,27 @@ class LibraryBloc extends BlocBase {
 
     if (!routerService.rootContext.mounted) return;
 
-    showDialog(
+    await showDialog(
       context: routerService.rootContext,
       builder: (context) {
         return FileImportDialog(filePath: filePath);
       },
     );
+
+    if (isDispose) return;
+    loadData();
   }
 
-  void _handleRemoveStory(BookEntity item) {
-    localApiService.bookRepository.deleteBook(item.id);
-    loadData();
+  void _handleRemoveStory(BookEntity item) async {
+    isLoadingSubject.value = true;
+    try {
+      await localApiService.bookRepository.deleteBook(item.id);
+      if (isDispose) return;
+      await loadData();
+    } finally {
+      if (!isDispose) {
+        isLoadingSubject.value = false;
+      }
+    }
   }
 }

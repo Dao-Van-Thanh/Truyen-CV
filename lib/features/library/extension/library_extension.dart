@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:truyen_cv/constants/common.dart';
 import 'package:truyen_cv/features/library/library_bloc.dart';
 
 extension LibraryExtension on LibraryBloc {
@@ -36,16 +37,22 @@ extension LibraryExtension on LibraryBloc {
   }
 
   void _listenScrollBookmarks() {
-    bookmarksScrollController.addListener(() {
-      if (bookmarksScrollController.position.pixels >=
-          bookmarksScrollController.position.maxScrollExtent - 200) {
-        if (isLoadMoreBookmarksSubject.value) return;
+    bookmarksScrollController.addListener(() async {
+      if (!bookmarksScrollController.hasClients) return;
+      if (isLoadMoreBookmarksSubject.value || isLastPageBookmarks) return;
 
-        if (isLastPageBookmarks) return;
+      final position = bookmarksScrollController.position;
+      if (position.pixels < position.maxScrollExtent - 200) return;
 
-        bookmarksCurrentPage++;
+      isLoadMoreBookmarksSubject.value = true;
+      bookmarksCurrentPage++;
 
-        _loadBookmarks(page: bookmarksCurrentPage);
+      try {
+        await _loadBookmarks(page: bookmarksCurrentPage);
+      } finally {
+        if (!isDispose) {
+          isLoadMoreBookmarksSubject.value = false;
+        }
       }
     });
   }
@@ -57,7 +64,7 @@ extension LibraryExtension on LibraryBloc {
 
   Future<void> _loadBookmarks({int page = 0}) async {
     final bookmarks = await localApiService.bookRepository
-        .getFavoriteBooks(page: page, limit: 100);
+        .getFavoriteBooks(page: page, limit: CommonConstants.pageSize);
     if (isDispose) return;
 
     if (page == 0) {

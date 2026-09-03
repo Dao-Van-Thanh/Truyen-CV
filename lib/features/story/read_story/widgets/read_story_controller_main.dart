@@ -85,7 +85,9 @@ class MainController extends ConsumerWidget {
                       child: AnimatedSlide(
                         duration: _duration,
                         curve: _curve,
-                        offset: isShow && isVisible ? Offset.zero : const Offset(1, 0),
+                        offset: isShow && isVisible
+                            ? Offset.zero
+                            : const Offset(2, 0),
                         child: IconButton(
                           style: IconButton.styleFrom(
                             backgroundColor: backgroundColor,

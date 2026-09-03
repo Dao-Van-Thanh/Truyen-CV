@@ -1,7 +1,17 @@
+import 'package:html_unescape/html_unescape.dart';
+
 class ReadStoryUtil {
+  static final HtmlUnescape _htmlUnescape = HtmlUnescape();
+
   static String _cleanChapterName(String? name) {
     if (name == null) return 'Chương';
-    return name.replaceAll(RegExp(r'\s*\(#\d+\)$'), '');
+    return _decodeHtmlEntities(
+      name.replaceAll(RegExp(r'\s*\(#\d+\)$'), ''),
+    );
+  }
+
+  static String _decodeHtmlEntities(String text) {
+    return _htmlUnescape.convert(text).replaceAll('\u00A0', ' ').trim();
   }
 
   static List<String> parseContent(String content, String? chapterName) {
@@ -25,7 +35,7 @@ class ReadStoryUtil {
 
     return rawParts
         .map((e) {
-          final cleanLine = e.trim();
+          final cleanLine = _decodeHtmlEntities(e);
           return cleanLine;
         })
         .where((e) => e.isNotEmpty)

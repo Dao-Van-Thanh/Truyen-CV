@@ -18,6 +18,9 @@ class _FileImportDialogState extends ConsumerState<FileImportDialog>
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   bool _isLoading = false;
+  int _importedChapter = 0;
+  int _totalChapter = 0;
+  DateTime? _lastProgressUpdate;
 
   @override
   void initState() {
@@ -42,6 +45,9 @@ class _FileImportDialogState extends ConsumerState<FileImportDialog>
   void _processFile() async {
     setState(() {
       _isLoading = true;
+      _importedChapter = 0;
+      _totalChapter = 0;
+      _lastProgressUpdate = null;
     });
 
     try {
@@ -63,7 +69,12 @@ class _FileImportDialogState extends ConsumerState<FileImportDialog>
 
       await Future.delayed(const Duration(milliseconds: 50));
 
-      final res = await ref.read(AppService.importFile).importFile(finalPath);
+      final res = await ref.read(AppService.importFile).importFile(
+        finalPath,
+        onProgress: (imported, total) {
+          _updateProgress(imported, total);
+        },
+      );
 
       logger.i('Kết quả import: $res');
 
@@ -76,6 +87,24 @@ class _FileImportDialogState extends ConsumerState<FileImportDialog>
         _isLoading = false;
       });
     }
+  }
+
+  void _updateProgress(int imported, int total) {
+    if (!mounted) return;
+
+    final now = DateTime.now();
+    final lastUpdate = _lastProgressUpdate;
+    final shouldUpdate = lastUpdate == null ||
+        now.difference(lastUpdate).inMilliseconds >= 250 ||
+        (total > 0 && imported >= total);
+
+    if (!shouldUpdate) return;
+
+    setState(() {
+      _importedChapter = imported;
+      _totalChapter = total;
+      _lastProgressUpdate = now;
+    });
   }
 
   @override
@@ -109,6 +138,17 @@ class _FileImportDialogState extends ConsumerState<FileImportDialog>
                           color: colorScheme.onSurface,
                         ),
                       ),
+                      if (_importedChapter > 0) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          _totalChapter > 0
+                              ? '$_importedChapter / $_totalChapter chương'
+                              : '$_importedChapter chương',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
                     ] else ...[
                       Icon(
                         Icons.library_books,

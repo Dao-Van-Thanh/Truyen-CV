@@ -6,7 +6,7 @@ import 'package:truyen_cv/shared/utilities/logger.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-const int sqliteVersion = 3;
+const int sqliteVersion = 5;
 
 class SqliteService {
   SqliteService();
@@ -44,6 +44,7 @@ class SqliteService {
     await Future.wait([
       db.execute(SqfliteSchema.createChapterContentsTable),
     ]);
+    await _createIndexes(db);
   }
 
   Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
@@ -55,6 +56,22 @@ class SqliteService {
     if (oldVersion < 3) {
       await db.execute(SqfliteSchema.addExploreNavigationTabToSystemConfigs);
     }
+
+    if (oldVersion < 4) {
+      await db.execute(SqfliteSchema.addOrderIndexToChapters);
+    }
+
+    if (oldVersion < 5) {
+      await _createIndexes(db);
+    }
+  }
+
+  Future<void> _createIndexes(Database db) async {
+    await Future.wait([
+      db.execute(SqfliteSchema.createChaptersBookIdIndex),
+      db.execute(SqfliteSchema.createChapterContentsChapterIdIndex),
+      db.execute(SqfliteSchema.createRoutesBookIdIndex),
+    ]);
   }
 
   Future<void> close() async {

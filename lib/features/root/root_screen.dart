@@ -17,12 +17,21 @@ class RootScreen extends ConsumerStatefulWidget {
 class _RootScreenState extends ConsumerState<RootScreen> with RouteAware {
   late final routeService = ref.read(AppService.router);
   late final bloc = ref.watch(BlocProvider.root);
+  ModalRoute<void>? _route;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    routeService.routeObserver.subscribe(this, ModalRoute.of(context)!);
+    final route = ModalRoute.of(context)! as ModalRoute<void>;
+    if (_route == route) return;
+
+    if (_route != null) {
+      routeService.routeObserver.unsubscribe(this);
+    }
+
+    _route = route;
+    routeService.routeObserver.subscribe(this, route);
   }
 
   @override

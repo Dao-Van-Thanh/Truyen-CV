@@ -180,6 +180,7 @@ extension ReadStoryTtsExtension on ReadStoryBloc {
     }
 
     final voices = await tts.getVoices();
+    if (isDispose) return;
     final currentConfig = ttsConfigSubject.value;
 
     Map<String, String>? defaultVoice;
@@ -307,6 +308,7 @@ extension ReadStoryTtsExtension on ReadStoryBloc {
     if (currentConfig.selectedEngine == newEngine) return;
 
     await tts.setEngine(newEngine);
+    if(isDispose) return;
 
     ttsConfigSubject.add(
       currentConfig.copyWith(

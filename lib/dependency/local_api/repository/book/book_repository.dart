@@ -84,7 +84,7 @@ class BookRepository {
       whereArgs: [1],
       orderBy: 'timeStamp DESC',
       limit: limit,
-      offset: (page - 1) * limit,
+      offset: page * limit,
     );
 
     return _attachChaptersToBooks(books);
@@ -103,7 +103,7 @@ class BookRepository {
       whereArgs: [oneMonthAgo.toIso8601String()],
       orderBy: 'lastReadTime DESC',
       limit: limit,
-      offset: (page - 1) * limit,
+      offset: page * limit,
     );
 
     return _attachChaptersToBooks(books);
@@ -140,44 +140,87 @@ class BookRepository {
 
   Future<bool> deleteBook(String id) async {
     try {
-      final bookList = await db.query(
-        _booksTable,
-        columns: ['storyData'],
-        where: 'id = ?',
-        whereArgs: [id],
-        limit: 1,
-      );
+      final thumbPath = await _getLocalThumbPath(id);
 
-      if (bookList.isNotEmpty) {
-        try {
-          final storyDataStr = bookList.first['storyData'] as String;
-          final storyMap = jsonDecode(storyDataStr);
-          final String? thumbPath = storyMap['thumb'];
+      await db.transaction((txn) async {
+        await txn.delete(
+          'chapter_contents',
+          where: '''
+            chapterId IN (
+              SELECT id FROM $_chaptersTable WHERE bookId = ?
+            )
+          ''',
+          whereArgs: [id],
+        );
 
-          if (thumbPath != null &&
-              thumbPath.isNotEmpty &&
-              !thumbPath.startsWith('http')) {
-            final file = File(thumbPath);
-            if (await file.exists()) {
-              await file.delete();
-              logger.i('🗑️ Đã xóa file ảnh bìa: $thumbPath');
-            }
-          }
-        } catch (e) {
-          logger.w('⚠️ Lỗi khi xóa file ảnh bìa: $e');
-        }
+        await txn.delete(
+          _chaptersTable,
+          where: 'bookId = ?',
+          whereArgs: [id],
+        );
+
+        await txn.delete(
+          'routes',
+          where: 'bookId = ?',
+          whereArgs: [id],
+        );
+
+        await txn.delete(
+          _booksTable,
+          where: 'id = ?',
+          whereArgs: [id],
+        );
+      });
+
+      if (thumbPath != null) {
+        await _deleteLocalThumb(thumbPath);
       }
-
-      await db.delete(
-        _booksTable,
-        where: 'id = ?',
-        whereArgs: [id],
-      );
 
       return true;
     } catch (e) {
       logger.e('Lỗi xóa book: $e');
       return false;
+    }
+  }
+
+  Future<String?> _getLocalThumbPath(String id) async {
+    final bookList = await db.query(
+      _booksTable,
+      columns: ['storyData'],
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+
+    if (bookList.isEmpty) return null;
+
+    try {
+      final storyDataStr = bookList.first['storyData'] as String;
+      final storyMap = jsonDecode(storyDataStr);
+      final thumbPath = storyMap['thumb'] as String?;
+
+      if (thumbPath == null ||
+          thumbPath.isEmpty ||
+          thumbPath.startsWith('http')) {
+        return null;
+      }
+
+      return thumbPath;
+    } catch (e) {
+      logger.w('⚠️ Lỗi khi đọc path ảnh bìa: $e');
+      return null;
+    }
+  }
+
+  Future<void> _deleteLocalThumb(String thumbPath) async {
+    try {
+      final file = File(thumbPath);
+      if (await file.exists()) {
+        await file.delete();
+        logger.i('🗑️ Đã xóa file ảnh bìa: $thumbPath');
+      }
+    } catch (e) {
+      logger.w('⚠️ Lỗi khi xóa file ảnh bìa: $e');
     }
   }
 
@@ -192,7 +235,7 @@ class BookRepository {
       _chaptersTable,
       where: 'bookId IN (${List.filled(bookIds.length, '?').join(',')})',
       whereArgs: bookIds,
-      orderBy: 'timeStamp ASC',
+      orderBy: 'bookId ASC, orderIndex ASC, timeStamp ASC',
     );
 
     final chapterGroup = <String, List<ListChapterEntity>>{};
@@ -228,7 +271,7 @@ class BookRepository {
       _chaptersTable,
       where: 'bookId = ?',
       whereArgs: [bookId],
-      orderBy: 'timeStamp ASC',
+      orderBy: 'orderIndex ASC, timeStamp ASC',
     );
 
     return maps.map((e) {
@@ -241,9 +284,16 @@ class BookRepository {
     required BookEntity book,
     required List<ChapterContentsEntity> chapterContents,
   }) async {
+    if (chapterContents.length != book.listChapters.length) {
+      throw ArgumentError(
+        'chapterContents length must match listChapters length',
+      );
+    }
+
     // Đảm bảo timestamp luôn mới
     final now = DateTime.now().toIso8601String();
     final bookToSave = book.copyWith(
+      storyData: book.storyData.copyWith(listChapter: const []),
       timeStamp: now,
       lastReadTime: now,
       isFavorite: true,
@@ -293,5 +343,87 @@ class BookRepository {
         );
       }
     });
+  }
+
+  Future<void> createImportedBook(BookEntity book) async {
+    final now = DateTime.now().toIso8601String();
+    final bookToSave = book.copyWith(
+      storyData: book.storyData.copyWith(listChapter: const []),
+      timeStamp: now,
+      lastReadTime: now,
+      isFavorite: true,
+      isLocal: true,
+    );
+
+    await db.insert(
+      _booksTable,
+      bookToSave.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> appendImportedChapters({
+    required String bookId,
+    required List<ListChapterEntity> chapters,
+    required List<ChapterContentsEntity> chapterContents,
+    required int startOrderIndex,
+  }) async {
+    if (chapterContents.length != chapters.length) {
+      throw ArgumentError(
+        'chapterContents length must match chapters length',
+      );
+    }
+
+    await db.transaction((txn) async {
+      await chapterRepository.upsertChaptersBatch(
+        bookId: bookId,
+        chapters: chapters,
+        startOrderIndex: startOrderIndex,
+        dbOverride: txn,
+      );
+
+      final contents = List.generate(chapterContents.length, (index) {
+        return ChapterContentsEntity(
+          id: chapterContents[index].id,
+          chapterId: chapters[index].id,
+          content: chapterContents[index].content,
+        );
+      });
+
+      await chapterRepository.upsertChapterContentsBatch(
+        contents: contents,
+        dbOverride: txn,
+      );
+    });
+  }
+
+  Future<void> updateImportedBookTotalChapter({
+    required String bookId,
+    required int totalChapter,
+  }) async {
+    final books = await db.query(
+      _booksTable,
+      where: 'id = ?',
+      whereArgs: [bookId],
+      limit: 1,
+    );
+
+    if (books.isEmpty) return;
+
+    final book = BookEntity.fromMap(books.first);
+    final bookToSave = book.copyWith(
+      storyData: book.storyData.copyWith(
+        totalChapter: totalChapter.toString(),
+        listChapter: const [],
+      ),
+      timeStamp: DateTime.now().toIso8601String(),
+    );
+
+    await db.update(
+      _booksTable,
+      bookToSave.toMap(),
+      where: 'id = ?',
+      whereArgs: [bookId],
+    );
   }
 }
